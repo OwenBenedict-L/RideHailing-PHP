@@ -14,7 +14,7 @@
 
         <label>Register As:</label><br> 
         <select name="role">
-            <option value="user">User / Penumpang</option>
+            <option value="user">User / Passenger</option>
             <option value="driver">Driver</option>
         </select><br><br>
  
