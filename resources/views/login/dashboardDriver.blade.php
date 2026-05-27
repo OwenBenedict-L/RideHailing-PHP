@@ -1,6 +1,6 @@
 <html>
 <body>
-    <h2>Hello Driver: {{ Auth::user()->name }}</h2>
+    <h2>Hello Driver: {{ Auth::driver()->name }}</h2>
     <ul>
         <li>[Notification]</li>
         <li>[CS]</li>

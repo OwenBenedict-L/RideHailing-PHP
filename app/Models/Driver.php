@@ -2,15 +2,14 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Database\Factories\UserFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Foundation\Auth\Driver as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable
+class Driver extends Authenticatable
 {
-    /** @use HasFactory<UserFactory> */
+    /** @use HasFactory<DriverFactory> */
     use HasFactory, Notifiable;
 
     /**
@@ -22,6 +21,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'drivers_license_number',
+        'license_plate',
         // 'role',
     ];
 

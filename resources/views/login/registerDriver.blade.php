@@ -12,16 +12,15 @@
         <label>Password:</label><br> 
         <input type="password" name="password" required><br><br> 
 
-        <!-- <label>Register As:</label><br> 
-        <select name="role">
-            <option value="user">User / Passenger</option>
-            <option value="driver">Driver</option>
-        </select><br><br> -->
+        <label>Drivers License Number:</label><br>
+        <input type="text" name="drivers_license_number" required><br><br> 
+
+        <label>Drivers Plate:</label><br>
+        <input type="text" name="license_plate" required><br><br> 
  
         <button type="submit">[SIGN UP]</button> 
     </form> 
     <br>
-    <a href="/registerDriver">[REGISTER AS DRIVER]</a><br>
     <a href="/login">[BACK]</a>
 </body> 
 </html>
