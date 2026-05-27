@@ -21,6 +21,9 @@ Route::middleware('guest')->group(function() {
     
     Route::get('/register', [AuthController::class, 'showRegister']);
     Route::post('/register', [AuthController::class, 'register']);
+
+    Route::get('/registerDriver', [AuthController::class, 'showRegisterDriver']);
+    Route::post('/registerDriver', [AuthController::class, 'registerDriver']);
 }); 
 
 Route::middleware('auth')->group(function () {
