@@ -26,6 +26,7 @@ Route::middleware('guest')->group(function() {
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [AuthController::class, 'dashboard']);
     Route::post('/logout', [AuthController::class, 'logout']);
+    Route::get('/wallet', [WalletController::class, 'index'])->name('wallet.balance');
 });
 
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login'); 
