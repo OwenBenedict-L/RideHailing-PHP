@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\DB;
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\BookingController;
+
 Route::get('/', function () {
     return view('login.landing');
 });
@@ -30,6 +32,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [AuthController::class, 'dashboard']);
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/wallet', [WalletController::class, 'index'])->name('wallet.balance');
+    Route::resource('bookings', BookingController::class);
 });
 
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login'); 
