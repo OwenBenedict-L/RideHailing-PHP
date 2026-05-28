@@ -2,10 +2,18 @@
 <body>
     <h2>Hello User: {{ Auth::user()->name }}</h2>
     <ul>
-        <li>[notification]</li>
+        <li>[Notification]</li>
         <li>[CS]</li>
-        <li>[wallet]</li>
-        <li>[booking]</li>
+        <li>
+            <a href="{{ route('wallet.balance') }} ">
+                <button type= button>[wallet]</button>
+            </a>
+        </li>
+        <li>            
+            <a href="{{ route('bookings.index') }}">
+                <button type="button">[bookings]</button>
+            </a>
+        </li>
     </ul>
 
     <form method="POST" action="/logout">
