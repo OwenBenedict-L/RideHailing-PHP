@@ -19,12 +19,14 @@ Route::get('/vulnerable', function () {
     return $user; 
 }); 
 
-Route::middleware('guest')->group(function() { 
+Route::middleware('guest:user')->group(function() { 
     Route::get('/login-user', [AuthController::class, 'showLoginUser'])->name('login'); // Name 'login' wajib untuk User agar sistem Auth Laravel tidak bingung
     Route::post('/login-user', [AuthController::class, 'loginUser']);
     Route::get('/register-user', [AuthController::class, 'showRegisterUser']);
     Route::post('/register-user', [AuthController::class, 'registerUser']);
+});
 
+Route::middleware('guest:driver')->group(function() {
     Route::get('/login-driver', [AuthController::class, 'showLoginDriver']);
     Route::post('/login-driver', [AuthController::class, 'loginDriver']);
     Route::get('/register-driver', [AuthController::class, 'showRegisterDriver']);
@@ -44,8 +46,12 @@ Route::middleware('auth:driver')->group(function () {
     Route::get('/dashboard-driver', [AuthController::class, 'dashboardDriver'])->name('dashboard.driver');
 });
 
-Route::middleware('auth:user,driver')->group(function () {
-    Route::post('/logout', [AuthController::class, 'logout']);
+Route::middleware('auth:user')->group(function () {
+    Route::post('/logout-user', [AuthController::class, 'logout']);
+});
+
+Route::middleware('auth:driver')->group(function () {
+    Route::post('/logout-driver', [AuthController::class, 'logout']);
 });
 
 Route::get('/estimations/create', [EstimationController::class, 'create'])->name('estimations.create');
