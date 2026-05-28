@@ -33,7 +33,8 @@ Route::middleware('guest')->group(function() {
 Route::middleware('auth:user')->group(function () {
     Route::get('/dashboard-user', [AuthController::class, 'dashboardUser'])->name('dashboard.user');
     Route::get('/wallet', [WalletController::class, 'index'])->name('wallet.balance');
-    
+    Route::get('/wallet/topup', [WalletController::class, 'topupForm'])->name('wallet.topup');
+    Route::post('/wallet/topup', [WalletController::class, 'processTopup'])->name('wallet.topup.process');
     Route::post('/bookings/confirm', [BookingController::class, 'confirm'])->name('bookings.confirm');
     Route::resource('bookings', BookingController::class);
 });

@@ -18,4 +18,24 @@ class WalletController extends Controller
         $balance = $wallet->balance;
         return view('wallet.balance', compact('balance'));
     }
+
+    public function topupForm(){
+        return view('wallet.topup');
+    }
+
+    public function processTopup(Request $request)
+    {
+        $request->validate([
+            'amount' => 'required|numeric|min:1000'
+        ]);
+        $userId = Auth::id();
+        $wallet = Wallet::firstOrCreate(
+            ['user_id' => $userId],
+            ['balance' => 0]
+        );
+        $wallet->balance += $request->amount;
+        $wallet->save();
+        return redirect()->route('wallet.balance')->with('success', 'Top Up with amount ' . 
+        number_format($request->amount, 0, ',', '.') . ' successfully added!');
+    }
 }
