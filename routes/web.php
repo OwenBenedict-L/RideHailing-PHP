@@ -7,6 +7,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\WalletController;
+use App\Http\Controllers\EstimationController;
 
 Route::get('/', function () {
     return view('login.landing');
@@ -46,3 +47,7 @@ Route::middleware('auth:driver')->group(function () {
 Route::middleware('auth:user,driver')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
 });
+
+Route::get('/estimations/create', [EstimationController::class, 'create'])->name('estimations.create');
+Route::post('/estimations', [EstimationController::class, 'store'])->name('estimations.store');
+Route::get('/estimations/{id}', [EstimationController::class, 'show'])->name('estimations.show');

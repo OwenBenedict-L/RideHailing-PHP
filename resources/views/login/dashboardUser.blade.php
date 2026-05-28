@@ -14,9 +14,14 @@
                 <button type="button">[bookings]</button>
             </a>
         </li>
+        <li>
+            <a href="{{ route('estimations.create') }}">
+                <button type="button">[ride estimations]</button>
+            </a>
+        </li>
     </ul>
-
-    <form method="POST" action="/logout">
+    
+    <br><form method="POST" action="/logout">
         @csrf
         <button type="submit">[LOGOUT]</button>
     </form>
