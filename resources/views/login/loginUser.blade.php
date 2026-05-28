@@ -1,6 +1,6 @@
 <html> 
 <body> 
-    <h2>Login Page</h2> 
+    <h2>Login Page - USER</h2> 
  
     @if ($errors->any()) 
         <div style="color: red;"> 
@@ -8,7 +8,7 @@
         </div> <br> 
     @endif 
  
-    <form method="POST" action="/login"> 
+    <form method="POST" action="/login-user"> 
         @csrf 
         <label>Email:</label><br> 
         <input type="email" name="email"><br><br> 
@@ -16,9 +16,11 @@
         <label>Password:</label><br> 
         <input type="password" name="password"><br><br> 
  
-        <button type="submit">LOGIN</button> 
+        <button type="submit">LOGIN USER</button> 
     </form> 
     <br>
-    <a href="/register">Don't have an account? [sign up]</a>
+    <a href="/register-user">Don't have an account? [sign up]</a>
+    <br>
+    <a href="/">[BACK]</a>
 </body> 
 </html>

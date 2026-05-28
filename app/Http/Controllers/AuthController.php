@@ -1,54 +1,73 @@
 <?php 
- 
 namespace App\Http\Controllers; 
  
 use App\Models\User;
+use App\Models\Driver;
 use Illuminate\Http\Request; 
 use Illuminate\Support\Facades\Auth; 
 use Illuminate\Support\Facades\Hash;
  
 class AuthController extends Controller 
 { 
-    public function showLogin() 
-    { 
-        return view('login.login'); 
+    public function showLoginUser() { 
+        return view('login.loginUser'); 
     } 
 
-    public function showRegister() { 
-        return view('login.register'); 
+    public function showRegisterUser() { 
+        return view('login.registerUser'); 
     }
 
-    public function showRegisterDriver() { 
-        return view('login.registerDriver'); 
-    }
-
-    public function register(Request $request) {
+    public function registerUser(Request $request) {
         $request->validate([
             'name' => 'required',
             'email' => 'required|email|unique:users',
             'password' => 'required',
-            // 'role' => 'required',
         ]);
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            // 'role' => $request->role,
         ]);
 
-        Auth::login($user);
-        return redirect('/dashboard');
+        Auth::guard('user')->login($user);
+        return redirect('/dashboard-user');
+    }
+
+    public function loginUser(Request $request) 
+    { 
+        $credentials = $request->validate([ 
+            'email' => ['required', 'email'], 
+            'password' => ['required'], 
+        ]); 
+ 
+        if (Auth::guard('user')->attempt($credentials)) { 
+            $request->session()->regenerate(); 
+            return redirect()->intended('/dashboard-user'); 
+        } 
+ 
+        return back()->withErrors(['email' => 'Wrong email or password.']); 
+    } 
+
+    public function dashboardUser() {
+        return view('login.dashboardUser');
+    }
+
+    public function showLoginDriver() { 
+        return view('login.loginDriver'); 
+    }
+
+    public function showRegisterDriver() { 
+        return view('login.registerDriver'); 
     }
 
     public function registerDriver(Request $request) {
         $request->validate([
             'name' => 'required',
-            'email' => 'required|email|unique:users',
+            'email' => 'required|email|unique:drivers',
             'password' => 'required',
-            // 'role' => 'required',
-            'drivers_license_number' => 'required|drivers_license_number|unique:drivers',
-            'license_plate' => 'required|license_plate|unique:drivers',
+            'drivers_license_number' => 'required|unique:drivers',
+            'license_plate' => 'required|unique:drivers',
         ]);
 
         $driver = Driver::create([
@@ -57,45 +76,40 @@ class AuthController extends Controller
             'password' => Hash::make($request->password),
             'drivers_license_number' => $request->drivers_license_number,
             'license_plate' => $request->license_plate,
-            // 'role' => $request->role,
         ]);
 
-        Auth::login($driver);
-        return redirect('/dashboardDriver');
+        Auth::guard('driver')->login($driver);
+        return redirect('/dashboard-driver');
     }
- 
-    public function login(Request $request) 
+
+    public function loginDriver(Request $request) 
     { 
         $credentials = $request->validate([ 
             'email' => ['required', 'email'], 
             'password' => ['required'], 
         ]); 
  
-        if (Auth::attempt($credentials)) { 
+        if (Auth::guard('driver')->attempt($credentials)) { 
             $request->session()->regenerate(); 
-            return redirect()->intended('/dashboard'); 
+            return redirect()->intended('/dashboard-driver'); 
         } 
  
-        return back()->withErrors([ 
-            'email' => 'Wrong email or password.', 
-        ]); 
+        return back()->withErrors(['email' => 'Wrong email or password.']); 
     } 
-
-    public function dashboard() {
-        // if (Auth::Driver()) {
-        //     return view('login.dashboardDriver');
-        // }
-        return view('login.dashboardUser');
-    }
 
     public function dashboardDriver() {
         return view('login.dashboardDriver');
     }
 
     public function logout(Request $request) {
-        Auth::logout();
+        if (Auth::guard('driver')->check()) {
+            Auth::guard('driver')->logout();
+        } else {
+            Auth::guard('user')->logout();
+        }
+        
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         return redirect('/');
     }
-} 
+}

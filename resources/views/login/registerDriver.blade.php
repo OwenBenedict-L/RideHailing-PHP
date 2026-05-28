@@ -1,7 +1,7 @@
 <html> 
 <body> 
-    <h2>REGISTER</h2> 
-    <form method="POST" action="/register"> 
+    <h2>REGISTER DRIVER</h2> 
+    <form method="POST" action="/register-driver"> 
         @csrf 
         <label>Full Name:</label><br> 
         <input type="text" name="name" required><br><br> 
@@ -18,9 +18,9 @@
         <label>Drivers Plate:</label><br>
         <input type="text" name="license_plate" required><br><br> 
  
-        <button type="submit">[SIGN UP]</button> 
+        <button type="submit">[SIGN UP AS DRIVER]</button> 
     </form> 
     <br>
-    <a href="/login">[BACK]</a>
+    <a href="/login-driver">[BACK TO LOGIN]</a>
 </body> 
 </html>
