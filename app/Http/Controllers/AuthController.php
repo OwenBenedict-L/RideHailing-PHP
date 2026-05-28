@@ -73,7 +73,7 @@ class AuthController extends Controller
         $driver = Driver::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => Hash::make($request->password),
+            'password' => $request->password,
             'drivers_license_number' => $request->drivers_license_number,
             'license_plate' => $request->license_plate,
         ]);
