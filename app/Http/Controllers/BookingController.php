@@ -35,23 +35,25 @@ class BookingController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'pickup_location' => 'required|string|max:255',
-            'destination_location' => 'required|string|max:255',
-            'promo_code' => 'nullable|string|max:50',
+        if ($request->has('confirm_booking')) {
+        $booking = Booking::create([
+            'user_id' => Auth::id(),
+            'pickup_location' => $request->pickup_location,
+            'destination_location' => $request->destination_location,
+            'promo_code' => $request->promo_code,
+            'fare' => $request->fare,
+            'distance' => $request->distance,
+            'status' => 'pending'
         ]);
 
-        $distance = 5.0;
-        $base_fare = 20000;
-        $discount = 0;
-
-        if ($request->filled('promo_code')) {
-            if (strtoupper($request->promo_code) === 'UNTAR') {
-                $discount = 5000;
-            }
+        $wallet = Wallet::where('user_id', Auth::id())->first();
+        if ($wallet) {
+            $wallet->balance -= $request->fare;
+            $wallet->save();
         }
 
-        $total_fare = $base_fare - $discount;
+        return redirect()->route('bookings.index')->with('success', 'Booking successful! Finding your driver...');
+        }
 
         $userId = Auth::id();
 
@@ -61,14 +63,14 @@ class BookingController extends Controller
         );
 
         $wallet_balance = $wallet->balance;
-
+        $total_fare = $request->fare; 
         $balance_enough = $wallet_balance >= $total_fare;
 
         return view('bookings.checkout', [
             'pickup_location' => $request->pickup_location,
             'destination_location' => $request->destination_location,
             'promo_code' => $request->promo_code,
-            'distance' => $distance,
+            'distance' => $request->distance ?? 0,
             'fare' => $total_fare,
             'wallet_balance' => $wallet_balance,
             'balance_enough' => $balance_enough
@@ -100,26 +102,6 @@ class BookingController extends Controller
      */
     public function update(Request $request, Booking $booking)
     {
-        if ($request->has('confirm_booking')) {
-            $booking = Booking::create([
-                'user_id' => Auth::id(),
-                'pickup_location' => $request->pickup_location,
-                'destination_location' => $request->destination_location,
-                'promo_code' => $request->promo_code,
-                'fare' => $request->fare,
-                'distance' => $request->distance,
-                'status' => 'pending'
-            ]);
-
-            $wallet = Wallet::where('user_id', Auth::id())->first();
-            if ($wallet) {
-                $wallet->balance -= $request->fare;
-                $wallet->save();
-            }
-
-            return redirect()->route('bookings.index')->with('success', 'Booking successful! Finding your driver...');
-        }
-
         $request->validate([
             'status' => 'required|in:pending,confirmed,on_way,completed,cancelled',
         ]);
