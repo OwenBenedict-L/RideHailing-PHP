@@ -10,7 +10,7 @@ class EstimationController extends Controller
 {
     public function create()
     {
-        // Menampilkan halaman form input lokasi
+
         return view('estimations.create');
     }
 

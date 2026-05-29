@@ -15,12 +15,12 @@
             </a>
         </li>
         <li>
-            <a href="{{ route('estimations.create') }}">
-                <button type="button">[ride estimations]</button>
+            <a href="{{ route('helpcenter.index') }}">
+                <button type="button">[help center]</button>
             </a>
         </li>
     </ul>
-    
+
     <br><form method="POST" action="/logout-user">
         @csrf
         <button type="submit">[LOGOUT]</button>

@@ -9,6 +9,7 @@ use App\Http\Controllers\BookingController;
 use App\Http\Controllers\WalletController;
 use App\Http\Controllers\DriverWalletController;
 use App\Http\Controllers\EstimationController;
+use App\Http\Controllers\HelpCenterController;
 
 Route::get('/', function () {
     return view('login.landing');
@@ -41,6 +42,11 @@ Route::middleware('auth:user')->group(function () {
     Route::post('/wallet/topup', [WalletController::class, 'processTopup'])->name('wallet.topup.process');
     Route::post('/bookings/confirm', [BookingController::class, 'confirm'])->name('bookings.confirm');
     Route::resource('bookings', BookingController::class);
+    Route::get('/estimations/create', [EstimationController::class, 'create'])->name('estimations.create');
+    Route::post('/estimations', [EstimationController::class, 'store'])->name('estimations.store');
+    Route::get('/estimations/{id}', [EstimationController::class, 'show'])->name('estimations.show');
+    Route::get('/helpcenter', [HelpCenterController::class, 'index'])->name('helpcenter.index');
+    Route::post('/helpcenter', [HelpCenterController::class, 'store'])->name('helpcenter.store');
 });
 
 Route::middleware('auth:driver')->group(function () {
@@ -63,6 +69,3 @@ Route::middleware('auth:driver')->group(function () {
     Route::post('/logout-driver', [AuthController::class, 'logout']);
 });
 
-Route::get('/estimations/create', [EstimationController::class, 'create'])->name('estimations.create');
-Route::post('/estimations', [EstimationController::class, 'store'])->name('estimations.store');
-Route::get('/estimations/{id}', [EstimationController::class, 'show'])->name('estimations.show');
