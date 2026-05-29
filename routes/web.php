@@ -40,13 +40,18 @@ Route::middleware('auth:user')->group(function () {
     Route::get('/wallet', [WalletController::class, 'index'])->name('wallet.balance');
     Route::get('/wallet/topup', [WalletController::class, 'topupForm'])->name('wallet.topup');
     Route::post('/wallet/topup', [WalletController::class, 'processTopup'])->name('wallet.topup.process');
-    Route::get('/driver/wallet', [DriverWalletController::class, 'index'])->name('driver.wallet.balance');
     Route::post('/bookings/confirm', [BookingController::class, 'confirm'])->name('bookings.confirm');
     Route::resource('bookings', BookingController::class);
+    Route::get('/estimations/create', [EstimationController::class, 'create'])->name('estimations.create');
+    Route::post('/estimations', [EstimationController::class, 'store'])->name('estimations.store');
+    Route::get('/estimations/{id}', [EstimationController::class, 'show'])->name('estimations.show');
+    Route::get('/helpcenter', [HelpCenterController::class, 'index'])->name('helpcenter.index');
+    Route::post('/helpcenter', [HelpCenterController::class, 'store'])->name('helpcenter.store');
 });
 
 Route::middleware('auth:driver')->group(function () {
     Route::get('/dashboard-driver', [AuthController::class, 'dashboardDriver'])->name('dashboard.driver');
+    Route::get('/driver/wallet', [DriverWalletController::class, 'index'])->name('driver.wallet.balance');
 });
 
 Route::middleware('auth:driver')->group(function () {
@@ -64,8 +69,3 @@ Route::middleware('auth:driver')->group(function () {
     Route::post('/logout-driver', [AuthController::class, 'logout']);
 });
 
-Route::get('/estimations/create', [EstimationController::class, 'create'])->name('estimations.create');
-Route::post('/estimations', [EstimationController::class, 'store'])->name('estimations.store');
-Route::get('/estimations/{id}', [EstimationController::class, 'show'])->name('estimations.show');
-
-Route::get('/helpcenter', [HelpCenterController::class, 'index'])->name('helpcenter.index');

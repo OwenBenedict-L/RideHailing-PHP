@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <body>
-    <h2>Form Estimasi Perjalanan</h2>
+    <h2>Estimasi Perjalanan</h2>
     <hr>
 
     <form action="{{ route('estimations.store') }}" method="POST">

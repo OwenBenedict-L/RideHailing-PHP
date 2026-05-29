@@ -35,3 +35,8 @@
     </form>
 </body>
 </html>
+
+@if (session('success'))
+    <p>{{ session('success') }}</p>
+    <hr>
+@endif
