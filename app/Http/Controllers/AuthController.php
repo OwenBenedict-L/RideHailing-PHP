@@ -22,6 +22,8 @@ class AuthController extends Controller
             'name' => 'required',
             'email' => 'required|email|unique:users',
             'password' => 'required',
+        ], [
+            'email.unique' => 'This email is already registered, please use another email!',
         ]);
 
         $user = User::create([
@@ -68,6 +70,10 @@ class AuthController extends Controller
             'password' => 'required',
             'drivers_license_number' => 'required|unique:drivers',
             'license_plate' => 'required|unique:drivers',
+        ],[
+            'email.unique' => 'This driver email is already registered!',
+            'drivers_license_number.unique' => 'This drivers license number is already registered in our system!',
+            'license_plate.unique' => 'This license plate is already used by another driver!',
         ]);
 
         $driver = Driver::create([
