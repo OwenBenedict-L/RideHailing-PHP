@@ -9,6 +9,7 @@ use App\Http\Controllers\BookingController;
 use App\Http\Controllers\WalletController;
 use App\Http\Controllers\DriverWalletController;
 use App\Http\Controllers\EstimationController;
+use App\Http\Controllers\HelpCenterController;
 
 Route::get('/', function () {
     return view('login.landing');
@@ -66,3 +67,5 @@ Route::middleware('auth:driver')->group(function () {
 Route::get('/estimations/create', [EstimationController::class, 'create'])->name('estimations.create');
 Route::post('/estimations', [EstimationController::class, 'store'])->name('estimations.store');
 Route::get('/estimations/{id}', [EstimationController::class, 'show'])->name('estimations.show');
+
+Route::get('/helpcenter', [HelpCenterController::class, 'index'])->name('helpcenter.index');

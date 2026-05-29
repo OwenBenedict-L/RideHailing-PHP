@@ -21,7 +21,15 @@
         </li>
     </ul>
     
-    <br><form method="POST" action="/logout-user">
+
+        <li>
+            <a href="{{ route('helpcenter.index') }}">
+                <button type="button" style="margin-top: 10px;">[help center]</button>
+            </a>
+        </li>
+    </ul>
+
+    <br><form method="POST" action="/logout">
         @csrf
         <button type="submit">[LOGOUT]</button>
     </form>
