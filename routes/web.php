@@ -7,6 +7,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\WalletController;
+use App\Http\Controllers\DriverWalletController;
 use App\Http\Controllers\EstimationController;
 
 Route::get('/', function () {
@@ -38,6 +39,7 @@ Route::middleware('auth:user')->group(function () {
     Route::get('/wallet', [WalletController::class, 'index'])->name('wallet.balance');
     Route::get('/wallet/topup', [WalletController::class, 'topupForm'])->name('wallet.topup');
     Route::post('/wallet/topup', [WalletController::class, 'processTopup'])->name('wallet.topup.process');
+    Route::get('/driver/wallet', [DriverWalletController::class, 'index'])->name('driver.wallet.balance');
     Route::post('/bookings/confirm', [BookingController::class, 'confirm'])->name('bookings.confirm');
     Route::resource('bookings', BookingController::class);
 });
