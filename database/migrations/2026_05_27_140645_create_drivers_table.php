@@ -24,6 +24,15 @@ return new class extends Migration
             $table->rememberToken();
             $table->timestamps();
         });
+
+        Schema::create('driver_wallets', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('driver_id')->constrained('drivers')->onDelete('cascade');
+            $table->decimal('balance', 15, 2)->default(0);
+            $table->string('bank_name')->nullable(); 
+            $table->string('bank_account_number')->nullable(); 
+            $table->timestamps();
+        });
     }
 
     /**
@@ -31,6 +40,7 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::dropIfExists('driver_wallets');
         Schema::dropIfExists('drivers');
     }
 };
