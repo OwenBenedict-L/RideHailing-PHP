@@ -46,6 +46,13 @@ Route::middleware('auth:driver')->group(function () {
     Route::get('/dashboard-driver', [AuthController::class, 'dashboardDriver'])->name('dashboard.driver');
 });
 
+Route::middleware('auth:driver')->group(function () {
+    Route::get('/dashboard-driver', [AuthController::class, 'dashboardDriver'])->name('dashboard.driver');
+    Route::get('/driver/orders', [BookingController::class, 'driverOrders'])->name('driver.orders');
+    Route::post('/driver/bookings/{booking}/accept', [BookingController::class, 'acceptOrder'])->name('bookings.orders.accept');
+    Route::post('/driver/bookings/{booking}/reject', [BookingController::class, 'rejectOrder'])->name('bookings.orders.reject');
+});
+
 Route::middleware('auth:user')->group(function () {
     Route::post('/logout-user', [AuthController::class, 'logout']);
 });
