@@ -1,3 +1,5 @@
+<html>
+<body>
 <h1>Booking History</h1>
 
 @if(session('success'))
@@ -8,7 +10,7 @@
 @endif
 
 <a href="{{ route('bookings.create') }}"><button>Create New Booking</button></a>
-<a href="/dashboard"><button>Back to Dashboard</button></a>
+<a href="{{ route('dashboard.user') }}"><button>BACK</button></a>
 <br><br>
 
 @if($bookings->isEmpty())
@@ -52,3 +54,5 @@
         </tbody>
     </table>
 @endif
+</body>
+</html>

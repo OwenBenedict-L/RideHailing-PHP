@@ -1,6 +1,8 @@
-<h1>Form Pemesanan Perjalanan</h1>
+<html>
+<body>
+<h1>Book Your Ride</h1>
 
-<form method="POST" action="{{ route('bookings.store') }}">
+<form method="POST" action="{{ route('estimations.store') }}">
     @csrf
     
     Pickup Location:
@@ -18,6 +20,8 @@
     <input name="promo_code" placeholder="Example: UNTAR">
     <br><br>
     
-    <a href="/dashboard"><button type="button">BACK</button></a>
+    <a href="/bookings"><button type="button">BACK</button></a>
     <button type="submit">NEXT</button>
 </form>
+</body>
+</html>
