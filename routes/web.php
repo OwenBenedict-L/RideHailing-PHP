@@ -39,13 +39,13 @@ Route::middleware('auth:user')->group(function () {
     Route::get('/wallet', [WalletController::class, 'index'])->name('wallet.balance');
     Route::get('/wallet/topup', [WalletController::class, 'topupForm'])->name('wallet.topup');
     Route::post('/wallet/topup', [WalletController::class, 'processTopup'])->name('wallet.topup.process');
-    Route::get('/driver/wallet', [DriverWalletController::class, 'index'])->name('driver.wallet.balance');
     Route::post('/bookings/confirm', [BookingController::class, 'confirm'])->name('bookings.confirm');
     Route::resource('bookings', BookingController::class);
 });
 
 Route::middleware('auth:driver')->group(function () {
     Route::get('/dashboard-driver', [AuthController::class, 'dashboardDriver'])->name('dashboard.driver');
+    Route::get('/driver/wallet', [DriverWalletController::class, 'index'])->name('driver.wallet.balance');
 });
 
 Route::middleware('auth:driver')->group(function () {
