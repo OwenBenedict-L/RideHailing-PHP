@@ -120,6 +120,54 @@ class BookingController extends Controller
     }
 
     /**
+     * Driver Management Functions.
+     */
+    public function driverOrders()
+    {
+        if (!Auth::guard('driver')->check()) {
+            abort(403, 'Unauthorized action. Only drivers can access this page.');
+        }
+
+        $orders = Booking::with('user')
+            ->where('status', 'pending')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('bookings.orders', compact('orders'));
+    }
+
+    public function acceptOrder(Booking $booking)
+    {
+        if (!Auth::guard('driver')->check()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        if ($booking->status !== 'pending') {
+            return redirect()->back()->with('error', 'Sorry, this order has already been taken by another driver or was cancelled.');
+        }
+
+        $booking->update([
+            'driver_id' => Auth::guard('driver')->id(),
+            'status' => 'confirmed'
+        ]);
+
+        return redirect()->route('dashboard.driver')->with('success', 'Order successfully accepted! Please pick up the passenger.');
+    }
+
+    public function rejectOrder(Booking $booking)
+    {
+        if (!Auth::guard('driver')->check()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        if ($booking->status !== 'pending') {
+            return redirect()->back()->with('error', 'Sorry, this order has already been taken by another driver or was cancelled.');
+        }
+
+        return redirect()->route('dashboard.driver')->with('success', 'Order successfully skipped.');
+    }
+
+    /**
      * Remove the specified resource from storage.
      */
     public function destroy(Booking $booking)
