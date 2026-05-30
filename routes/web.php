@@ -57,6 +57,7 @@ Route::middleware('auth:user')->group(function () {
     Route::get('/estimations/{id}', [EstimationController::class, 'show'])->name('estimations.show');
     Route::get('/helpcenter', [HelpCenterController::class, 'index'])->name('helpcenter.index');
     Route::post('/helpcenter', [HelpCenterController::class, 'store'])->name('helpcenter.store');
+    Route::get('/helpcenter/history', [HelpCenterController::class, 'history'])->name('helpcenter.history');
 });
 
 Route::middleware('auth:driver')->group(function () {
