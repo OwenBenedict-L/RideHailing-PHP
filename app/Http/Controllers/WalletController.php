@@ -27,6 +27,9 @@ class WalletController extends Controller
     {
         $request->validate([
             'amount' => 'required|numeric|min:1000'
+        ], [
+            'amount.required' => 'Please enter the top up amount.',
+            'amount.min' => 'The minimum top up amount is Rp1.000.'
         ]);
         $userId = Auth::id();
         $wallet = Wallet::firstOrCreate(
@@ -35,7 +38,7 @@ class WalletController extends Controller
         );
         $wallet->balance += $request->amount;
         $wallet->save();
-        return redirect()->route('wallet.balance')->with('success', 'Top Up with amount ' . 
+        return redirect()->route('wallet.balance')->with('success', 'Top Up with amount Rp' . 
         number_format($request->amount, 0, ',', '.') . ' successfully added!');
     }
 }

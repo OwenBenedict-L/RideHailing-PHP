@@ -7,7 +7,7 @@
     </div>
     @endif
     <div style="display: flex; gap: 20px;">
-        <p>Balance: {{ number_format($balance, 0, ',', '.') }}</p>
+        <p>Balance: Rp{{ number_format($balance, 0, ',', '.') }}</p>
         <p>
             <a href="{{ route('wallet.topup') }}">
                 <button>TOP UP</button>

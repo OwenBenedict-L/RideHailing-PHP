@@ -64,6 +64,8 @@ Route::middleware('auth:driver')->group(function () {
     Route::get('/dashboard-driver', [AuthController::class, 'dashboardDriver'])->name('dashboard.driver');
     Route::post('/logout-driver', [AuthController::class, 'logout']);
     Route::get('/driver/wallet', [DriverWalletController::class, 'index'])->name('driver.wallet.balance');
+    Route::get('/driver/wallet/withdraw', [DriverWalletController::class, 'withdrawForm'])->name('driver.wallet.withdraw');
+    Route::post('/driver/wallet/withdraw', [DriverWalletController::class, 'processWithdraw'])->name('driver.wallet.withdraw.process');
     Route::get('/driver/orders', [BookingController::class, 'driverOrders'])->name('driver.orders');
     Route::post('/driver/bookings/{booking}/accept', [BookingController::class, 'acceptOrder'])->name('bookings.orders.accept');
     Route::post('/driver/bookings/{booking}/reject', [BookingController::class, 'rejectOrder'])->name('bookings.orders.reject');
