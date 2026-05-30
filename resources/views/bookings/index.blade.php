@@ -9,6 +9,13 @@
     <br>
 @endif
 
+@if(session('error'))
+    <div style="color: red; font-weight: bold;">
+        {{ session('error') }}
+    </div>
+    <br>
+@endif
+
 <a href="{{ route('bookings.create') }}"><button>Create New Booking</button></a>
 <a href="{{ route('dashboard.user') }}"><button>BACK</button></a>
 <br><br>
@@ -37,16 +44,67 @@
                     <td>Rp {{ number_format($booking->fare, 0, ',', '.') }}</td>
                     <td>{{ $booking->distance }} Km</td>
                     <td>
-                        @if($booking->driver_id)
-                            <span style="color: green; font-weight: bold;">
-                                Accepted by: {{ $booking->driver->name }}
-                            </span> 
-                            <br>
-                            <small>Plate: {{ $booking->driver->license_plate }}</small>
-                        @else
-                            <span style="color: orange; font-weight: bold;">
-                                {{ strtoupper($booking->status) }} (Searching for Driver...)
+                        @if($booking->status === 'confirmed')
+                            <div style="margin-bottom: 6px;">
+                                <span style="color: green; font-weight: bold;">
+                                    Accepted by: {{ $booking->driver->name }}
+                                </span> 
+                                <br>
+                                <small>Plate: {{ $booking->driver->license_plate }}</small>
+                            </div>
+
+                            <a href="#" style="display: inline-block; background-color: #28a745; color: white; padding: 4px 8px; text-decoration: none; border-radius: 4px; font-size: 12px; font-family: sans-serif; font-weight: bold; margin-right: 5px;">
+                                🗪 Chat Driver
+                            </a>
+
+                            <form action="{{ route('bookings.destroy', $booking->id) }}" method="POST" style="display: inline;" 
+                                onsubmit="return confirm('Are you sure you want to cancel this ride?')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" style="background-color: #dc3545; color: white; padding: 4px 8px; border: none; border-radius: 4px; font-size: 12px; font-weight: bold; cursor: pointer;">
+                                    Cancel
+                                </button>
+                            </form>
+
+                        @elseif($booking->status === 'on_way')
+                            <div style="margin-bottom: 6px;">
+                                <span style="color: #9932cc; font-weight: bold;">
+                                    ➔ ON THE WAY
+                                </span> 
+                                <br>
+                                <small style="color: gray;">Riding with {{ $booking->driver->name }}</small>
+                            </div>
+
+                        @elseif($booking->status === 'completed')
+                            <div style="margin-bottom: 6px;">
+                                <span style="color: #28a745; font-weight: bold;">
+                                    ✔ TRIP COMPLETED
+                                </span>
+                            </div>
+
+                            <a href="#" style="display: inline-block; background-color: #28a745; color: white; padding: 4px 8px; text-decoration: none; border-radius: 4px; font-size: 12px; font-family: sans-serif; font-weight: bold; margin-right: 5px;">
+                                ☆ Rate & Review
+                            </a>
+
+                        @elseif($booking->status === 'cancelled')
+                            <span style="color: red; font-weight: bold;">
+                                ✖ TRIP CANCELLED
                             </span>
+                        
+                        @else
+                            <div style="margin-bottom: 6px;">
+                                <span style="color: orange; font-weight: bold;">
+                                    {{ strtoupper($booking->status) }} (Searching for Driver...)
+                                </span>
+                            </div>
+                            <form action="{{ route('bookings.destroy', $booking->id) }}" method="POST" style="display: inline;" 
+                                onsubmit="return confirm('Are you sure you want to cancel this ride?')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" style="background-color: #dc3545; color: white; padding: 4px 8px; border: none; border-radius: 4px; font-size: 12px; font-weight: bold; cursor: pointer;">
+                                    Cancel
+                                </button>
+                            </form>
                         @endif
                     </td>
                 </tr>
