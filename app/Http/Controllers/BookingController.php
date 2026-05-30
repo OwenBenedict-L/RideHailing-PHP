@@ -172,7 +172,13 @@ class BookingController extends Controller
      */
     public function destroy(Booking $booking)
     {
-        $booking->update(['status' => 'cancelled']);
+        if ($booking->status === 'pending' || $booking->status === 'confirmed') {
+            $booking->update([
+                'status' => 'cancelled'
+            ]);
+            
+        return redirect()->route('bookings.index')->with('success', 'Your ride has been successfully cancelled.');
+        }
         
         return redirect()->route('bookings.index')->with('success', 'Booking cancelled successfully.');
     }
