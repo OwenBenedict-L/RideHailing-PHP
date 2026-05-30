@@ -1,6 +1,15 @@
 <html>
 <body>
     <h2>TOP UP WALLET</h2>
+    @if ($errors->any())
+        <div style="color: red;">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
     <form action="{{ route('wallet.topup.process') }}" method="POST">
         @csrf
         <div>
