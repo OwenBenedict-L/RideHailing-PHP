@@ -1,6 +1,6 @@
 <html> 
 <body> 
-    <h2>Login Page - USER</h2> 
+    <h2>Login Page USER</h2> 
  
     @if ($errors->any()) 
         <div style="color: red;"> 

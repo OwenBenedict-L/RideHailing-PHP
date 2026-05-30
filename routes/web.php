@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PostController;
@@ -12,6 +13,14 @@ use App\Http\Controllers\EstimationController;
 use App\Http\Controllers\HelpCenterController;
 
 Route::get('/', function () {
+    if (Auth::guard('user')->check()) {
+        return redirect('/dashboard-user');
+    }
+    
+    if (Auth::guard('driver')->check()) {
+        return redirect('/dashboard-driver');
+    }
+
     return view('login.landing');
 });
 
@@ -22,7 +31,7 @@ Route::get('/vulnerable', function () {
 }); 
 
 Route::middleware('guest:user')->group(function() { 
-    Route::get('/login-user', [AuthController::class, 'showLoginUser'])->name('login'); // Name 'login' wajib untuk User agar sistem Auth Laravel tidak bingung
+    Route::get('/login-user', [AuthController::class, 'showLoginUser'])->name('login'); 
     Route::post('/login-user', [AuthController::class, 'loginUser']);
     Route::get('/register-user', [AuthController::class, 'showRegisterUser']);
     Route::post('/register-user', [AuthController::class, 'registerUser']);
@@ -37,6 +46,7 @@ Route::middleware('guest:driver')->group(function() {
 
 Route::middleware('auth:user')->group(function () {
     Route::get('/dashboard-user', [AuthController::class, 'dashboardUser'])->name('dashboard.user');
+    Route::post('/logout-user', [AuthController::class, 'logout']);
     Route::get('/wallet', [WalletController::class, 'index'])->name('wallet.balance');
     Route::get('/wallet/topup', [WalletController::class, 'topupForm'])->name('wallet.topup');
     Route::post('/wallet/topup', [WalletController::class, 'processTopup'])->name('wallet.topup.process');
@@ -47,25 +57,14 @@ Route::middleware('auth:user')->group(function () {
     Route::get('/estimations/{id}', [EstimationController::class, 'show'])->name('estimations.show');
     Route::get('/helpcenter', [HelpCenterController::class, 'index'])->name('helpcenter.index');
     Route::post('/helpcenter', [HelpCenterController::class, 'store'])->name('helpcenter.store');
+    Route::get('/helpcenter/history', [HelpCenterController::class, 'history'])->name('helpcenter.history');
 });
 
 Route::middleware('auth:driver')->group(function () {
     Route::get('/dashboard-driver', [AuthController::class, 'dashboardDriver'])->name('dashboard.driver');
+    Route::post('/logout-driver', [AuthController::class, 'logout']);
     Route::get('/driver/wallet', [DriverWalletController::class, 'index'])->name('driver.wallet.balance');
-});
-
-Route::middleware('auth:driver')->group(function () {
-    Route::get('/dashboard-driver', [AuthController::class, 'dashboardDriver'])->name('dashboard.driver');
     Route::get('/driver/orders', [BookingController::class, 'driverOrders'])->name('driver.orders');
     Route::post('/driver/bookings/{booking}/accept', [BookingController::class, 'acceptOrder'])->name('bookings.orders.accept');
     Route::post('/driver/bookings/{booking}/reject', [BookingController::class, 'rejectOrder'])->name('bookings.orders.reject');
 });
-
-Route::middleware('auth:user')->group(function () {
-    Route::post('/logout-user', [AuthController::class, 'logout']);
-});
-
-Route::middleware('auth:driver')->group(function () {
-    Route::post('/logout-driver', [AuthController::class, 'logout']);
-});
-
