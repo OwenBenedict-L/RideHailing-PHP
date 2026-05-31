@@ -56,6 +56,10 @@
                                     REJECT
                                 </button>
                             </form>
+
+                            <a href="{{ route('chat.show.driver', $booking->user->id) }}" style="display: inline-block; background-color: #28a745; color: white; padding: 4px 8px; text-decoration: none; border-radius: 4px; font-size: 12px; font-family: sans-serif; font-weight: bold; margin-right: 5px;">
+                                🗪 Chat User
+                            </a>
                         </td>
                     </tr>
                 @endforeach
