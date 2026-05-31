@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Wallet;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\WalletTransaction;
 
 class WalletController extends Controller
 {
@@ -38,7 +39,23 @@ class WalletController extends Controller
         );
         $wallet->balance += $request->amount;
         $wallet->save();
+
+        WalletTransaction::create([
+            'wallet_id' => $wallet->id,
+            'type' => 'topup',
+            'amount' => $request->amount,
+            'description' => 'Top Up'
+        ]);
+
         return redirect()->route('wallet.balance')->with('success', 'Top Up with amount Rp' . 
         number_format($request->amount, 0, ',', '.') . ' successfully added!');
+    }
+
+    public function history()
+    {
+        $userId = Auth::id();
+        $wallet = Wallet::firstWhere('user_id', $userId);
+        $transactions = $wallet ? $wallet->transactions()->latest()->get() : [];
+        return view('wallet.history', compact('transactions'));
     }
 }
