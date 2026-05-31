@@ -16,7 +16,7 @@ class BookingController extends Controller
     {
         $bookings = Booking::with(['user', 'driver'])
             ->where('user_id', Auth::id())
-            ->orderBy('created_at', 'desc')
+            ->orderBy('created_at', 'asc')
             ->get();
 
         return view('bookings.index', compact('bookings'));

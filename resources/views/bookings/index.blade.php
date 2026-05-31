@@ -17,7 +17,8 @@
 @endif
 
 <a href="{{ route('bookings.create') }}"><button>Create New Booking</button></a>
-<a href="{{ route('dashboard.user') }}"><button>BACK</button></a>
+<a href="{{ route('dashboard.user') }}" style="margin-left: 5px;"><button>BACK</button></a>
+<button onclick="window.location.reload();" style="margin-left: 5px;">↻ Refresh</button>
 <br><br>
 
 @if($bookings->isEmpty())
@@ -27,6 +28,7 @@
         <thead>
             <tr>
                 <th>No</th>
+                <th>Order Time</th>
                 <th>Trip Route</th>
                 <th>Fare</th>
                 <th>Distance</th>
@@ -37,6 +39,10 @@
             @foreach($bookings as $booking)
                 <tr>
                     <td>{{ $loop->iteration }}</td>
+                    <td>
+                        {{ $booking->created_at->format('d M Y') }} <br>
+                        {{ $booking->created_at->format('H:i') }} WIB
+                    </td>
                     <td>
                         <strong>From:</strong> {{ $booking->pickup_location }} <br>
                         <strong>To:</strong> {{ $booking->destination_location }}
