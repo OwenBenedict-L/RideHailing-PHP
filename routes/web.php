@@ -67,6 +67,8 @@ Route::middleware('auth:user')->group(function () {
     Route::post('/promos', [PromoController::class, 'store']);
     Route::post('/promos/validate', [PromoController::class, 'validatePromo']);
     Route::delete('/promos/{id}', [PromoController::class, 'destroy']);
+    Route::get('/chat/{userId}', [ChatController::class, 'showConversationForDriver'])->name('chat.show.driver');
+    Route::post('/chat/{userId}', [ChatController::class, 'storeForDriver'])->name('chat.send.driver');
 });
 
 Route::middleware('auth:driver')->group(function () {
@@ -78,4 +80,6 @@ Route::middleware('auth:driver')->group(function () {
     Route::get('/driver/orders', [BookingController::class, 'driverOrders'])->name('driver.orders');
     Route::post('/driver/bookings/{booking}/accept', [BookingController::class, 'acceptOrder'])->name('bookings.orders.accept');
     Route::post('/driver/bookings/{booking}/reject', [BookingController::class, 'rejectOrder'])->name('bookings.orders.reject');
+    Route::get('/chat/{driverId}', [ChatController::class, 'showConversationForUser'])->name('chat.show.user');
+    Route::post('/chat/{driverId}', [ChatController::class, 'storeForUser'])->name('chat.send.user');
 });
