@@ -19,6 +19,13 @@
                 <button type="button">[help center]</button>
             </a>
         </li>
+        @if(Auth::user()->email === 'developer@gmail.com')
+        <li>
+            <a href="{{ url('/promos/create') }}">
+                <button type="button">[promo admin]</button>
+            </a>
+        </li>
+        @endif
     </ul>
 
     <br><form method="POST" action="/logout-user">

@@ -10,6 +10,10 @@
 <hr>
 
 <h3>Fare Details</h3>
+    @if($discount_amount > 0)
+        <p>Original Fare: <strike>Rp {{ number_format($original_fare, 0, ',', '.') }}</strike></p>
+        <p style="color: green;">Promo Discount: - Rp {{ number_format($discount_amount, 0, ',', '.') }}</p>
+    @endif
 <p>Total Fare: <strong>Rp {{ number_format($fare, 0, ',', '.') }}</strong></p>
 @if($promo_code)
     <p>Promo Code Applied: <span style="color: green;">{{ strtoupper($promo_code) }}</span></p>
