@@ -50,6 +50,7 @@ Route::middleware('auth:user')->group(function () {
     Route::get('/wallet', [WalletController::class, 'index'])->name('wallet.balance');
     Route::get('/wallet/topup', [WalletController::class, 'topupForm'])->name('wallet.topup');
     Route::post('/wallet/topup', [WalletController::class, 'processTopup'])->name('wallet.topup.process');
+    Route::get('/wallet/history', [WalletController::class, 'history'])->name('wallet.history');
     Route::post('/bookings/confirm', [BookingController::class, 'confirm'])->name('bookings.confirm');
     Route::resource('bookings', BookingController::class);
     Route::get('/estimations/create', [EstimationController::class, 'create'])->name('estimations.create');

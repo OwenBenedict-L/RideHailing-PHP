@@ -14,6 +14,13 @@
             </a>
         </p>
     </div>
+    <div>
+        <p>
+            <a href="{{ route('wallet.history') }}">
+                <button>HISTORY</button>
+            </a>
+        </p>
+    </div>
     <a href="{{ route('dashboard.user') }}">
             <button>BACK</button>
     </a>
