@@ -21,9 +21,13 @@
         th {
             background-color: #f2f2f2;
         }
-        th:nth-child(1) { width: 25%; }
-        th:nth-child(2) { width: 55%; } 
-        th:nth-child(3) { width: 20%; }
+
+        /* this is for width */
+        th:nth-child(1) { width: 15%; } /* Type of Complaint */
+        th:nth-child(2) { width: 40%; } /* Complaints (tetap paling lebar) */
+        th:nth-child(3) { width: 15%; } /* Date */
+        th:nth-child(4) { width: 15%; } /* Status */
+        th:nth-child(5) { width: 15%} /* Reply */
     </style>
 </head>
 <body>
@@ -36,6 +40,8 @@
                 <th>Type of Complaint</th>
                 <th>Complaints</th>
                 <th>Date</th>
+                <th>Status</th>
+                <th>Reply</th>
             </tr>
         </thead>
         <tbody>
@@ -57,6 +63,18 @@
                 <td>{{ $jenis_inggris }}</td>
                 <td>{{ $item->isi_keluhan }}</td>
                 <td>{{ $item->created_at->format('d M Y, H:i') }}</td>
+
+                <td>
+                    @if($item->status == 'pending')
+                        <span style="color: #d9534f; font-weight: bold;">Incomplete</span>
+                    @else
+                        <span style="color: #5cb85c; font-weight: bold;">Complete</span>
+                    @endif
+                </td>
+                    
+                <td>
+                    <a href="{{ route('helpcenter.chat', $item->id) }}" style="color: #007bff; text-decoration: underline; font-weight: bold;">Message</a>
+                </td>
             </tr>
             @endforeach
         </tbody>

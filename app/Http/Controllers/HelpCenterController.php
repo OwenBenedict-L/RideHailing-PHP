@@ -52,6 +52,27 @@ class HelpCenterController extends Controller
 
         return view('helpcenter.history', compact('keluhan'));
     }
-        
+    
+    public function chat($id)
+    {
+        $tiket = HelpCenter::findOrFail($id);
+
+        return view('helpcenter.chat', compact('tiket'));
+    }
+
+    public function sendReply(Request $request, $id)
+    {
+        $pesanBaru = $request->pesan;
+        return "
+            <div style='font-family: sans-serif; padding: 20px;'>
+                <h3 style='color: green;'>Pesan Berhasil Terkirim!</h3>
+                <p>Tiket ID: <strong>$id</strong></p>
+                <p>Isi Pesan: <em>$pesanBaru</em></p>
+                <br>
+                <a href='" . route('helpcenter.history') . "' style='text-decoration: none;'>
+                    <button type='button' style='padding: 5px 15px; cursor: pointer;'>Kembali ke History</button>
+                </a>
+            </div>";
+    }
 }
 

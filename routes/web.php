@@ -59,6 +59,8 @@ Route::middleware('auth:user')->group(function () {
     Route::get('/helpcenter', [HelpCenterController::class, 'index'])->name('helpcenter.index');
     Route::post('/helpcenter', [HelpCenterController::class, 'store'])->name('helpcenter.store');
     Route::get('/helpcenter/history', [HelpCenterController::class, 'history'])->name('helpcenter.history');
+    Route::get('/helpcenter/chat/{id}', [HelpCenterController::class, 'chat'])->name('helpcenter.chat');
+    Route::post('/helpcenter/chat/{id}', [HelpCenterController::class, 'sendReply'])->name('helpcenter.reply');
 });
 
 Route::middleware('auth:driver')->group(function () {
