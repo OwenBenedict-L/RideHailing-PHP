@@ -62,17 +62,33 @@ class BookingController extends Controller
             ['balance' => 0]
         );
 
-        $wallet_balance = $wallet->balance;
-        $total_fare = $request->fare; 
-        $balance_enough = $wallet_balance >= $total_fare;
+        $total_fare = $request->fare;
+        $discount_amount = 0;
+
+        if ($request->promo_code) {
+            $promo = Promo::where('code', strtoupper($request->promo_code))->first();
+
+            if ($promo && $promo->expiry_date >= now() && $promo->is_active) {
+                $discount_amount = ($promo->discount_percentage / 100) * $total_fare;
+
+                if ($promo->max_discount && $discount_amount > $promo->max_discount) {
+                    $discount_amount = $promo->max_discount;
+                }
+            }
+        }
+
+        $final_fare = $total_fare - $discount_amount;
+        $balance_enough = $wallet->balance >= $final_fare;
 
         return view('bookings.checkout', [
             'pickup_location' => $request->pickup_location,
             'destination_location' => $request->destination_location,
             'promo_code' => $request->promo_code,
             'distance' => $request->distance ?? 0,
-            'fare' => $total_fare,
-            'wallet_balance' => $wallet_balance,
+            'original_fare' => $total_fare,
+            'discount_amount' => $discount_amount,
+            'fare' => $final_fare,
+            'wallet_balance' => $wallet->balance,
             'balance_enough' => $balance_enough
         ]);
     }

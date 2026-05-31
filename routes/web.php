@@ -11,6 +11,7 @@ use App\Http\Controllers\WalletController;
 use App\Http\Controllers\DriverWalletController;
 use App\Http\Controllers\EstimationController;
 use App\Http\Controllers\HelpCenterController;
+use App\Http\Controllers\PromoController;
 
 Route::get('/', function () {
     if (Auth::guard('user')->check()) {
@@ -61,6 +62,11 @@ Route::middleware('auth:user')->group(function () {
     Route::get('/helpcenter/history', [HelpCenterController::class, 'history'])->name('helpcenter.history');
     Route::get('/helpcenter/chat/{id}', [HelpCenterController::class, 'chat'])->name('helpcenter.chat');
     Route::post('/helpcenter/chat/{id}', [HelpCenterController::class, 'sendReply'])->name('helpcenter.reply');
+    Route::get('/promos/create', [PromoController::class, 'create']);
+    Route::get('/promos', [PromoController::class, 'index']);
+    Route::post('/promos', [PromoController::class, 'store']);
+    Route::post('/promos/validate', [PromoController::class, 'validatePromo']);
+    Route::delete('/promos/{id}', [PromoController::class, 'destroy']);
 });
 
 Route::middleware('auth:driver')->group(function () {
