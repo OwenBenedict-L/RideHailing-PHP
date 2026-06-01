@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Ticket; 
 use Illuminate\Support\Facades\Auth;
+use App\Models\TicketMessage;
 use App\Models\HelpCenter;
 
 class HelpCenterController extends Controller
@@ -25,24 +26,18 @@ class HelpCenterController extends Controller
             $jenis = $request->jenis_keluhan_lainnya;
         }
         
-        HelpCenter::create([
+        $tiketBaru = HelpCenter::create([
             'user_id' => Auth::id(),
-            'jenis_keluhan' => $request->jenis_keluhan, 
-            'isi_keluhan' => $request->isi_keluhan,
-            'status' => 'pending'
+            'subject' => $jenis,
+            'status' => 'OPEN'
         ]);
 
-        return "
-            <div style='text-align: center; margin-top: 50px; font-family: sans-serif;'>
-                <h2>Thank you for your feedback.</h2>
-                <p>Please be patient, our team will respond to your feedback ASAP.</p>
-                <br>
-                
-                <a href='" . route('dashboard.user') . "'>
-                    <button style='padding: 10px 20px; cursor: pointer;'>Return to Dashboard</button>
-                </a>
-            </div>
-        ";
+        \App\Models\TicketMessage::create([
+            'ticket_id' => $tiketBaru->id,
+            'sender_type' => 'CUSTOMER',
+            'message' => $request->isi_keluhan
+        ]);
+        return redirect()->route('helpcenter.history');
     }
 
     public function history()
@@ -53,26 +48,29 @@ class HelpCenterController extends Controller
         return view('helpcenter.history', compact('keluhan'));
     }
     
+
     public function chat($id)
     {
         $tiket = HelpCenter::findOrFail($id);
 
-        return view('helpcenter.chat', compact('tiket'));
+        $riwayatChat = TicketMessage::where('ticket_id', $id)
+                                    ->orderBy('created_at', 'asc')
+                                    ->get();
+
+        return view('helpcenter.chat', compact('tiket', 'riwayatChat'));
     }
 
     public function sendReply(Request $request, $id)
     {
-        $pesanBaru = $request->pesan;
-        return "
-            <div style='font-family: sans-serif; padding: 20px;'>
-                <h3 style='color: green;'>Pesan Berhasil Terkirim!</h3>
-                <p>Tiket ID: <strong>$id</strong></p>
-                <p>Isi Pesan: <em>$pesanBaru</em></p>
-                <br>
-                <a href='" . route('helpcenter.history') . "' style='text-decoration: none;'>
-                    <button type='button' style='padding: 5px 15px; cursor: pointer;'>Kembali ke History</button>
-                </a>
-            </div>";
+        $tiket = HelpCenter::findOrFail($id);
+        TicketMessage::create([
+            'ticket_id' => $id,
+            'sender_type' => 'CUSTOMER',
+            'message' => $request->pesan
+        ]);
+
+        return redirect()->back(); 
     }
+
 }
 
