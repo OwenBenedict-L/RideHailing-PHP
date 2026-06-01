@@ -9,5 +9,6 @@ class TicketMessage extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['ticket_id', 'sender_type', 'message'];
+    protected $guarded = [];
+    
 }

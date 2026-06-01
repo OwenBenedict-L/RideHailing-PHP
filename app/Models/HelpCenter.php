@@ -8,11 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class HelpCenter extends Model
 {
     use HasFactory;
-
+    protected $table = 'tickets';
     protected $fillable = [
         'user_id',
-        'jenis_keluhan',
-        'isi_keluhan',
+        'subject',
         'status',
     ];
 }

@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html>
 <head>
     <title>Complaint History</title>
@@ -24,7 +23,7 @@
 
         /* this is for width */
         th:nth-child(1) { width: 15%; } /* Type of Complaint */
-        th:nth-child(2) { width: 40%; } /* Complaints (tetap paling lebar) */
+        th:nth-child(2) { width: 40%; } /* Complaints */
         th:nth-child(3) { width: 15%; } /* Date */
         th:nth-child(4) { width: 15%; } /* Status */
         th:nth-child(5) { width: 15%} /* Reply */
@@ -56,16 +55,20 @@
                     'masalah_pembayaran' => 'Payment / Balance Issues',
                     'lainnya' => 'Others'
                 ];
-                $jenis_inggris = $kamus[$item->jenis_keluhan] ?? $item->jenis_keluhan;
+                
+                $jenis_inggris = $kamus[$item->subject] ?? $item->subject;
+                
+                $pesanPertama = \App\Models\TicketMessage::where('ticket_id', $item->id)->first();
+                $isi_keluhan = $pesanPertama ? $pesanPertama->message : 'Tidak ada teks';
             @endphp
 
             <tr>
                 <td>{{ $jenis_inggris }}</td>
-                <td>{{ $item->isi_keluhan }}</td>
+                <td>{{ $isi_keluhan }}</td>
                 <td>{{ $item->created_at->format('d M Y, H:i') }}</td>
 
                 <td>
-                    @if($item->status == 'pending')
+                    @if($item->status == 'OPEN')
                         <span style="color: #d9534f; font-weight: bold;">Incomplete</span>
                     @else
                         <span style="color: #5cb85c; font-weight: bold;">Complete</span>
