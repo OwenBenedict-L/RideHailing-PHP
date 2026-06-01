@@ -19,4 +19,9 @@ class DriverWallet extends Model
     {
         return $this->belongsTo(Driver::class);
     }
+
+    public function transactions()
+    {
+        return $this->hasMany(DriverWalletTransaction::class, 'driver_wallet_id');
+    }
 }

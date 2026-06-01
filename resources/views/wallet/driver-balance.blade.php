@@ -14,6 +14,13 @@
             </a>
         </p>
     </div>
+    <div>
+        <p>
+            <a href="{{ route('driver.wallet.history') }}">
+                <button>HISTORY</button>
+            </a>
+        </p>
+    </div>
     <a href="{{ route('dashboard.driver') }}">
             <button>BACK</button>
     </a>
