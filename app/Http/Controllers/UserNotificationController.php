@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\UserNotification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UserNotificationController extends Controller
 {
@@ -12,7 +13,11 @@ class UserNotificationController extends Controller
      */
     public function index()
     {
-        //
+        $notifications = UserNotification::where('user_id', Auth::id())
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('notifications.index', compact('notifications'));
     }
 
     /**
@@ -20,7 +25,7 @@ class UserNotificationController extends Controller
      */
     public function create()
     {
-        //
+        return redirect()->back();
     }
 
     /**
@@ -28,7 +33,7 @@ class UserNotificationController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        return redirect()->back();
     }
 
     /**
@@ -36,7 +41,15 @@ class UserNotificationController extends Controller
      */
     public function show(UserNotification $userNotification)
     {
-        //
+        if ($userNotification->user_id !== Auth::id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        if (!$userNotification->is_read) {
+            $userNotification->update(['is_read' => true]);
+        }
+
+        return view('notifications.show', compact('userNotification'));
     }
 
     /**
@@ -44,7 +57,7 @@ class UserNotificationController extends Controller
      */
     public function edit(UserNotification $userNotification)
     {
-        //
+        return redirect()->back();
     }
 
     /**
@@ -52,7 +65,17 @@ class UserNotificationController extends Controller
      */
     public function update(Request $request, UserNotification $userNotification)
     {
-        //
+        if ($userNotification->user_id !== Auth::id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $request->validate([
+            'is_read' => 'required|boolean',
+        ]);
+
+        $userNotification->update($request->only('is_read'));
+
+        return redirect()->route('notifications.index')->with('success', 'Notification marked as read.');
     }
 
     /**
@@ -60,6 +83,12 @@ class UserNotificationController extends Controller
      */
     public function destroy(UserNotification $userNotification)
     {
-        //
+        if ($userNotification->user_id !== Auth::id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $userNotification->delete();
+
+        return redirect()->route('notifications.index')->with('success', 'Notification deleted from your inbox.');
     }
 }

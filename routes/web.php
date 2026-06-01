@@ -12,6 +12,7 @@ use App\Http\Controllers\DriverWalletController;
 use App\Http\Controllers\EstimationController;
 use App\Http\Controllers\HelpCenterController;
 use App\Http\Controllers\PromoController;
+use App\Http\Controllers\UserNotificationController;
 
 Route::get('/', function () {
     if (Auth::guard('user')->check()) {
@@ -69,6 +70,7 @@ Route::middleware('auth:user')->group(function () {
     Route::delete('/promos/{id}', [PromoController::class, 'destroy']);
     Route::get('/chat/{userId}', [ChatController::class, 'showConversationForDriver'])->name('chat.show.driver');
     Route::post('/chat/{userId}', [ChatController::class, 'storeForDriver'])->name('chat.send.driver');
+    Route::resource('notifications', UserNotificationController::class);
 });
 
 Route::middleware('auth:driver')->group(function () {
