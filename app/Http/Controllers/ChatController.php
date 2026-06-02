@@ -63,4 +63,22 @@ class ChatController extends Controller
 
         return view( 'chat.show',compact('chat', 'contact'));
     }
+
+    public function updateChatUser(Request $request, $chatId) {
+        $request->validate(['message' => 'required|string']);
+    
+        $chat = Chat::where('id', $chatId)->where('senderUser_id', auth('user')->id()) ->firstOrFail();
+    
+        $chat->update(['message' => $request->message, 'is_edited' => true]);
+        return back();
+    }
+
+    public function updateChatDriver(Request $request, $chatId) {
+        $request->validate(['message' => 'required|string']);
+    
+        $chat = Chat::where('id', $chatId)->where('senderDriver_id', auth('driver')->id()) ->firstOrFail();
+    
+        $chat->update(['message' => $request->message, 'is_edited' => true]);
+        return back();
+    }
 };
