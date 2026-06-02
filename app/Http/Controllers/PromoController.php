@@ -8,13 +8,17 @@ use Illuminate\Support\Facades\Auth;
 
 class PromoController extends Controller
 {
-    public function index()
+public function index()
     {
-        $promos = Promo::where('is_active', true)
-            ->where('expiry_date', '>=', now())
-            ->get();
+        if (Auth::user()->email === 'developer@gmail.com') {
+            $promos = Promo::all();
+        } else {
+            $promos = Promo::where('is_active', true)
+                ->where('expiry_date', '>=', now())
+                ->get();
+        }
 
-        return response()->json($promos);
+        return view('promos.index', ['promos' => $promos]);
     }
 
     public function create()
@@ -30,6 +34,15 @@ class PromoController extends Controller
     {
         if (Auth::user()->email !== 'developer@gmail.com') {
             abort(403);
+        }
+
+        if ($request->discount_percentage < 1 || $request->discount_percentage > 100) {
+            return redirect()->back()->with('error', 'Discount percentage must be between 1 and 100!');
+        }
+
+        $existing_promo = Promo::where('code', strtoupper($request->code))->first();
+        if ($existing_promo) {
+            return redirect()->back()->with('error', 'Promo code already exists!');
         }
 
         Promo::create([
@@ -66,7 +79,12 @@ class PromoController extends Controller
 
     public function destroy($id)
     {
+        if (Auth::user()->email !== 'developer@gmail.com') {
+            abort(403);
+        }
+
         Promo::destroy($id);
-        return response()->json(['message' => 'Promo deleted']);
+        
+        return redirect()->back()->with('success', 'Promo deleted successfully!');
     }
 }
