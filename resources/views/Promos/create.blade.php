@@ -6,6 +6,10 @@
         <p style="color: green; font-weight: bold;">{{ session('success') }}</p>
     @endif
 
+    @if(session('error'))
+        <p style="color: red; font-weight: bold;">{{ session('error') }}</p>
+    @endif
+
     <form method="POST" action="{{ url('/promos') }}">
         @csrf
         

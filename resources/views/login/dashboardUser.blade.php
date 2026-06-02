@@ -22,7 +22,12 @@
         @if(Auth::user()->email === 'developer@gmail.com')
         <li>
             <a href="{{ url('/promos/create') }}">
-                <button type="button">[promo admin]</button>
+                <button type="button">[create promo]</button>
+            </a>
+        </li>
+        <li>
+            <a href="{{ url('/promos') }}">
+                <button type="button">[promo list]</button>
             </a>
         </li>
         @endif
