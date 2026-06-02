@@ -58,6 +58,8 @@ Route::middleware('auth:user')->group(function () {
     Route::get('/estimations/create', [EstimationController::class, 'create'])->name('estimations.create');
     Route::post('/estimations', [EstimationController::class, 'store'])->name('estimations.store');
     Route::get('/estimations/{id}', [EstimationController::class, 'show'])->name('estimations.show');
+    Route::post('/estimations/{id}/select', [EstimationController::class, 'selectVehicle'])->name('estimations.selectVehicle');
+    Route::get('/estimations/{id}/confirmation', [EstimationController::class, 'confirmation'])->name('estimations.confirmation');
     Route::get('/helpcenter', [HelpCenterController::class, 'index'])->name('helpcenter.index');
     Route::post('/helpcenter', [HelpCenterController::class, 'store'])->name('helpcenter.store');
     Route::get('/helpcenter/history', [HelpCenterController::class, 'history'])->name('helpcenter.history');

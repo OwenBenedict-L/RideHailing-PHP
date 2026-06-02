@@ -1,25 +1,55 @@
-<!DOCTYPE html>
 <html>
+<head>
+    <title>Select Your Ride</title>
+    <style>
+        body { font-family: sans-serif; padding: 25px; color: #333; }
+        h1 { font-size: 24px; font-weight: bold; }
+        hr { border: 0; border-top: 1px solid #ccc; margin-bottom: 20px; }
+        .route-path { font-size: 18px; font-weight: bold; margin-bottom: 5px; }
+        .distance { color: #666; font-size: 14px; margin-bottom: 25px; }
+        .section-title { font-size: 18px; font-weight: bold; margin-bottom: 15px; }
+        .option-card { border: 1px solid #ccc; padding: 15px; margin-bottom: 12px; display: flex; gap: 15px; background-color: #f9f9f9; cursor: pointer;}
+        .vehicle-name { font-weight: bold; }
+    </style>
+</head>
 <body>
-    <h2>Hasil Estimasi Perjalanan Anda</h2>
-    <hr>
-    
-    <h3>Rute Perjalanan</h3>
-    <p><strong>Titik Jemput:</strong> {{ $estimation->origin }}</p>
-    <p><strong>Tujuan:</strong> {{ $estimation->destination }}</p>
-    
+
+    <h1>Select Your Ride</h1>
     <hr>
 
-    <h3>Rincian Harga</h3>
-    <p><strong>Perkiraan Jarak:</strong> {{ $estimation->distance }} Km</p>
-    <p><strong>Total Tarif:</strong> Rp {{ number_format($estimation->fare, 0, ',', '.') }}</p>
-    
-    <hr>
-    <p><i>*Ini adalah template data untuk Booking. Fitur tombol konfirmasi Booking akan kita taruh di halaman ini nantinya.</i></p>
+    <div class="route-path">{{ $estimation->origin }} &rarr; {{ $estimation->destination }}</div>
+    <div class="distance">Distance: {{ $estimation->distance }} Km</div>
 
-    <a href="{{ route('dashboard.user') }}">
-        <button type="button">Kembali ke Dasbor</button>
-    </a>
+    <div class="section-title">Available Vehicles</div>
+    
+    <form action="{{ route('estimations.selectVehicle', $estimation->id) }}" method="POST">
+        @csrf
+        
+        @php
+            // Hitung harga mobil (misal Rp 6.500 / km)
+            $hargaMobil = $estimation->distance * 6500;
+        @endphp
+
+        <label class="option-card">
+            <input type="radio" name="vehicle_type" value="Bike" checked>
+            <div>
+                <div class="vehicle-name">RideApp Bike (Motorcycle)</div>
+                <div>Fare: Rp {{ number_format($estimation->fare, 0, ',', '.') }}</div>
+            </div>
+        </label>
+
+        <label class="option-card">
+            <input type="radio" name="vehicle_type" value="Car">
+            <div>
+                <div class="vehicle-name">RideApp Car (Four-Wheeler)</div>
+                <div>Fare: Rp {{ number_format($hargaMobil, 0, ',', '.') }}</div>
+            </div>
+        </label>
+
+        <br>
+        <button type="button" onclick="window.location.href='{{ route('estimations.create') }}'">CHANGE ROUTE</button>
+        <button type="submit">NEXT</button>
+    </form>
 
 </body>
 </html>
