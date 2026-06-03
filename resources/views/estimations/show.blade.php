@@ -1,6 +1,6 @@
 <html>
 <head>
-    <title>Select Your Ride</title>
+    <title>Ride Estimations</title>
     <style>
         body { font-family: sans-serif; padding: 25px; color: #333; }
         h1 { font-size: 24px; font-weight: bold; }
@@ -14,7 +14,7 @@
 </head>
 <body>
 
-    <h1>Select Your Ride</h1>
+    <h1>Ride Estimations</h1>
     <hr>
 
     <div class="route-path">{{ $estimation->origin }} &rarr; {{ $estimation->destination }}</div>
@@ -26,14 +26,15 @@
         @csrf
         
         @php
-            // Hitung harga mobil (misal Rp 6.500 / km)
-            $hargaMobil = $estimation->distance * 6500;
+            $hargaAwalMobil = $estimation->distance * 5000;
+            $surgeMobil = rand(120, 130) / 100;
+            $hargaMobil = $hargaAwalMobil * $surgeMobil;
         @endphp
 
         <label class="option-card">
             <input type="radio" name="vehicle_type" value="Bike" checked>
             <div>
-                <div class="vehicle-name">RideApp Bike (Motorcycle)</div>
+                <div class="vehicle-name">Bike (Motorcycle)</div>
                 <div>Fare: Rp {{ number_format($estimation->fare, 0, ',', '.') }}</div>
             </div>
         </label>
@@ -41,13 +42,13 @@
         <label class="option-card">
             <input type="radio" name="vehicle_type" value="Car">
             <div>
-                <div class="vehicle-name">RideApp Car (Four-Wheeler)</div>
+                <div class="vehicle-name">Car (Four-Wheeler)</div>
                 <div>Fare: Rp {{ number_format($hargaMobil, 0, ',', '.') }}</div>
             </div>
         </label>
 
         <br>
-        <button type="button" onclick="window.location.href='{{ route('estimations.create') }}'">CHANGE ROUTE</button>
+        <button type="button" onclick="window.location.href='{{ route('bookings.create') }}'">Back</button>
         <button type="submit">NEXT</button>
     </form>
 

@@ -15,28 +15,27 @@ class EstimationController extends Controller
 
     public function store(Request $request)
     {
-        // 1. Validasi Input
         $request->validate([
             'pickup_location' => 'required|string',
             'destination_location' => 'required|string',
         ]);
 
-        // 2. Perhitungan (Bisa disesuaikan dengan kebutuhan demo Anda)
         $distance = rand(2, 15);
-        $fare = $distance * 5000; 
-        
-        // Menghitung estimasi waktu (Asumsi kecepatan rata-rata 40 km/jam)
+        $tarifMotor = $distance * 5000; 
+        $surgeMultiplier = rand(95, 105) / 100;
+        $fareAkhir = $tarifMotor * $surgeMultiplier;
+
         $waktuEstimasi = round(($distance / 40) * 60);
 
-        // 3. Simpan ke Database
+
         $estimation = Estimation::create([
             'user_id' => Auth::id(),
             'origin' => $request->pickup_location,
             'destination' => $request->destination_location,
             'distance' => $distance,
-            'fare' => $fare,
-            'estimated_time' => $waktuEstimasi, // Laci ini sekarang terisi!
-            'surge_multiplier' => 1.0,          // Nilai default
+            'fare' => $fareAkhir,
+            'estimated_time' => $waktuEstimasi,
+            'surge_multiplier' => $surgeMultiplier,
             'status' => 'ACTIVE' 
         ]);
 
@@ -54,18 +53,52 @@ class EstimationController extends Controller
         $estimation = Estimation::findOrFail($id);
     
         if ($request->vehicle_type === 'Car') {
-            $hargaMobil = $estimation->distance * 6500;
+            $hargaMobil = $estimation->distance * 5000;
             $estimation->update([
                 'fare' => $hargaMobil
             ]);
         }
 
-        return redirect()->route('estimations.confirmation', $estimation->id);
+        return redirect()->route('bookings.checkout', $estimation->id);
     }
 
-    public function confirmation($id)
+    public function checkout($id)
     {
+        // 1. Ambil data koper besar
         $estimation = Estimation::findOrFail($id);
-        return view('estimations.dashboard', compact('estimation'));
+        
+        // 2. Variabel eceran untuk rute dan jarak
+        $pickup_location = $estimation->origin;
+        $destination_location = $estimation->destination;
+        $distance = $estimation->distance;
+        
+        // 3. Variabel eceran untuk harga dan promo
+        $original_fare = $estimation->fare;
+        $discount_amount = 0; 
+        $fare = $original_fare - $discount_amount;
+        
+        // TAMBAHAN BARU: Variabel untuk Promo Code (diisi null dulu jika belum ada sistem validasi promo)
+        $promo_code = null; 
+
+        // TAMBAHAN BARU: Variabel untuk Saldo (Wallet)
+        // Kita gunakan auth()->user() untuk mengambil saldo user yang sedang login
+        $wallet_balance = auth()->user()->wallet_balance ?? 0;
+        
+        // TAMBAHAN BARU: Pengecekan apakah saldo cukup (menghasilkan nilai True/False)
+        $balance_enough = $wallet_balance >= $fare;
+
+        // 4. Kirim SEMUA variabel yang diminta ke halaman web
+        return view('bookings.checkout', compact(
+            'estimation', 
+            'pickup_location', 
+            'destination_location', 
+            'distance', 
+            'original_fare', 
+            'discount_amount', 
+            'fare',
+            'promo_code',
+            'wallet_balance',
+            'balance_enough'
+        )); 
     }
 }
