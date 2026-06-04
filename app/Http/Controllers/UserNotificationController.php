@@ -39,23 +39,26 @@ class UserNotificationController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(UserNotification $userNotification)
+    public function show($id)
     {
-        if ($userNotification->user_id !== Auth::id()) {
+        $notification = UserNotification::findOrFail($id);
+
+        if ($notification->user_id !== Auth::guard('user')->id()) {
             abort(403, 'Unauthorized action.');
         }
 
-        if (!$userNotification->is_read) {
-            $userNotification->update(['is_read' => true]);
+        if (!$notification->is_read) {
+            $notification->update(['is_read' => true]);
         }
 
+        $userNotification = $notification;
         return view('notifications.show', compact('userNotification'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(UserNotification $userNotification)
+    public function edit($id)
     {
         return redirect()->back();
     }
@@ -63,9 +66,11 @@ class UserNotificationController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, UserNotification $userNotification)
+    public function update(Request $request, $id)
     {
-        if ($userNotification->user_id !== Auth::id()) {
+        $notification = UserNotification::findOrFail($id);
+
+        if ($notification->user_id !== Auth::guard('user')->id()) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -73,7 +78,7 @@ class UserNotificationController extends Controller
             'is_read' => 'required|boolean',
         ]);
 
-        $userNotification->update($request->only('is_read'));
+        $notification->update($request->only('is_read'));
 
         return redirect()->route('notifications.index')->with('success', 'Notification marked as read.');
     }
@@ -81,13 +86,15 @@ class UserNotificationController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(UserNotification $userNotification)
+    public function destroy($id)
     {
-        if ($userNotification->user_id !== Auth::id()) {
+        $notification = UserNotification::findOrFail($id);
+
+        if ($notification->user_id !== Auth::guard('user')->id()) {
             abort(403, 'Unauthorized action.');
         }
 
-        $userNotification->delete();
+        $notification->delete();
 
         return redirect()->route('notifications.index')->with('success', 'Notification deleted from your inbox.');
     }

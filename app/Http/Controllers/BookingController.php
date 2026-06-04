@@ -6,6 +6,8 @@ use App\Models\Booking;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Wallet;
+use App\Models\Promo;
+use App\Models\UserNotification;
 
 class BookingController extends Controller
 {
@@ -132,6 +134,24 @@ class BookingController extends Controller
 
         $booking->update($data);
 
+        if ($request->status === 'on_way') {
+            UserNotification::create([
+                'user_id' => $booking->user_id,
+                'type' => 'ride',
+                'title' => 'Trip Started ➔',
+                'message' => 'Your trip to ' . $booking->destination_location . ' has started!',
+                'is_read' => false
+            ]);
+        } elseif ($request->status === 'completed') {
+            UserNotification::create([
+                'user_id' => $booking->user_id,
+                'type' => 'ride',
+                'title' => 'Trip Completed',
+                'message' => 'You have arrived at ' . $booking->destination_location . '. Thank you for riding with us! ',
+                'is_read' => false
+            ]);
+        }
+
         return redirect()->route('bookings.index')->with('success', 'Booking updated successfully.');
     }
 
@@ -167,6 +187,14 @@ class BookingController extends Controller
             'status' => 'confirmed'
         ]);
 
+        UserNotification::create([
+            'user_id' => $booking->user_id,
+            'type' => 'ride',
+            'title' => 'Driver Found!',
+            'message' => 'Your driver, ' . Auth::guard('driver')->user()->name . ' (' . Auth::guard('driver')->user()->license_plate . '), is on the way to pick you up at ' . $booking->pickup_location . '.',
+            'is_read' => false
+        ]);
+
         return redirect()->route('dashboard.driver')->with('success', 'Order successfully accepted! Please pick up the passenger.');
     }
 
@@ -195,6 +223,14 @@ class BookingController extends Controller
             
         return redirect()->route('bookings.index')->with('success', 'Your ride has been successfully cancelled.');
         }
+
+        UserNotification::create([
+                'user_id' => $booking->user_id,
+                'type' => 'ride',
+                'title' => 'Trip Cancelled ✖',
+                'message' => 'Your booking to ' . $booking->destination_location . ' has been cancelled.',
+                'is_read' => false
+            ]);
         
         return redirect()->route('bookings.index')->with('success', 'Booking cancelled successfully.');
     }
