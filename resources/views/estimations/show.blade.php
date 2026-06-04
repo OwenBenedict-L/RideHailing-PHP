@@ -22,9 +22,9 @@
 
     <div class="section-title">Available Vehicles</div>
     
-    <form action="{{ route('estimations.selectVehicle', $estimation->id) }}" method="POST">
+    <form action="{{ route('estimations.selectVehicle') }}" method="POST">
         @csrf
-        
+        <input type="hidden" name="estimation_id" value="{{ $estimation->id }}">
         @php
             $hargaAwalMobil = $estimation->distance * 5000;
             $surgeMobil = rand(120, 130) / 100;
@@ -48,7 +48,7 @@
         </label>
 
         <br>
-        <button type="button" onclick="window.location.href='{{ route('bookings.create') }}'">Back</button>
+        <button type="button" onclick="window.location.href='{{ route('bookings.create') }}'">BACK</button>
         <button type="submit">NEXT</button>
     </form>
 
