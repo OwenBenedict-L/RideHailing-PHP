@@ -3,8 +3,10 @@
     <h2>Hello Driver: {{ Auth::guard('driver')->user()->name }}</h2>
 
     <ul>
-        <li>[Notification]</li>
         <li>
+            <a href="{{ route('notifications.index')}} ">
+                <button type= button> [Notification]</button>
+        </li>
             <a href="{{ route('helpcenter.store') }}">
                 <button type="button">Help Center</button>
             </a>
