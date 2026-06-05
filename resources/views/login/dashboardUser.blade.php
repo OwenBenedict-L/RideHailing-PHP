@@ -2,7 +2,10 @@
 <body>
     <h2>Hello User: {{ Auth::user()->name }}</h2>
     <ul>
-        <li>[Notification]</li>
+        <li>
+            <a href="{{ route('notifications.index')}} ">
+                <button type= button> [Notification]</button>
+        </li>
         <li>[CS]</li>
         <li>
             <a href="{{ route('wallet.balance') }} ">

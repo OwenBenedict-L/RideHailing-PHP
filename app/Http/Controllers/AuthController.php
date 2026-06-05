@@ -48,7 +48,8 @@ class AuthController extends Controller
             return redirect()->intended('/dashboard-user'); 
         } 
  
-        return back()->withErrors(['email' => 'Wrong email or password.']); 
+        return back()->withErrors([
+            'email' => 'Wrong email or password.'])->withInput($request->only('email')); 
     } 
 
     public function dashboardUser() {
@@ -100,7 +101,8 @@ class AuthController extends Controller
             return redirect()->intended('/dashboard-driver'); 
         } 
  
-        return back()->withErrors(['email' => 'Wrong email or password.']); 
+        return back()->withErrors([
+            'email' => 'Wrong email or password.'])->withInput($request->only('email')); 
     } 
 
     public function dashboardDriver() {
