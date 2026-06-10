@@ -14,6 +14,10 @@
         {{ session('error') }}
     </div>
     <br>
+
+    <script>
+        alert("{{ session('error') }}");
+    </script>
 @endif
 
 <a href="{{ route('bookings.create') }}"><button>Create New Booking</button></a>

@@ -29,6 +29,14 @@ class BookingController extends Controller
      */
     public function create()
     {
+        $activeBooking = Booking::where('user_id', Auth::id())
+            ->whereIn('status', ['pending', 'confirmed', 'on_way'])
+            ->first();
+
+        if ($activeBooking) {
+            return redirect()->route('bookings.index')->with('error', 'You cannot book a new ride until your current trip is completed or cancelled!');
+        }
+
         return view('bookings.create');
     }
 
@@ -47,12 +55,6 @@ class BookingController extends Controller
             'distance' => $request->distance,
             'status' => 'pending'
         ]);
-
-        $wallet = Wallet::where('user_id', Auth::id())->first();
-        if ($wallet) {
-            $wallet->balance -= $request->fare;
-            $wallet->save();
-        }
 
         return redirect()->route('bookings.index')->with('success', 'Booking successful! Finding your driver...');
         }
@@ -143,6 +145,12 @@ class BookingController extends Controller
                 'is_read' => false
             ]);
         } elseif ($request->status === 'completed') {
+            $wallet = Wallet::where('user_id', $booking->user_id)->first();
+            if ($wallet) {
+                $wallet->balance -= $booking->fare;
+                $wallet->save();
+            }
+
             UserNotification::create([
                 'user_id' => $booking->user_id,
                 'type' => 'ride',
