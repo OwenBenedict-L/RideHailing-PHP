@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\WalletController;
 use App\Http\Controllers\DriverWalletController;
 use App\Http\Controllers\EstimationController;
@@ -70,8 +71,8 @@ Route::middleware('auth:user')->group(function () {
     Route::post('/promos', [PromoController::class, 'store']);
     Route::post('/promos/validate', [PromoController::class, 'validatePromo']);
     Route::delete('/promos/{id}', [PromoController::class, 'destroy']);
-    Route::get('/chat/{userId}', [ChatController::class, 'showConversationForDriver'])->name('chat.show.driver');
-    Route::post('/chat/{userId}', [ChatController::class, 'storeForDriver'])->name('chat.send.driver');
+    Route::get('/chat/user/{driverId}', [ChatController::class, 'showConversationForUser'])->name('chat.show.user');
+    Route::post('/chat/user/{driverId}', [ChatController::class, 'storeForUser'])->name('chat.send.user');
     Route::resource('notifications', UserNotificationController::class);
 });
 
@@ -85,6 +86,7 @@ Route::middleware('auth:driver')->group(function () {
     Route::get('/driver/orders', [BookingController::class, 'driverOrders'])->name('driver.orders');
     Route::post('/driver/bookings/{booking}/accept', [BookingController::class, 'acceptOrder'])->name('bookings.orders.accept');
     Route::post('/driver/bookings/{booking}/reject', [BookingController::class, 'rejectOrder'])->name('bookings.orders.reject');
-    Route::get('/chat/{driverId}', [ChatController::class, 'showConversationForUser'])->name('chat.show.user');
-    Route::post('/chat/{driverId}', [ChatController::class, 'storeForUser'])->name('chat.send.user');
+    Route::patch('/driver/bookings/{booking}', [BookingController::class, 'update'])->name('bookings.orders.update');
+    Route::get('/chat/driver/{userId}', [ChatController::class, 'showConversationForDriver'])->name('chat.show.driver');
+    Route::post('/chat/driver/{userId}', [ChatController::class, 'storeForDriver'])->name('chat.send.driver'); 
 });

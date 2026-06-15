@@ -85,6 +85,10 @@
                                 <small style="color: gray;">Riding with {{ $booking->driver->name }}</small>
                             </div>
 
+                            <a href="{{ route('chat.show.user', $booking->driver->id) }}" style="display: inline-block; background-color: #28a745; color: white; padding: 4px 8px; text-decoration: none; border-radius: 4px; font-size: 12px; font-family: sans-serif; font-weight: bold; margin-right: 5px;">
+                                🗪 Chat Driver
+                            </a>
+
                         @elseif($booking->status === 'completed')
                             <div style="margin-bottom: 6px;">
                                 <span style="color: #28a745; font-weight: bold;">

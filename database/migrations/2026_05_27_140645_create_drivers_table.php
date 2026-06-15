@@ -19,8 +19,6 @@ return new class extends Migration
             $table->string('password');
             $table->string('drivers_license_number')->unique();
             $table->string('license_plate')->unique();
-            // $table->enum('role', ['user', 'driver'])->default('driver');;
-            // $table->enum('statusOrder', ['pending', 'confirmed', 'on_way', 'completed', 'cancelled'])
             $table->rememberToken();
             $table->timestamps();
         });
