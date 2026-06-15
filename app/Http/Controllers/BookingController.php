@@ -126,6 +126,7 @@ class BookingController extends Controller
             'status' => 'required|in:pending,confirmed,on_way,completed,cancelled',
         ]);
 
+        $isDriver = Auth::guard('driver')->check();
         $data = $request->only('status');
 
         if ($request->status === 'confirmed') {
@@ -160,6 +161,10 @@ class BookingController extends Controller
             ]);
         }
 
+        if($isDriver) {
+            return redirect()->route('driver.orders')->with('success', 'Order status has been updated successfully.');
+        }
+
         return redirect()->route('bookings.index')->with('success', 'Booking updated successfully.');
     }
 
@@ -172,8 +177,11 @@ class BookingController extends Controller
             abort(403, 'Unauthorized action. Only drivers can access this page.');
         }
 
+        $driverId = Auth::guard('driver')->id();
+
         $orders = Booking::with('user')
             ->where('status', 'pending')
+            ->orwhere('driver_id', $driverId)
             ->orderBy('created_at', 'desc')
             ->get();
 
@@ -203,7 +211,7 @@ class BookingController extends Controller
             'is_read' => false
         ]);
 
-        return redirect()->route('dashboard.driver')->with('success', 'Order successfully accepted! Please pick up the passenger.');
+        return redirect()->route('bookings.order')->with('success', 'Order successfully accepted! Please pick up the passenger.');
     }
 
     public function rejectOrder(Booking $booking)
@@ -216,7 +224,7 @@ class BookingController extends Controller
             return redirect()->back()->with('error', 'Sorry, this order has already been taken by another driver or was cancelled.');
         }
 
-        return redirect()->route('dashboard.driver')->with('success', 'Order successfully skipped.');
+        return redirect()->route('bookings.order')->with('success', 'Order successfully skipped.');
     }
 
     /**

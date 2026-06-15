@@ -10,27 +10,35 @@ use App\Models\Bookings;
 
 class ChatController extends Controller
 {
-    public function storeForUser(Request $request)
+    public function storeForUser(Request $request, $driverId)
     {
+        $request->validate([
+            'message' => 'required|string|max:1000'
+        ]);
+
         Chat::create([
-            'senderUser_id' => auth('user')->id(),
-            'receiverDriver_id' => $request->receiverDriver_id,
-            'message' => $request->message
-        ]);        
+            'senderUser_id'      => auth('user')->id(),
+            'receiverDriver_id'  => $driverId,
+            'message'            => $request->message
+        ]);
 
         return back();
     }
 
-    public function storeForDriver(Request $request)
+    public function storeForDriver(Request $request, $userId)
     {
+        $request->validate([
+            'message' => 'required|string|max:1000'
+        ]);
+
         Chat::create([
             'senderDriver_id' => auth('driver')->id(),
-            'receiverUser_id' => $request->receiverUser_id,
-            'message' => $request->message
-        ]);        
+            'receiverUser_id' => $userId,
+            'message'         => $request->message
+        ]);
 
         return back();
-    }    
+    }
 
     public function showConversationForUser($driverId)
     {
@@ -45,7 +53,7 @@ class ChatController extends Controller
     })
     ->orderBy('created_at')->get();
 
-        return view( 'chat.show',compact('chat', 'contact'));
+        return view( 'chats.show',compact('chat', 'contact'));
     }
 
     public function showConversationForDriver($userId)
@@ -61,7 +69,7 @@ class ChatController extends Controller
     })
     ->orderBy('created_at')->get();
 
-        return view( 'chat.show',compact('chat', 'contact'));
+        return view( 'chats.show',compact('chat', 'contact'));
     }
 
     public function updateChatUser(Request $request, $chatId) {
