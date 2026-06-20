@@ -14,6 +14,7 @@ use App\Http\Controllers\EstimationController;
 use App\Http\Controllers\HelpCenterController;
 use App\Http\Controllers\PromoController;
 use App\Http\Controllers\UserNotificationController;
+use App\Http\Controllers\ReviewController;
 
 Route::get('/', function () {
     if (Auth::guard('user')->check()) {
@@ -74,6 +75,10 @@ Route::middleware('auth:user')->group(function () {
     Route::get('/chat/user/{driverId}', [ChatController::class, 'showConversationForUser'])->name('chat.show.user');
     Route::post('/chat/user/{driverId}', [ChatController::class, 'storeForUser'])->name('chat.send.user');
     Route::resource('notifications', UserNotificationController::class);
+    Route::get('/bookings/{booking}/review', [ReviewController::class, 'create'])->name('reviews.create');
+    Route::post('/bookings/{booking}/review', [ReviewController::class, 'store'])->name('reviews.store');
+    Route::get('/bookings/{booking}/review/edit', [ReviewController::class, 'edit'])->name('reviews.edit');
+    Route::put('/bookings/{booking}/review', [ReviewController::class, 'update'])->name('reviews.update');
 });
 
 Route::middleware('auth:driver')->group(function () {
