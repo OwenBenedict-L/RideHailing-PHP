@@ -27,6 +27,11 @@ class Booking extends Model
     {
         return $this->belongsTo(Driver::class);
     }
+
+    public function review() {
+        return $this->hasOne(Review::class);
+    }
+    
     use HasFactory;
     protected $guarded = [];
 }
