@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Wallet;
 use App\Models\Promo;
 use App\Models\UserNotification;
+use App\Models\WalletTransaction;
+use App\Models\DriverWallet;
+use App\Models\DriverWalletTransaction;
 
 class BookingController extends Controller
 {
@@ -150,12 +153,36 @@ class BookingController extends Controller
             if ($wallet) {
                 $wallet->balance -= $booking->fare;
                 $wallet->save();
+
+                WalletTransaction::create([
+                    'wallet_id' => $wallet->id,
+                    'type' => 'payment',
+                    'amount' => $booking->fare,
+                    'description' => 'Paid for Trip #' . $booking->id
+                ]);
+            }
+
+            if ($booking->driver_id) {
+                $driverWallet = DriverWallet::firstOrCreate(
+                    ['driver_id' => $booking->driver_id],
+                    ['balance' => 0]
+                );
+
+                $driverWallet->balance += $booking->fare;
+                $driverWallet->save();
+
+                DriverWalletTransaction::create([
+                    'driver_wallet_id' => $driverWallet->id,
+                    'type' => 'earnings',
+                    'amount' => $booking->fare,
+                    'description' => 'Earnings from Trip #' . $booking->id
+                ]);
             }
 
             UserNotification::create([
                 'user_id' => $booking->user_id,
                 'type' => 'ride',
-                'title' => 'Trip Completed',
+                'title' => 'Trip Completed 🥳',
                 'message' => 'You have arrived at ' . $booking->destination_location . '. Thank you for riding with us! ',
                 'is_read' => false
             ]);
@@ -206,12 +233,12 @@ class BookingController extends Controller
         UserNotification::create([
             'user_id' => $booking->user_id,
             'type' => 'ride',
-            'title' => 'Driver Found!',
+            'title' => 'Driver Found!👨🏻‍✈️',
             'message' => 'Your driver, ' . Auth::guard('driver')->user()->name . ' (' . Auth::guard('driver')->user()->license_plate . '), is on the way to pick you up at ' . $booking->pickup_location . '.',
             'is_read' => false
         ]);
 
-        return redirect()->route('bookings.order')->with('success', 'Order successfully accepted! Please pick up the passenger.');
+        return redirect()->route('driver.orders')->with('success', 'Order successfully accepted! Please pick up the passenger.');
     }
 
     public function rejectOrder(Booking $booking)
@@ -243,7 +270,7 @@ class BookingController extends Controller
         UserNotification::create([
                 'user_id' => $booking->user_id,
                 'type' => 'ride',
-                'title' => 'Trip Cancelled ✖',
+                'title' => 'Trip Cancelled ❌',
                 'message' => 'Your booking to ' . $booking->destination_location . ' has been cancelled.',
                 'is_read' => false
             ]);

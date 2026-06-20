@@ -96,9 +96,19 @@
                                 </span>
                             </div>
 
-                            <a href="#" style="display: inline-block; background-color: #28a745; color: white; padding: 4px 8px; text-decoration: none; border-radius: 4px; font-size: 12px; font-family: sans-serif; font-weight: bold; margin-right: 5px;">
-                                ☆ Rate & Review
-                            </a>
+                            @if(!$booking->review)
+                                <a href="{{ route('reviews.create', $booking->id) }}" style="display: inline-block; background-color: #28a745; color: white; padding: 4px 8px; text-decoration: none; border-radius: 4px; font-size: 12px; font-family: sans-serif; font-weight: bold; margin-right: 5px;">
+                                    ☆ Rate & Review
+                                </a>
+                            @else
+                                <div style="font-size: 13px; color: #555; margin-top: 4px;">
+                                    <strong>You rated:</strong> {{ str_repeat('⭐', $booking->review->rating) }}
+                                    <br>
+                                    <a href="{{ route('reviews.edit', $booking->id) }}" style="color: #007bff; text-decoration: none; font-size: 11px; font-weight: bold; display: inline-block; margin-top: 2px;">
+                                        ✍️ Edit Review
+                                    </a>
+                                </div>
+                            @endif
 
                         @elseif($booking->status === 'cancelled')
                             <span style="color: red; font-weight: bold;">

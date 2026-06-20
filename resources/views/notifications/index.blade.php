@@ -54,6 +54,12 @@
                             <span style="background-color: #28a745; color: white; padding: 2px 6px; border-radius: 4px; font-size: 11px; font-weight: bold; font-family: sans-serif;">WALLET</span>
                         @elseif($notification->type === 'promo')
                             <span style="background-color: #ffc107; color: black; padding: 2px 6px; border-radius: 4px; font-size: 11px; font-weight: bold; font-family: sans-serif;">PROMO</span>
+                        @elseif($notification->type === 'chat')
+                            <span style="background-color: #17a2b8; color: white; padding: 2px 6px; border-radius: 4px; font-size: 11px; font-weight: bold; font-family: sans-serif;">CHAT</span>
+                        @elseif($notification->type === 'help')
+                            <span style="background-color: #fd7e14; color: white; padding: 2px 6px; border-radius: 4px; font-size: 11px; font-weight: bold; font-family: sans-serif;">HELP</span>
+                        @elseif($notification->type === 'security')
+                            <span style="background-color: #dc3545; color: white; padding: 2px 6px; border-radius: 4px; font-size: 11px; font-weight: bold; font-family: sans-serif;">SECURITY</span>
                         @else
                             <span style="background-color: #6c757d; color: white; padding: 2px 6px; border-radius: 4px; font-size: 11px; font-weight: bold; font-family: sans-serif;">SYSTEM</span>
                         @endif
