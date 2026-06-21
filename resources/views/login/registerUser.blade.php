@@ -1,6 +1,20 @@
 <html> 
 <body> 
-    <h2>REGISTER USER</h2> 
+    <table>
+    <tr>
+        <th style="border: none">
+            <h2>
+                <a href="/">
+                    <button type="button">BACK</button>
+                </a>
+            </h2>
+        </th>
+
+        <th style="border: none">
+            <h2>REGISTER USER</h2> 
+        </th>
+    </tr>
+    </table>
 
     @if ($errors->any()) 
         <div style="color: red;"> 
@@ -24,9 +38,7 @@
         <label>Password:</label><br> 
         <input type="password" name="password" required><br><br> 
  
-        <button type="submit">[SIGN UP AS USER]</button> 
+        <button type="submit">SIGN UP AS USER</button> 
     </form> 
-    <br>
-    <a href="/">[BACK]</a>
 </body> 
 </html>

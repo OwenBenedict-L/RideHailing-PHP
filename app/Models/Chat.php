@@ -13,6 +13,7 @@ class Chat extends Model
         'receiverUser_id',
         'senderDriver_id',
         'receiverDriver_id',
+        'booking_id',
         'message'
     ];
 

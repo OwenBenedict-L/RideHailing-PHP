@@ -4,28 +4,41 @@
 
     <ul>
         <li>
-            <a href="{{ route('notifications.index')}} ">
-                <button type= button> [Notification]</button>
-        </li>
-            <a href="{{ route('helpcenter.store') }}">
-                <button type="button">[Help Center]</button>
+            <a href="{{ route('driver-notifications.index')}} ">
+                <button type= button>Notification</button>
             </a>
         </li>
+
+        <br>
+
+        <li>
+            <a href="{{ route('helpcenter.store') }}">
+                <button type="button">Help Center</button>
+            </a>
+        </li>
+
+        <br>
+
         <li>
             <a href="{{ route('driver.wallet.balance') }}">
-                <button type="button">[Wallet]</button>
+                <button type="button">Wallet</button>
             </a>
         </li>
+
+        <br>
+        
         <li>
             <a href="{{ route('driver.orders') }}">
-                <button type="button">[Look For Orders]</button>
+                <button type="button">Look For Orders</button>
             </a>
         </li>
     </ul>
 
+    <br>
+
     <form method="POST" action="/logout-driver">
         @csrf
-        <button type="submit">[LOGOUT]</button>
+        <button type="submit">LOGOUT</button>
     </form>
 </body>
 </html>

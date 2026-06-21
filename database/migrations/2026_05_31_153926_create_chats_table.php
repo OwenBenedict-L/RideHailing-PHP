@@ -14,6 +14,7 @@ return new class extends Migration
             $table->foreignId('receiverUser_id')->nullable()->constrained('users')->nullOnDelete();
             $table->foreignId('senderDriver_id')->nullable()->constrained('drivers')->nullOnDelete();
             $table->foreignId('receiverDriver_id')->nullable()->constrained('drivers')->nullOnDelete();
+            $table->foreignId('booking_id')->nullable()->constrained('bookings')->nullOnDelete();
             $table->longText('message');
             $table->boolean('is_edited')->default(false);
             $table->timestamps();

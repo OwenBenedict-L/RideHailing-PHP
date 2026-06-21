@@ -151,6 +151,17 @@ class BookingController extends Controller
                 'message' => 'Your trip to ' . $booking->destination_location . ' has started!',
                 'is_read' => false
             ]);
+
+            if ($booking->driver_id) {
+                    DriverNotification::create([
+                        'driver_id' => $booking->driver_id,
+                        'type' => 'ride',
+                        'title' => 'Trip Started ➔',
+                        'message' => 'You have started the trip. Please drive safely to ' . $booking->destination_location . '.',
+                        'is_read' => false
+                    ]);
+                }
+
         } elseif ($request->status === 'completed') {
             $wallet = Wallet::where('user_id', $booking->user_id)->first();
             if ($wallet) {
@@ -180,6 +191,14 @@ class BookingController extends Controller
                     'amount' => $booking->fare,
                     'description' => 'Earnings from Trip #' . $booking->id
                 ]);
+
+                DriverNotification::create([
+                    'driver_id' => $booking->driver_id,
+                    'type' => 'wallet',
+                    'title' => 'Trip Completed!💰',
+                    'message' => 'You have successfully completed Trip #' . $booking->id . '. Earnings of Rp ' . number_format($booking->fare, 0, ',', '.') . ' have been added to your wallet.',
+                    'is_read' => false
+                ]);
             }
 
             UserNotification::create([
@@ -187,6 +206,14 @@ class BookingController extends Controller
                 'type' => 'ride',
                 'title' => 'Trip Completed 🥳',
                 'message' => 'You have arrived at ' . $booking->destination_location . '. Thank you for riding with us! ',
+                'is_read' => false
+            ]);
+
+            DriverNotification::create([
+                'driver_id' => Auth::guard('driver')->id(),
+                'type' => 'ride',
+                'title' => 'Order Confirmed 👨🏻‍✈️',
+                'message' => 'You have accepted Trip #' . $booking->id . '. Please pick up ' . $booking->user->name . ' at ' . $booking->pickup_location . '.',
                 'is_read' => false
             ]);
         }
@@ -263,6 +290,9 @@ class BookingController extends Controller
     public function destroy(Booking $booking)
     {
         if ($booking->status === 'pending' || $booking->status === 'confirmed') {
+
+            $oldDriverId = $booking->driver_id;
+
             $booking->update([
                 'status' => 'cancelled'
             ]);
@@ -279,5 +309,17 @@ class BookingController extends Controller
             ]);
         
         return redirect()->route('bookings.index')->with('success', 'Booking cancelled successfully.');
+
+        if ($oldDriverId) {
+            DriverNotification::create([
+                'driver_id' => $oldDriverId,
+                'type'      => 'ride',
+                'title'     => 'Trip Cancelled by Passenger ❌',
+                'message'   => 'Trip #' . $booking->id . ' to ' . $booking->destination_location . ' has been cancelled by the passenger.',
+                'is_read'   => false
+            ]);
+
+            return redirect()->route('driver.orders')->with('success', 'Your ride has been successfully cancelled.');
+        }
     }
 }

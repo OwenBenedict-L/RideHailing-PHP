@@ -1,6 +1,20 @@
 <html> 
 <body> 
-    <h2>REGISTER DRIVER</h2> 
+    <table>
+    <tr>
+        <th style="border: none">
+            <h2>
+                <a href="/">
+                    <button type="button">BACK</button>
+                </a>
+            </h2>
+        </th>
+
+        <th style="border: none">
+            <h2>REGISTER DRIVER</h2> 
+        </th>
+    </tr>
+    </table>
 
     @if ($errors->any()) 
         <div style="color: red;"> 
@@ -29,9 +43,7 @@
         <label>Drivers Plate:</label><br>
         <input type="text" name="license_plate" value="{{ old('license_plate') }}" required><br><br>
  
-        <button type="submit">[SIGN UP AS DRIVER]</button> 
+        <button type="submit">SIGN UP AS DRIVER</button> 
     </form> 
-    <br>
-    <a href="/">[BACK]</a>
 </body> 
 </html>

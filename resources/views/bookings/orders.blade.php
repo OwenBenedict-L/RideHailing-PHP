@@ -107,6 +107,25 @@
                                 </span>
                             </div>
 
+                            @if($order->review)
+                                <div style="background-color: #fff9e6; padding: 6px 10px; border-radius: 6px; border-left: 3px solid #ffc107; font-size: 13px; min-width: 140px;">
+                                    <div style="margin-bottom: 3px;">
+                                        {{ str_repeat('⭐', $order->review->rating) }}
+                                    </div>
+                                    @if($order->review->comment)
+                                        <q style="font-style: italic; color: #555; display: block;">
+                                            {{ $order->review->comment }}
+                                        </q>
+                                    @else
+                                        <span style="color: #999; font-size: 11px;">(No written review)</span>
+                                    @endif
+                                </div>
+                            @else
+                                <span style="color: #888; font-size: 11px; font-style: italic;">
+                                    Waiting for passenger review...
+                                </span>
+                            @endif
+
                         @elseif($order->status === 'cancelled')
                             <span style="color: red; font-weight: bold;">
                                 ✖ TRIP CANCELLED
