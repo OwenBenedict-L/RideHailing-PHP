@@ -2,7 +2,7 @@
 <head>
     <title>Ride Estimations</title>
     <style>
-        body { font-family: sans-serif; padding: 25px; color: #333; }
+        body { padding: 25px; color: #333; }
         h1 { font-size: 24px; font-weight: bold; }
         hr { border: 0; border-top: 1px solid #ccc; margin-bottom: 20px; }
         .route-path { font-size: 18px; font-weight: bold; margin-bottom: 5px; }

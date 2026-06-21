@@ -37,9 +37,14 @@ class HelpCenterController extends Controller
             'sender_type' => 'CUSTOMER',
             'message' => $request->isi_keluhan
         ]);
-        return redirect()->route('helpcenter.history');
+        return redirect()->route('helpcenter.feedback');
     }
 
+    public function feedbackPage()
+    {
+        return view('helpcenter.feedback'); 
+    }
+    
     public function history()
     {
         $keluhan = HelpCenter::where('user_id', Auth::id())
