@@ -47,6 +47,12 @@ return [
             'driver' => 'session',
             'provider' => 'drivers',
         ],
+
+        'cs' => [
+            'driver' => 'session',
+            'provider' => 'cs',
+        ]
+
     ],
 
     /*
@@ -76,6 +82,13 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\Driver::class,
         ],
+
+        'cs' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Cs::class,
+        ],
+        
+        
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',

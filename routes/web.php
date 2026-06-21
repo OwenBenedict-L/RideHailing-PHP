@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CsController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\ChatController;
@@ -24,6 +25,9 @@ Route::get('/', function () {
     
     if (Auth::guard('driver')->check()) {
         return redirect('/dashboard-driver');
+    }
+    if (Auth::guard('cs')->check()) {
+        return redirect('/cs/dashboard');
     }
 
     return view('login.landing');
@@ -48,6 +52,13 @@ Route::middleware('guest:driver')->group(function() {
     Route::get('/register-driver', [AuthController::class, 'showRegisterDriver']);
     Route::post('/register-driver', [AuthController::class, 'registerDriver']);
 }); 
+
+Route::middleware('guest:cs')->group(function() {
+    Route::get('/login-cs', [AuthController::class, 'showLoginCs'])->name('cs.login');
+    Route::post('/login-cs', [AuthController::class, 'loginCs'])->name('cs.login.submit');
+    Route::get('/register-cs', [AuthController::class, 'showRegisterCs'])->name('cs.register');
+    Route::post('/register-cs', [AuthController::class, 'registerCs'])->name('cs.register.submit');
+});
 
 Route::middleware('auth:user')->group(function () {
     Route::get('/dashboard-user', [AuthController::class, 'dashboardUser'])->name('dashboard.user');
@@ -75,8 +86,6 @@ Route::middleware('auth:user')->group(function () {
     Route::get('/helpcenter/chat/{id}', [HelpCenterController::class, 'chat'])->name('helpcenter.chat');
     Route::post('/helpcenter/chat/{id}', [HelpCenterController::class, 'sendReply'])->name('helpcenter.reply');
     Route::get('/helpcenter/feedback', [HelpCenterController::class, 'feedbackPage'])->name('helpcenter.feedback');
-    Route::get('/cs/dashboard', [CsController::class, 'dashboard'])->name('cs.dashboard');
-    Route::get('/cs/users', [CsController::class, 'showAllUsers'])->name('cs.users');
     Route::get('/promos/create', [PromoController::class, 'create']);
     Route::get('/promos', [PromoController::class, 'index']);
     Route::post('/promos', [PromoController::class, 'store']);
@@ -115,4 +124,10 @@ Route::middleware('auth:driver')->group(function () {
     Route::get('/driver-notifications/{driverNotification}', [DriverNotificationController::class, 'show'])->name('driver-notifications.show');
     Route::put('/driver-notifications/{driverNotification}', [DriverNotificationController::class, 'update'])->name('driver-notifications.update');
     Route::delete('/driver-notifications/{driverNotification}', [DriverNotificationController::class, 'destroy'])->name('driver-notifications.destroy');
+});
+
+Route::middleware('auth:cs')->group(function () {
+    Route::get('/cs/dashboard', [CsController::class, 'dashboard'])->name('cs.dashboard');
+    Route::get('/cs/users', [CsController::class, 'showAllUsers'])->name('cs.users');
+    Route::post('/logout-cs', [AuthController::class, 'logout'])->name('cs.logout');
 });

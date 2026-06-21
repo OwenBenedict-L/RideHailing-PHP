@@ -12,6 +12,12 @@
         <p>DRIVER</p>
         <a href="/login-driver"><button>Login Driver</button></a>
         <a href="/register-driver"><button>Sign Up Driver</button></a>
+
+        <br><br>
+        
+        <p>CUSTOMER SERVICE</p>
+        <a href="/login-cs"><button>Login CS</button></a>
+        <a href="/register-cs"><button>Sign Up CS</button></a>
     </center>
 </body>
 </html>

@@ -38,6 +38,9 @@
         <label>Password:</label><br> 
         <input type="password" name="password" required><br><br> 
  
+        <label>Confirm Password:</label><br> 
+        <input type="password" name="password_confirmation" required><br><br> 
+
         <button type="submit">SIGN UP AS USER</button> 
     </form> 
 </body> 
