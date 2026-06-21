@@ -11,6 +11,7 @@ use App\Models\UserNotification;
 use App\Models\WalletTransaction;
 use App\Models\DriverWallet;
 use App\Models\DriverWalletTransaction;
+use App\Models\DriverNotification;
 
 class BookingController extends Controller
 {
@@ -20,7 +21,7 @@ class BookingController extends Controller
     public function index()
     {
         $bookings = Booking::with(['user', 'driver'])
-            ->where('user_id', Auth::id())
+            ->where('user_id', Auth::guard('user')->id())
             ->orderBy('created_at', 'asc')
             ->get();
 
@@ -32,13 +33,15 @@ class BookingController extends Controller
      */
     public function create()
     {
-        $activeBooking = Booking::where('user_id', Auth::id())
+        $activeBooking = Booking::where('user_id', Auth::guard('user')->id())
             ->whereIn('status', ['pending', 'confirmed', 'on_way'])
             ->first();
 
         if ($activeBooking) {
             return redirect()->route('bookings.index')->with('error', 'You cannot book a new ride until your current trip is completed or cancelled!');
         }
+
+        session()->flashInput(request()->old());
 
         return view('bookings.create');
     }
@@ -50,7 +53,7 @@ class BookingController extends Controller
     {
         if ($request->has('confirm_booking')) {
         $booking = Booking::create([
-            'user_id' => Auth::id(),
+            'user_id' => Auth::guard('user')->id(),
             'pickup_location' => $request->pickup_location,
             'destination_location' => $request->destination_location,
             'promo_code' => $request->promo_code,
@@ -62,7 +65,7 @@ class BookingController extends Controller
         return redirect()->route('bookings.index')->with('success', 'Booking successful! Finding your driver...');
         }
 
-        $userId = Auth::id();
+        $userId = Auth::guard('user')->id();
 
         $wallet = Wallet::firstOrCreate(
             ['user_id' => $userId],
@@ -105,7 +108,7 @@ class BookingController extends Controller
      */
     public function show(Booking $booking)
     {
-        if ($booking->user_id !== Auth::id()) {
+        if ($booking->user_id !== Auth::guard('user')->id()) {
             abort(403, 'Unauthorized action.');
         }
 

@@ -5,18 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class UserNotification extends Model
+class DriverNotification extends Model
 {
     protected $fillable = [
-        'user_id',
+        'driver_id',
         'type',
         'title',
         'message',
         'is_read',
     ];
 
-    public function user(): BelongsTo
+    public function driver(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Driver::class);
     }
 }
