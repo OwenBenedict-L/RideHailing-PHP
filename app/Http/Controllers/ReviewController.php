@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Models\Booking;
 use App\Models\Review;
+use App\Models\UserNotification;
 use Illuminate\Support\Facades\Auth;
 
 class ReviewController extends Controller
@@ -44,6 +45,14 @@ class ReviewController extends Controller
             'driver_id' => $booking->driver_id,
             'rating' => $request->rating,
             'comment' => $request->comment
+        ]);
+
+        UserNotification::create([
+            'user_id' => Auth::id(),
+            'type'    => 'review',
+            'title'   => 'Thank You for Your Review! ⭐',
+            'message' => 'Your rating of ' . $request->rating . ' stars and feedback have been submitted. Thanks for helping us improve our service!',
+            'is_read' => false
         ]);
 
         return redirect()->route('bookings.index')->with('success', 'Review submitted!');

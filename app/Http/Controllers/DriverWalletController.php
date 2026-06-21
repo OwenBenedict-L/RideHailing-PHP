@@ -6,6 +6,7 @@ use App\Models\DriverWallet;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\DriverWalletTransaction;
+use App\Models\DriverNotification;
 
 class DriverWalletController extends Controller
 {
@@ -52,6 +53,14 @@ class DriverWalletController extends Controller
             'type' => 'withdraw',
             'amount' => $request->amount,
             'description' => 'Withdrawal to ' . $request->bank_name . ' (' . $request->bank_account_number . ')'
+        ]);
+
+        DriverNotification::create([
+            'driver_id' => $driverId,
+            'type'      => 'wallet',
+            'title'     => 'Withdrawal Successful 💵',
+            'message'   => 'Your withdrawal of Rp ' . number_format($request->amount, 0, ',', '.') . ' to ' . $request->bank_name . ' (' . $request->bank_account_number . ') has been processed.',
+            'is_read'   => false,
         ]);
 
         return redirect()->route('driver.wallet.balance')->with('success', 'Successfully withdrew Rp' .

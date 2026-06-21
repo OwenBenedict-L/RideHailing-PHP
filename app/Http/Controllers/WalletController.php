@@ -6,6 +6,7 @@ use App\Models\Wallet;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\WalletTransaction;
+use App\Models\UserNotification;
 
 class WalletController extends Controller
 {
@@ -45,6 +46,14 @@ class WalletController extends Controller
             'type' => 'topup',
             'amount' => $request->amount,
             'description' => 'Top Up'
+        ]);
+
+        UserNotification::create([
+            'user_id' => $userId,
+            'type'    => 'wallet',
+            'title'   => 'Top Up Successful!💵',
+            'message' => 'An amount of Rp ' . number_format($request->amount, 0, ',', '.') . ' has been successfully credited to your wallet balance.',
+            'is_read' => false
         ]);
 
         return redirect()->route('wallet.balance')->with('success', 'Top Up with amount Rp' . 
