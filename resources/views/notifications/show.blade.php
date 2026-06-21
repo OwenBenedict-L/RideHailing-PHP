@@ -22,7 +22,6 @@
 @endif
 
 <br>
-{{-- Tombol untuk kembali ke halaman daftar notifikasi awal --}}
 <a href="{{ route('notifications.index') }}">
     <button type="button" style="padding: 10px;">BACK TO INBOX</button>
 </a>

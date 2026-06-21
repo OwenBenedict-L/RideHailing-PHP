@@ -1,6 +1,6 @@
 <html>
 <body>
-<h1>Notification History</h1>
+<h1>Driver Notification History</h1>
 
 @if(session('success'))
     <div style="color: green; font-weight: bold;">
@@ -16,7 +16,7 @@
     <br>
 @endif
 
-<a href="{{ route('dashboard.user') }}"><button>BACK</button></a>
+<a href="{{ route('dashboard.driver') }}"><button>BACK</button></a>
 <button onclick="window.location.reload();" style="margin-left: 5px;">↻ Refresh</button>
 
 @if(!$notifications->isEmpty())
@@ -54,7 +54,7 @@
                     <td>
                         {{ $loop->iteration }}
                         @if(!$notification->is_read)
-                            <span style="color: red; font-weight: bold; font-size: 11px; block;">● NEW</span>
+                            <span style="color: red; font-weight: bold; font-size: 11px; display: block;">● NEW</span>
                         @endif
                     </td>
                     <td>
@@ -67,12 +67,8 @@
                             <span style="background-color: #007bff; color: white; padding: 2px 6px; border-radius: 4px; font-size: 11px; font-weight: bold; font-family: sans-serif;">RIDE</span>
                         @elseif($notification->type === 'wallet')
                             <span style="background-color: #28a745; color: white; padding: 2px 6px; border-radius: 4px; font-size: 11px; font-weight: bold; font-family: sans-serif;">WALLET</span>
-                        @elseif($notification->type === 'promo')
-                            <span style="background-color: #ffc107; color: black; padding: 2px 6px; border-radius: 4px; font-size: 11px; font-weight: bold; font-family: sans-serif;">PROMO</span>
                         @elseif($notification->type === 'chat')
                             <span style="background-color: #17a2b8; color: white; padding: 2px 6px; border-radius: 4px; font-size: 11px; font-weight: bold; font-family: sans-serif;">CHAT</span>
-                        @elseif($notification->type === 'help')
-                            <span style="background-color: #fd7e14; color: white; padding: 2px 6px; border-radius: 4px; font-size: 11px; font-weight: bold; font-family: sans-serif;">HELP</span>
                         @elseif($notification->type === 'security')
                             <span style="background-color: #dc3545; color: white; padding: 2px 6px; border-radius: 4px; font-size: 11px; font-weight: bold; font-family: sans-serif;">SECURITY</span>
                         @else
@@ -87,9 +83,9 @@
                         <span style="color: #555; font-size: 13px;">{{ $notification->message }}</span>
                     </td>
                     <td>
-                        <div style="display: flex; gap: 5px; items: center;">
+                        <div style="display: flex; gap: 5px; align-items: center;">
                             @if(!$notification->is_read)
-                                <form action="{{ route('notifications.update', $notification->id) }}" method="POST" style="margin: 0;">
+                                <form action="{{ route('driver-notifications.update', $notification->id) }}" method="POST" style="margin: 0;">
                                     @csrf
                                     @method('PUT')
                                     <input type="hidden" name="is_read" value="1">
@@ -99,11 +95,11 @@
                                 </form>
                             @endif
 
-                            <a href="{{ route('notifications.show', $notification->id) }}" style="display: inline-block; background-color: #007bff; color: white; padding: 4px 8px; text-decoration: none; border-radius: 4px; font-size: 12px; font-family: sans-serif; font-weight: bold;">
+                            <a href="{{ route('driver-notifications.show', $notification->id) }}" style="display: inline-block; background-color: #007bff; color: white; padding: 4px 8px; text-decoration: none; border-radius: 4px; font-size: 12px; font-family: sans-serif; font-weight: bold;">
                                 View
                             </a>
 
-                            <form action="{{ route('notifications.destroy', $notification->id) }}" method="POST" style="margin: 0;"
+                            <form action="{{ route('driver-notifications.destroy', $notification->id) }}" method="POST" style="margin: 0;"
                                 onsubmit="return confirm('Are you sure you want to delete this notification?')">
                                 @csrf
                                 @method('DELETE')

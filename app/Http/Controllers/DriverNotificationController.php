@@ -2,22 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\UserNotification;
+use App\Models\DriverNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class UserNotificationController extends Controller
+class DriverNotificationController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $notifications = UserNotification::where('user_id', Auth::guard('user')->id())
+        $notifications = DriverNotification::where('driver_id', Auth::guard('driver')->id())
             ->orderBy('created_at', 'desc')
             ->get();
 
-        return view('notifications.index', compact('notifications'));
+        return view('driver_notifications.index', compact('notifications'));
     }
 
     /**
@@ -39,29 +39,26 @@ class UserNotificationController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show($id)
+    public function show(DriverNotification $driverNotification)
     {
-        $notification = UserNotification::findOrFail($id);
-
-        if ($notification->user_id !== Auth::guard('user')->id()) {
+        if ($driverNotification->driver_id !== Auth::guard('driver')->id()) {
             abort(403, 'Unauthorized action.');
         }
 
-        if (!$notification->is_read) {
-            $notification->update(['is_read' => true]);
+        if (!$driverNotification->is_read) {
+            $driverNotification->update(['is_read' => true]);
 
-            $notification->refresh();
-
+            $driverNotification->refresh();
+            
         }
 
-        $userNotification = $notification;
-        return view('notifications.show', compact('userNotification'));
+        return view('driver_notifications.show', compact('driverNotification'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($id)
+    public function edit(DriverNotification $driverNotification)
     {
         return redirect()->back();
     }
@@ -69,11 +66,9 @@ class UserNotificationController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, DriverNotification $driverNotification)
     {
-        $notification = UserNotification::findOrFail($id);
-
-        if ($notification->user_id !== Auth::guard('user')->id()) {
+        if ($driverNotification->driver_id !== Auth::guard('driver')->id()) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -81,7 +76,7 @@ class UserNotificationController extends Controller
             'is_read' => 'required|boolean',
         ]);
 
-        $notification->update($request->only('is_read'));
+        $driverNotification->update($request->only('is_read'));
 
         return redirect()->back()->with('success', 'Notification marked as read.');
     }
@@ -89,22 +84,20 @@ class UserNotificationController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function destroy(DriverNotification $driverNotification)
     {
-        $notification = UserNotification::findOrFail($id);
-
-        if ($notification->user_id !== Auth::guard('user')->id()) {
+        if ($driverNotification->driver_id !== Auth::guard('driver')->id()) {
             abort(403, 'Unauthorized action.');
         }
 
-        $notification->delete();
+        $driverNotification->delete();
 
-        return redirect()->route('notifications.index')->with('success', 'Notification deleted from your inbox.');
+        return redirect()->route('driver-notifications.index')->with('success', 'Notification deleted successfully.');
     }
 
     public function markAllRead()
     {
-        UserNotification::where('user_id', Auth::guard('user')->id())
+        DriverNotification::where('driver_id', Auth::guard('driver')->id())
             ->where('is_read', false)
             ->update(['is_read' => true]);
 
@@ -113,8 +106,8 @@ class UserNotificationController extends Controller
 
     public function deleteAll()
     {
-        UserNotification::where('user_id', Auth::guard('user')->id())->delete();
+        DriverNotification::where('driver_id', Auth::guard('driver')->id())->delete();
 
-        return redirect()->back()->with('success', 'All notifications deleted from your inbox.');
+        return redirect()->back()->with('success', 'All notifications deleted successfully.');
     }
 }

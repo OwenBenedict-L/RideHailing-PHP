@@ -41,8 +41,8 @@
         <button type="submit" style="background-color: green; color: white; padding: 10px;">BOOK NOW</button>
     </form>
 @else
-    <p style="color: red; font-weight: bold;">Not enough balance. Please top up your wallet.</p>
-    <button type="button" onclick="window.history.back();">BACK</button>    <a href="{{ route('wallet.topup') }}"><button type="button" style="background-color: orange; color: white;">TOP UP NOW</button></a>
+    <p style="color: red; font-weight: bold;">Not enough balance. Please go back to the main dashboard to top up your wallet first.</p>
+    <button type="button" onclick="window.history.back();">BACK</button>
     <button type="button" disabled style="background-color: grey; color: white; padding: 10px;">BOOK NOW</button>
 @endif
 </body>

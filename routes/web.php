@@ -15,6 +15,7 @@ use App\Http\Controllers\HelpCenterController;
 use App\Http\Controllers\PromoController;
 use App\Http\Controllers\UserNotificationController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\DriverNotificationController;
 
 Route::get('/', function () {
     if (Auth::guard('user')->check()) {
@@ -57,7 +58,13 @@ Route::middleware('auth:user')->group(function () {
     Route::get('/wallet/history', [WalletController::class, 'history'])->name('wallet.history');
     Route::post('/bookings/confirm', [BookingController::class, 'confirm'])->name('bookings.confirm');
     Route::get('/bookings/checkout', [EstimationController::class, 'checkout'])->name('bookings.checkout');
-    Route::resource('bookings', BookingController::class);
+    Route::get('/bookings', [BookingController::class, 'index'])->name('bookings.index');
+    Route::get('/bookings/create', [BookingController::class, 'create'])->name('bookings.create');
+    Route::post('/bookings', [BookingController::class, 'store'])->name('bookings.store');
+    Route::get('/bookings/{booking}', [BookingController::class, 'show'])->name('bookings.show');
+    Route::get('/bookings/{booking}/edit', [BookingController::class, 'edit'])->name('bookings.edit');
+    Route::put('/bookings/{booking}', [BookingController::class, 'update'])->name('bookings.update');
+    Route::delete('/bookings/{booking}', [BookingController::class, 'destroy'])->name('bookings.destroy');
     Route::get('/estimations/create', [EstimationController::class, 'create'])->name('estimations.create');
     Route::post('/estimations', [EstimationController::class, 'store'])->name('estimations.store');
     Route::get('/estimations/detail', [EstimationController::class, 'show'])->name('estimations.show');
@@ -77,7 +84,12 @@ Route::middleware('auth:user')->group(function () {
     Route::delete('/promos/{id}', [PromoController::class, 'destroy']);
     Route::get('/chat/user/{driverId}', [ChatController::class, 'showConversationForUser'])->name('chat.show.user');
     Route::post('/chat/user/{driverId}', [ChatController::class, 'storeForUser'])->name('chat.send.user');
-    Route::resource('notifications', UserNotificationController::class);
+    Route::post('/notifications/mark-all-read', [UserNotificationController::class, 'markAllRead'])->name('notifications.markAllRead');
+    Route::delete('/notifications/delete-all', [UserNotificationController::class, 'deleteAll'])->name('notifications.deleteAll');
+    Route::get('/notifications', [UserNotificationController::class, 'index'])->name('notifications.index');
+    Route::get('/notifications/{id}', [UserNotificationController::class, 'show'])->name('notifications.show');
+    Route::put('/notifications/{id}', [UserNotificationController::class, 'update'])->name('notifications.update');
+    Route::delete('/notifications/{id}', [UserNotificationController::class, 'destroy'])->name('notifications.destroy');
     Route::get('/bookings/{booking}/review', [ReviewController::class, 'create'])->name('reviews.create');
     Route::post('/bookings/{booking}/review', [ReviewController::class, 'store'])->name('reviews.store');
     Route::get('/bookings/{booking}/review/edit', [ReviewController::class, 'edit'])->name('reviews.edit');
@@ -97,4 +109,10 @@ Route::middleware('auth:driver')->group(function () {
     Route::patch('/driver/bookings/{booking}', [BookingController::class, 'update'])->name('bookings.orders.update');
     Route::get('/chat/driver/{userId}', [ChatController::class, 'showConversationForDriver'])->name('chat.show.driver');
     Route::post('/chat/driver/{userId}', [ChatController::class, 'storeForDriver'])->name('chat.send.driver'); 
+    Route::post('/driver-notifications/mark-all-read', [DriverNotificationController::class, 'markAllRead'])->name('driver-notifications.markAllRead');
+    Route::delete('/driver-notifications/delete-all', [DriverNotificationController::class, 'deleteAll'])->name('driver-notifications.deleteAll');
+    Route::get('/driver-notifications', [DriverNotificationController::class, 'index'])->name('driver-notifications.index');
+    Route::get('/driver-notifications/{driverNotification}', [DriverNotificationController::class, 'show'])->name('driver-notifications.show');
+    Route::put('/driver-notifications/{driverNotification}', [DriverNotificationController::class, 'update'])->name('driver-notifications.update');
+    Route::delete('/driver-notifications/{driverNotification}', [DriverNotificationController::class, 'destroy'])->name('driver-notifications.destroy');
 });
