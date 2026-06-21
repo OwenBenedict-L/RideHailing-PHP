@@ -11,7 +11,7 @@ class DriverWalletController extends Controller
 {
     public function index()
     {
-        $driverId = Auth::id(); 
+        $driverId = Auth::guard('driver')->id();
         $wallet = DriverWallet::firstOrCreate(
             ['driver_id' => $driverId],
             ['balance' => 0]
@@ -22,7 +22,7 @@ class DriverWalletController extends Controller
 
     public function withdrawForm()
     {
-        $driverId = Auth::id();
+        $driverId = Auth::guard('driver')->id();
         $wallet = DriverWallet::firstOrCreate(
             ['driver_id' => $driverId],
             ['balance' => 0]
@@ -32,7 +32,7 @@ class DriverWalletController extends Controller
 
     public function processWithdraw(Request $request)
     {
-        $driverId = Auth::id();
+        $driverId = Auth::guard('driver')->id();
         $wallet = DriverWallet::firstWhere('driver_id', $driverId);
         $request->validate([
             'bank_name' => 'required|string',
@@ -60,7 +60,7 @@ class DriverWalletController extends Controller
 
     public function history()
     {
-        $driverId = Auth::id();
+        Auth::guard('driver')->id();
         $wallet = DriverWallet::firstWhere('driver_id', $driverId);
         $transactions = $wallet ? $wallet->transactions()->latest()->get() : [];
         return view('wallet.driver-history', compact('transactions'));
