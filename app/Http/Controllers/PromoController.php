@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Promo;
+use App\Models\User;
+use App\Models\UserNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -45,13 +47,24 @@ public function index()
             return redirect()->back()->with('error', 'Promo code already exists!');
         }
 
-        Promo::create([
+        $promo = Promo::create([
             'code' => strtoupper($request->code),
             'discount_percentage' => $request->discount_percentage,
             'max_discount' => $request->max_discount,
             'expiry_date' => $request->expiry_date,
             'is_active' => true,
         ]);
+
+        $users = User::all();
+        foreach ($users as $user) {
+            UserNotification::create([
+                'user_id' => $user->id,
+                'type'    => 'promo',
+                'title'   => 'Special Promo Available! 🎁',
+                'message' => 'Get a ' . $request->discount_percentage . '% discount on your ride using promo code: [' . $promo->code . ']. Valid until ' . \Carbon\Carbon::parse($request->expiry_date)->format('d M Y') . '!',
+                'is_read' => false
+            ]);
+        }
 
         return redirect()->back()->with('success', 'Promo successfully created!');
     }

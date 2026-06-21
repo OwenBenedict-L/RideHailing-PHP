@@ -20,12 +20,12 @@
 <button onclick="window.location.reload();" style="margin-left: 5px;">↻ Refresh</button>
 
 @if(!$notifications->isEmpty())
-    <form action="{{ route('driver-notifications.markAllRead') }}" method="POST" style="display: inline;">
+    <form action="{{ route('notifications.markAllRead') }}" method="POST" style="display: inline;">
         @csrf
         <button type="submit" style="margin-left: 5px;">✓ Mark All as Read</button>
     </form>
 
-    <form action="{{ route('driver-notifications.deleteAll') }}" method="POST" style="display: inline;" 
+    <form action="{{ route('notifications.deleteAll') }}" method="POST" style="display: inline;" 
           onsubmit="return confirm('Are you sure you want to delete ALL notifications?')">
         @csrf
         @method('DELETE')

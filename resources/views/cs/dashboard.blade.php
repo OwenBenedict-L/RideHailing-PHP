@@ -1,13 +1,18 @@
-<div>
-    <h2>Welcome to CS Dashboard</h2>
-    <p>Anda sedang login sebagai Customer Service.</p>
-    
-    <br><br>
+<html>
+<body>
+    <h2>Hello CS: {{ Auth::guard('cs')->user()->name }}</h2>
 
-    <a href="{{ route('cs.users') }}">
-        <button>
-            User
-        </button>
-    </a>
+    <ul>
+        <li>
+            <a href="{{ route('cs.users') }}">
+                <button type="button">[User]</button>
+            </a>
+        </li>
+    </ul>
 
-</div>
+    <form method="POST" action="/logout-cs">
+        @csrf
+        <button type="submit">[LOGOUT]</button>
+    </form>
+</body>
+</html>
