@@ -1,6 +1,20 @@
 <html> 
 <body> 
-    <h2>Login Page USER</h2> 
+    <table>
+    <tr>
+        <th style="border: none">
+            <h2>
+                <a href="/">
+                    <button type="button">BACK</button>
+                </a>
+            </h2>
+        </th>
+
+        <th style="border: none">
+            <h2>LOGIN PAGE USER</h2>  
+        </th>
+    </tr>
+    </table>
  
     @if ($errors->any()) 
         <div style="color: red;"> 
@@ -19,8 +33,6 @@
         <button type="submit">LOGIN USER</button> 
     </form> 
     <br>
-    <a href="/register-user">Don't have an account? [sign up]</a>
-    <br>
-    <a href="/">[BACK]</a>
+    <a href="/register-user">Don't have an account? SIGN UP</a>
 </body> 
 </html>

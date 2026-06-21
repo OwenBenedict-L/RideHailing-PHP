@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Chat;
 use App\Models\User;
 use App\Models\Driver;
+use App\Models\UserNotification;
+use App\Models\DriverNotification;
 use Illuminate\Http\Request;
-use App\Models\Bookings;
+use App\Models\Booking;
 
 class ChatController extends Controller
 {
@@ -16,10 +18,29 @@ class ChatController extends Controller
             'message' => 'required|string|max:1000'
         ]);
 
+        $currentUser = auth('user')->id();
+
+        $activeBooking = Booking::where('user_id', $currentUser)
+            ->where('driver_id', $driverId)
+            ->whereNotIn('status', ['completed', 'cancelled'])
+            ->latest()
+            ->first();
+
         Chat::create([
+            'booking_id'         => $activeBooking ? $activeBooking->id : null,
             'senderUser_id'      => auth('user')->id(),
             'receiverDriver_id'  => $driverId,
             'message'            => $request->message
+        ]);
+
+        $userName = auth('user')->user()->name ?? 'Passenger';
+
+        DriverNotification::create([
+            'driver_id' => $driverId,
+            'type'      => 'chat',
+            'title'     => 'New Message from Passenger 💬',
+            'message'   => $userName . ' said: "' . \Illuminate\Support\Str::limit($request->message, 40) . '"',
+            'is_read'   => false
         ]);
 
         return back();
@@ -31,10 +52,29 @@ class ChatController extends Controller
             'message' => 'required|string|max:1000'
         ]);
 
+        $currentDriver = auth('driver')->id();
+
+        $activeBooking = Booking::where('driver_id', $currentDriver)
+            ->where('user_id', $userId)
+            ->whereNotIn('status', ['completed', 'cancelled'])
+            ->latest()
+            ->first();
+
         Chat::create([
+            'booking_id'      => $activeBooking ? $activeBooking->id : null,
             'senderDriver_id' => auth('driver')->id(),
             'receiverUser_id' => $userId,
             'message'         => $request->message
+        ]);
+
+        $driverName = auth('driver')->user()->name ?? 'Driver';
+        
+        UserNotification::create([
+            'user_id' => $userId,
+            'type'    => 'chat',
+            'title'   => 'New Message from Driver 💬',
+            'message' => $driverName . ' said: "' . \Illuminate\Support\Str::limit($request->message, 40) . '"',
+            'is_read' => false
         ]);
 
         return back();
@@ -45,15 +85,22 @@ class ChatController extends Controller
         $currentUser = auth('user')->id();
         $contact = Driver::findOrFail($driverId);
 
-        $chat = Chat::where(function ($query) use ($currentUser, $driverId) {
-        $query->where('senderUser_id', $currentUser) ->where('receiverDriver_id', $driverId);
-    })
-    ->orWhere(function ($query) use ($currentUser, $driverId) {
-        $query->where('senderDriver_id', $driverId)->where('receiverUser_id', $currentUser);
-    })
-    ->orderBy('created_at')->get();
+        $activeBooking = Booking::where('user_id', $currentUser)
+            ->where('driver_id', $driverId)
+            ->whereNotIn('status', ['completed', 'cancelled'])
+            ->latest()
+            ->first();
 
-        return view( 'chats.show',compact('chat', 'contact'));
+        if (!$activeBooking) {
+            $chat = collect();
+            return view('chats.show', compact('chat', 'contact'));
+        }
+
+        $chat = Chat::where('booking_id', $activeBooking->id)
+            ->orderBy('created_at')
+            ->get();
+
+        return view('chats.show', compact('chat', 'contact'));
     }
 
     public function showConversationForDriver($userId)
@@ -61,15 +108,22 @@ class ChatController extends Controller
         $currentDriver = auth('driver')->id();
         $contact = User::findOrFail($userId);
 
-        $chat = Chat::where(function ($query) use ($currentDriver, $userId) {
-        $query->where('senderDriver_id', $currentDriver) ->where('receiverUser_id', $userId);
-    })
-    ->orWhere(function ($query) use ($currentDriver, $userId) {
-        $query->where('senderUser_id', $userId)->where('receiverDriver_id', $currentDriver);
-    })
-    ->orderBy('created_at')->get();
+        $activeBooking = Booking::where('driver_id', $currentDriver)
+            ->where('user_id', $userId)
+            ->whereNotIn('status', ['completed', 'cancelled'])
+            ->latest()
+            ->first();
 
-        return view( 'chats.show',compact('chat', 'contact'));
+        if (!$activeBooking) {
+            $chat = collect();
+            return view('chats.show', compact('chat', 'contact'));
+        }
+
+        $chat = Chat::where('booking_id', $activeBooking->id)
+            ->orderBy('created_at')
+            ->get();
+
+        return view('chats.show', compact('chat', 'contact'));
     }
 
     public function updateChatUser(Request $request, $chatId) {

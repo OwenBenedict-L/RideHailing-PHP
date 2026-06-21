@@ -4,41 +4,61 @@
     <ul>
         <li>
             <a href="{{ route('notifications.index')}} ">
-                <button type= button> [Notification]</button>
+                <button type= button>Notification</button>
+            </a>
         </li>
-        <li>[CS]</li>
+
+        <br>
+
+        <li>CS</li>
+
+        <br>
+
         <li>
             <a href="{{ route('wallet.balance') }} ">
-                <button type= button>[wallet]</button>
+                <button type= button>Wallet</button>
             </a>
         </li>
+
+        <br>
+
         <li>            
             <a href="{{ route('bookings.index') }}">
-                <button type="button">[bookings]</button>
+                <button type="button">Bookings</button>
             </a>
         </li>
+
+        <br>
+
         <li>
             <a href="{{ route('helpcenter.index') }}">
-                <button type="button">[help center]</button>
+                <button type="button">Help Center</button>
             </a>
         </li>
+
         @if(Auth::user()->email === 'developer@gmail.com')
+
         <li>
             <a href="{{ url('/promos/create') }}">
-                <button type="button">[create promo]</button>
+                <button type="button">Create Promo</button>
             </a>
         </li>
+
+        <br>
+
         <li>
             <a href="{{ url('/promos') }}">
-                <button type="button">[promo list]</button>
+                <button type="button">Promo List</button>
             </a>
         </li>
         @endif
     </ul>
 
-    <br><form method="POST" action="/logout-user">
+    <br>
+
+    <form method="POST" action="/logout-user">
         @csrf
-        <button type="submit">[LOGOUT]</button>
+        <button type="submit">LOGOUT</button>
     </form>
 </body>
 </html>
