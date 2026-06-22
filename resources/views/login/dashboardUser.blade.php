@@ -1,64 +1,63 @@
 <html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard</title>
+
+    @vite(['resources/css/dashboard.css'])
+</head>
 <body>
-    <h2>Hello User: {{ Auth::user()->name }}</h2>
-    <ul>
-        <li>
-            <a href="{{ route('notifications.index')}} ">
-                <button type= button>Notification</button>
+
+    <header class="navbar">
+        <div class="navbar-brand">RideApp</div>
+        <div class="navbar-user-zone">
+            <span class="user-greeting">Hi, {{ Auth::user()->name }} 👋</span>
+            
+            <form method="POST" action="/logout-user" style="margin: 0;">
+                @csrf
+                <button type="submit" class="btn-logout">LOGOUT</button>
+            </form>
+        </div>
+    </header>
+
+    <main class="dashboard-container">
+        
+        <div class="welcome-banner">
+            <h2>Dashboard</h2>
+            <p>Welcome back! Ready to go?</p>
+        </div>
+
+        <section class="menu-grid">
+            
+            <a href="{{ route('wallet.balance') }}" class="menu-box">
+                <span class="menu-title">Wallet Balance</span>
             </a>
-        </li>
 
-        <br>
-
-        <li>CS</li>
-
-        <br>
-
-        <li>
-            <a href="{{ route('wallet.balance') }} ">
-                <button type= button>Wallet</button>
+            <a href="{{ route('bookings.index') }}" class="menu-box">
+                <span class="menu-title">My Bookings</span>
             </a>
-        </li>
 
-        <br>
-
-        <li>            
-            <a href="{{ route('bookings.index') }}">
-                <button type="button">Bookings</button>
+            <a href="{{ route('notifications.index') }}" class="menu-box">
+                <span class="menu-title">Notifications</span>
             </a>
-        </li>
 
-        <br>
-
-        <li>
-            <a href="{{ route('helpcenter.index') }}">
-                <button type="button">Help Center</button>
+            <a href="{{ route('helpcenter.index') }}" class="menu-box">
+                <span class="menu-title">Help Center</span>
             </a>
-        </li>
+
+        </section>
 
         @if(Auth::user()->email === 'developer@gmail.com')
-
-        <li>
-            <a href="{{ url('/promos/create') }}">
-                <button type="button">Create Promo</button>
-            </a>
-        </li>
-
-        <br>
-
-        <li>
-            <a href="{{ url('/promos') }}">
-                <button type="button">Promo List</button>
-            </a>
-        </li>
+            <section class="dev-section">
+                <h3>🛠️ Developer Control Panel</h3>
+                <div class="dev-grid">
+                    <a href="{{ url('/promos/create') }}" class="btn-dev">Create New Promo</a>
+                    <a href="{{ url('/promos') }}" class="btn-dev">View Promo List</a>
+                </div>
+            </section>
         @endif
-    </ul>
 
-    <br>
+    </main>
 
-    <form method="POST" action="/logout-user">
-        @csrf
-        <button type="submit">LOGOUT</button>
-    </form>
 </body>
 </html>

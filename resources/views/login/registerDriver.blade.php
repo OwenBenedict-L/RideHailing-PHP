@@ -1,52 +1,66 @@
-<html> 
-<body> 
-    <table>
-    <tr>
-        <th style="border: none">
-            <h2>
-                <a href="/">
-                    <button type="button">BACK</button>
-                </a>
-            </h2>
-        </th>
-
-        <th style="border: none">
-            <h2>REGISTER DRIVER</h2> 
-        </th>
-    </tr>
-    </table>
-
-    @if ($errors->any()) 
-        <div style="color: red;"> 
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li><strong>Error!</strong> {{ $error }}</li>
-                @endforeach
-            </ul>
-        </div> <br> 
-    @endif
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register Driver</title>
     
-    <form method="POST" action="/register-driver"> 
-        @csrf 
-        <label>Full Name:</label><br> 
-        <input type="text" name="name" required><br><br> 
+    @vite(['resources/css/register.css'])
+</head>
+<body>
 
-        <label>Email:</label><br> 
-        <input type="email" name="email" value="{{ old('email') }}" required><br><br>
- 
-        <label>Password:</label><br> 
-        <input type="password" name="password" required><br><br> 
+    <div class="register-box">
+        <a href="/" class="btn-back">← BACK</a>
 
-        <label>Confirm Password:</label><br> 
-        <input type="password" name="password_confirmation" required><br><br> 
+        <div class="register-header">
+            <h2>REGISTER DRIVER</h2>
+        </div>
 
-        <label>Drivers License Number:</label><br>
-        <input type="text" name="drivers_license_number" value="{{ old('drivers_license_number') }}" required><br><br>
+        @if ($errors->any()) 
+            <div class="error-alert"> 
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li><strong>Error!</strong> {{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div> 
+        @endif 
 
-        <label>Drivers Plate:</label><br>
-        <input type="text" name="license_plate" value="{{ old('license_plate') }}" required><br><br>
- 
-        <button type="submit">SIGN UP AS DRIVER</button> 
-    </form> 
+        <form method="POST" action="/register-driver"> 
+            @csrf 
+            
+            <div class="form-group">
+                <label for="name">Full Name</label>
+                <input type="text" id="name" name="name" value="{{ old('name') }}" required autocomplete="name">
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" autocomplete="off" required>
+            </div>
+     
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" autocomplete="new-password" required>
+            </div>
+     
+            <div class="form-group">
+                <label for="password_confirmation">Confirm Password</label>
+                <input type="password" id="password_confirmation" name="password_confirmation" autocomplete="new-password" required>
+            </div>
+
+            <div class="form-group">
+                <label for="drivers_license_number">Drivers License Number (SIM)</label>
+                <input type="text" id="drivers_license_number" name="drivers_license_number" value="{{ old('drivers_license_number') }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="license_plate">Drivers Plate (Police Number)</label>
+                <input type="text" id="license_plate" name="license_plate" value="{{ old('license_plate') }}" required>
+            </div>
+     
+            <button type="submit" class="btn-submit">SIGN UP AS DRIVER</button> 
+        </form> 
+    </div>
+
 </body> 
 </html>

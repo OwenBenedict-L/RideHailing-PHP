@@ -1,38 +1,44 @@
-<html> 
-<body> 
-    <table>
-    <tr>
-        <th style="border: none">
-            <h2>
-                <a href="/">
-                    <button type="button">BACK</button>
-                </a>
-            </h2>
-        </th>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login User</title>
+    
+    @vite(['resources/css/login.css'])
+</head>
+<body>
 
-        <th style="border: none">
-            <h2>LOGIN PAGE USER</h2>  
-        </th>
-    </tr>
-    </table>
- 
-    @if ($errors->any()) 
-        <div style="color: red;"> 
-            <strong>Error!</strong> {{ $errors->first('email') }} 
-        </div> <br> 
-    @endif 
- 
-    <form method="POST" action="/login-user"> 
-        @csrf 
-        <label>Email:</label><br> 
-        <input type="email" name="email" value = "{{old('email')}}" required><br><br> 
- 
-        <label>Password:</label><br> 
-        <input type="password" name="password"><br><br> 
- 
-        <button type="submit">LOGIN USER</button> 
-    </form> 
-    <br>
-    <a href="/register-user">Don't have an account? SIGN UP</a>
+    <div class="login-box">
+        <a href="/" class="btn-back">← BACK</a>
+
+        <div class="login-header">
+            <h2>LOGIN USER</h2>
+        </div>
+        
+        @if ($errors->any()) 
+            <div class="error-alert"> 
+                <strong>Error!</strong> {{ $errors->first('email') }} 
+            </div> 
+        @endif 
+     
+        <form method="POST" action="/login-user"> 
+            @csrf 
+            
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" value="{{ old('email') }}" required autocomplete="email">
+            </div>
+     
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+     
+            <button type="submit" class="btn-submit">LOGIN</button> 
+        </form> 
+        
+        <a href="/register-user" class="register-link">Don't have an account? Sign Up</a>
+    </div>
+
 </body> 
 </html>
