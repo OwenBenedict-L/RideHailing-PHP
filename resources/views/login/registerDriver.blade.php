@@ -22,41 +22,56 @@
                     <li><strong>Error!</strong> {{ $error }}</li>
                 @endforeach
             </ul>
-        </div> <br> 
+        </div>
     @endif
     
     <form method="POST" action="/register-driver"> 
         @csrf 
-        <label>Full Name:</label><br> 
-        <input type="text" name="name" required><br><br> 
+        <div class="form-group">
+                <label for="name">Full Name</label>
+                <input type="text" id="name" name="name" value="{{ old('name') }}" required autocomplete="name">
+        </div>
 
-        <label>Email:</label><br> 
-        <input type="email" name="email" value="{{ old('email') }}" required><br><br>
- 
-        <label>Password:</label><br> 
-        <input type="password" name="password" required><br><br> 
+        <div class="form-group">
+            <label>Email:</label> 
+            <input type="email" name="email" value="{{ old('email') }}" autocomplete="off" required>
+        </div>
 
-        <label>Confirm Password:</label><br> 
-        <input type="password" name="password_confirmation" required><br><br> 
+        <div class="form-group">
+            <label>Drivers License Number:</label>
+            <input type="text" name="drivers_license_number" value="{{ old('drivers_license_number') }}" autocomplete="off"required>
+        </div>
 
-        <label>Drivers License Number:</label><br>
-        <input type="text" name="drivers_license_number" value="{{ old('drivers_license_number') }}" required><br><br>
+        <div class="form-group">
+            <label>Vehicle Type:</label>
+            
+            <select name="vehicle_type_id" required>
+                <option value="">Select Vehicle Type</option>
 
-        
-        <label>Vehicle Type:</label><br>
-        <select name="vehicle_type_id" required>
-            <option value="">Select Vehicle Type</option>
-            @foreach($vehicleTypes as $type)
+                @foreach($vehicleTypes as $type)
                 <option value="{{ $type->id }}" {{ old('vehicle_type_id') == $type->id ? 'selected' : '' }}>
                     {{ $type->display_name }}
                 </option>
-            @endforeach
-        </select><br><br>
+                @endforeach
+            </select>
+        </div>
 
-        <label>Drivers Plate:</label><br>
-        <input type="text" name="license_plate" value="{{ old('license_plate') }}" required><br><br>
+        <div class="form-group">
+            <label>Drivers Plate:</label>
+            <input type="text" name="license_plate" value="{{ old('license_plate') }}" autocomplete="off"required>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" autocomplete="new-password" required>
+        </div>
+     
+        <div class="form-group">
+            <label for="password_confirmation">Confirm Password</label>
+            <input type="password" id="password_confirmation" name="password_confirmation" autocomplete="new-password" required>
+        </div>
  
-        <button type="submit">SIGN UP AS DRIVER</button> 
+        <button type="submit" class="btn-submit">SIGN UP AS DRIVER</button> 
     </form> 
 </body> 
 </html>

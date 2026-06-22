@@ -52,7 +52,19 @@ class EstimationController extends Controller
         }
         $estimation = Estimation::findOrFail($id);
         $vehicleTypes = Vehicle::all();
-        return view('estimations.show', compact('estimation', 'vehicleTypes'));
+
+        $fares = [];
+        foreach($vehicleTypes as $vehicle) {
+            if (strtolower($vehicle->name_vehicle) === 'car') {
+                $hargaAwalMobil = $estimation->distance * 5000;
+                $surgeMobil = rand(120, 130) / 100;
+                $fares[$vehicle->id] = $hargaAwalMobil * $surgeMobil;
+            } else {
+                $fares[$vehicle->id] = $estimation->fare; 
+            }
+        }
+
+        return view('estimations.show', compact('estimation', 'vehicleTypes', 'fares'));
     }
 
     public function selectVehicle(Request $request)
@@ -66,15 +78,10 @@ class EstimationController extends Controller
         $estimation = Estimation::findOrFail($estimationId);
         $vehicleType = Vehicle::findOrFail($request->input('vehicle_type_id'));
 
-        if ($vehicleType->name_vehicle === 'car') {
-            $hargaAwalMobil = $estimation->distance * 5000;
-            $surgeMobil = rand(120, 130) / 100;
-            $hargaMobil = $hargaAwalMobil * $surgeMobil;
-            
-            $estimation->update([
-                'fare' => $hargaMobil
-            ]);
-        }
+        $fares = session('calculated_fares');
+        $finalFare = $fares[$vehicleType->id] ?? $estimation->fare;
+        
+        $estimation->update(['fare' => $finalFare]);
 
         session([
             'checkout_estimation_id' => $estimation->id,
