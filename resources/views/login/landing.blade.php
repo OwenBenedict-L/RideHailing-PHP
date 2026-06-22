@@ -1,23 +1,39 @@
 <html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Ride App</title>
+    @vite(['resources/css/landing.css'])
+</head>
 <body>
-    <center>
-        <h2>Welcome to Ride App!</h2>
-        
-        <p>USER</p>
-        <a href="/login-user"><button>Login User</button></a>
-        <a href="/register-user"><button>Sign Up User</button></a>
-        
-        <br><br>
-        
-        <p>DRIVER</p>
-        <a href="/login-driver"><button>Login Driver</button></a>
-        <a href="/register-driver"><button>Sign Up Driver</button></a>
 
-        <br><br>
+    <div class="top-bar">
+        <div class="partner-block">
+            <span>Drive with Us! 🚗</span>
+            <a href="/login-driver" class="btn btn-outline">Login Driver</a>
+            <a href="/register-driver" class="btn btn-solid">Sign Up</a>
+        </div>
         
-        <p>CUSTOMER SERVICE</p>
-        <a href="/login-cs"><button>Login CS</button></a>
-        <a href="/register-cs"><button>Sign Up CS</button></a>
-    </center>
+        <div class="partner-block">
+            <span>Support Team 🎧</span>
+            <a href="/login-cs" class="btn btn-outline">Login CS</a>
+            <a href="/register-cs" class="btn btn-solid">Sign Up</a>
+        </div>
+    </div>
+
+    <div class="main-screen">
+        
+        <div class="profile-section">
+            <h1>Welcome to Ride App!</h1>
+            <p>An easy and safe way to get around every day. Book your ride anytime and enjoy a comfortable trip.</p>
+        </div>
+
+        <div class="user-box">
+            <h3>Start Riding Today</h3>
+            <a href="/login-user" class="btn btn-user-login">Login as User</a>
+            <a href="/register-user" class="btn btn-user-register">Create User Account</a>
+        </div>
+
+    </div>
 </body>
 </html>

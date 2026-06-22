@@ -1,20 +1,19 @@
-<html> 
-<body> 
-    <table>
-    <tr>
-        <th style="border: none">
-            <h2>
-                <a href="/">
-                    <button type="button">BACK</button>
-                </a>
-            </h2>
-        </th>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register Driver</title>
+    
+    @vite(['resources/css/register.css'])
+</head>
+<body>
 
-        <th style="border: none">
-            <h2>REGISTER DRIVER</h2> 
-        </th>
-    </tr>
-    </table>
+    <div class="register-box">
+        <a href="/" class="btn-back">← BACK</a>
+
+        <div class="register-header">
+            <h2>REGISTER DRIVER</h2>
+        </div>
 
     @if ($errors->any()) 
         <div style="color: red;"> 
@@ -43,6 +42,7 @@
         <label>Drivers License Number:</label><br>
         <input type="text" name="drivers_license_number" value="{{ old('drivers_license_number') }}" required><br><br>
 
+        
         <label>Vehicle Type:</label><br>
         <select name="vehicle_type_id" required>
             <option value="">Select Vehicle Type</option>
