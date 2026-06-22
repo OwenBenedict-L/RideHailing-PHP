@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Estimation; 
 use App\Models\Vehicle;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 
 class EstimationController extends Controller
 {
@@ -24,9 +25,11 @@ class EstimationController extends Controller
 
         $distance = rand(2, 15);
         $tarifMotor = $distance * 5000; 
-        $surgeMultiplier = rand(95, 105) / 100;
+        $userId = Auth::id() ?? session()->getId();
+        $surgeMultiplier = Cache::remember('surge_motor_' . $userId, now()->addHour(), function () {
+            return rand(95, 105) / 100;
+        });
         $fareAkhir = $tarifMotor * $surgeMultiplier;
-
         $waktuEstimasi = round(($distance / 40) * 60);
 
 
