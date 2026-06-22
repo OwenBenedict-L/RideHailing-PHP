@@ -69,7 +69,7 @@ class DriverWalletController extends Controller
 
     public function history()
     {
-        Auth::guard('driver')->id();
+        $driverId = Auth::guard('driver')->id();
         $wallet = DriverWallet::firstWhere('driver_id', $driverId);
         $transactions = $wallet ? $wallet->transactions()->latest()->get() : [];
         return view('wallet.driver-history', compact('transactions'));
