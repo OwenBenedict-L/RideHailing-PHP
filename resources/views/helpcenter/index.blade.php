@@ -67,7 +67,7 @@
     <textarea name="isi_keluhan" id="keluhan" rows="5" minlength="10" maxlength="100" required></textarea>
     <br><br>
 
-    <a href="{{route('dashboard.users}}" style="text-decoration: none;">
+    <a href="{{route('dashboard.user')}}" style="text-decoration: none;">
         <button type="button" style = "margin-right: 15px;">Back</button>
     </a>
     <button type="submit">Send</button>
