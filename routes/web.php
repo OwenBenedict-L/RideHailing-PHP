@@ -134,6 +134,9 @@ Route::middleware('auth:driver')->group(function () {
 
 Route::middleware('auth:cs')->group(function () {
     Route::get('/cs/dashboard', [CsController::class, 'dashboard'])->name('cs.dashboard');
-    Route::get('/cs/users', [CsController::class, 'showAllUsers'])->name('cs.users');
+    Route::get('/cs/users', [CsController::class, 'users'])->name('cs.users');
+    Route::get('/cs/ticket/{id}/chat', [CsController::class, 'chat'])->name('cs.chat');
+    Route::post('/cs/ticket/{id}/reply', [CsController::class, 'reply'])->name('cs.reply');
+    Route::post('/cs/ticket/{id}/complete', [CsController::class, 'complete'])->name('cs.ticket.complete');
     Route::post('/logout-cs', [AuthController::class, 'logout'])->name('cs.logout');
 });

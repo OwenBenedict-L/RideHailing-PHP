@@ -27,9 +27,13 @@
         </div>
 
         <section class="menu-grid">
-            
-            <a href="{{ route('cs.users') }}" class="menu-box">
-                <span class="menu-title">User Management</span>
+        
+            <a href="{{ route('cs.users') }}" class="menu-box efek-hati">
+                <span class="menu-title">User & Driver Management</span>
+
+                <div class="menu-image-wrapper">
+                    <img src="{{ asset('rem.png') }}" alt="User Management Illustration" class="menu-image-outside">
+                </div>
             </a>
 
         </section>

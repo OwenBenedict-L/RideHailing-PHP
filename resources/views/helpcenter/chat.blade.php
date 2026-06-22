@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html>
 <head>
     <title>Chat CS</title>
@@ -84,6 +83,12 @@
                 <p style="text-align: center; color: #888; font-style: italic;">Belum ada pesan balasan. Silakan ketik pesan Anda di bawah.</p>
             @endif
         </div>
+        @if($tiket->status === 'RESOLVED')
+            <div style="padding: 15px; background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; border-radius: 5px; text-align: center;">
+                <strong>Chat Closed</strong><br>
+                This issue has been closed by Customer Service. You can't send messages anymore. Sorry if this disturbs your comfort.
+            </div>
+        @else
         <form action="{{ route('helpcenter.reply', $tiket->id) }}" method="POST">
             @csrf
             <label for="pesan"><strong>Send a message to CS:</strong></label><br>
@@ -91,9 +96,8 @@
             
             <button type="submit" style="padding: 5px 15px; background-color: #007bff; color: white; border: none; cursor: pointer; border-radius: 4px;">Send Message</button>
         </form>
-    </div>
+    @endif </div> <br>
 
-    <br>
     <a href="{{ route('helpcenter.history') }}" style="text-decoration: none;">
         <button type="button" style="padding: 5px 15px; cursor: pointer;">Back to History</button>
     </a>
