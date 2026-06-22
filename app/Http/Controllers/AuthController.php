@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
  
 use App\Models\User;
 use App\Models\Driver;
+use App\Models\Vehicle;
 use App\Models\Cs;
 use App\Models\UserNotification;
 use Illuminate\Http\Request; 
@@ -82,7 +83,8 @@ class AuthController extends Controller
     }
 
     public function showRegisterDriver() { 
-        return view('login.registerDriver'); 
+        $vehicleTypes = Vehicle::all();
+        return view('login.registerDriver', compact('vehicleTypes')); 
     }
 
     public function registerDriver(Request $request) {
@@ -91,11 +93,13 @@ class AuthController extends Controller
             'email' => 'required|email|unique:drivers',
             'password' => 'required|confirmed',
             'drivers_license_number' => 'required|unique:drivers',
+            'vehicle_type_id' => 'required|exists:vehicle_types,id',
             'license_plate' => 'required|unique:drivers',
         ],[
             'email.unique' => 'This driver email is already registered!',
             'password.confirmed' => 'The password confirmation does not match.',
             'drivers_license_number.unique' => 'This drivers license number is already registered in our system!',
+            'vehicle_type_id.exists' => 'Please select a valid vehicle type.',
             'license_plate.unique' => 'This license plate is already used by another driver!',
         ]);
 
@@ -104,6 +108,7 @@ class AuthController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'drivers_license_number' => $request->drivers_license_number,
+            'vehicle_type_id' => $request->vehicle_type_id,
             'license_plate' => $request->license_plate,
         ]);
 

@@ -65,6 +65,8 @@
                                     SEARCHING CUSTOMER
                                 </span>
                             </div>
+
+                        
                             
                             <form method="POST" action="{{ route('bookings.orders.accept', $order->id) }}" style="display:inline;">
                                 @csrf

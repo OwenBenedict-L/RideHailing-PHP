@@ -43,6 +43,16 @@
         <label>Drivers License Number:</label><br>
         <input type="text" name="drivers_license_number" value="{{ old('drivers_license_number') }}" required><br><br>
 
+        <label>Vehicle Type:</label><br>
+        <select name="vehicle_type_id" required>
+            <option value="">Select Vehicle Type</option>
+            @foreach($vehicleTypes as $type)
+                <option value="{{ $type->id }}" {{ old('vehicle_type_id') == $type->id ? 'selected' : '' }}>
+                    {{ $type->display_name }}
+                </option>
+            @endforeach
+        </select><br><br>
+
         <label>Drivers Plate:</label><br>
         <input type="text" name="license_plate" value="{{ old('license_plate') }}" required><br><br>
  

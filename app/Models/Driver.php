@@ -22,6 +22,7 @@ class Driver extends Authenticatable
         'email',
         'password',
         'drivers_license_number',
+        'vehicle',
         'license_plate',
     ];
 

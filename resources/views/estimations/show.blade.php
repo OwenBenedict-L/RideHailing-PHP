@@ -25,27 +25,21 @@
     <form action="{{ route('estimations.selectVehicle') }}" method="POST">
         @csrf
         <input type="hidden" name="estimation_id" value="{{ $estimation->id }}">
-        @php
-            $hargaAwalMobil = $estimation->distance * 5000;
-            $surgeMobil = rand(120, 130) / 100;
-            $hargaMobil = $hargaAwalMobil * $surgeMobil;
-        @endphp
+        @foreach($vehicleTypes as $index => $vehicle)
+            @php
+                $hargaAwalMobil = $estimation->distance * 5000;
+                $surgeMobil = rand(120, 130) / 100;
+                $hargaMobil = $hargaAwalMobil * $surgeMobil;
+            @endphp
 
         <label class="option-card">
-            <input type="radio" name="vehicle_type" value="Bike" checked>
+            <input type="radio" name="vehicle_type_id" value="{{ $vehicle->id }}" {{ $index == 0 ? 'checked' : '' }} required>
             <div>
-                <div class="vehicle-name">Bike (Motorcycle)</div>
-                <div>Fare: Rp {{ number_format($estimation->fare, 0, ',', '.') }}</div>
+                <div class="vehicle-name">{{ $vehicle->display_name }}</div>
+                <div>Fare: Rp {{ number_format($displayFare, 0, ',', '.') }}</div>
             </div>
         </label>
-
-        <label class="option-card">
-            <input type="radio" name="vehicle_type" value="Car">
-            <div>
-                <div class="vehicle-name">Car (Four-Wheeler)</div>
-                <div>Fare: Rp {{ number_format($hargaMobil, 0, ',', '.') }}</div>
-            </div>
-        </label>
+        @endforeach
 
         <br>
         <button type="button" onclick="window.location.href='{{ route('bookings.create') }}'">BACK</button>
