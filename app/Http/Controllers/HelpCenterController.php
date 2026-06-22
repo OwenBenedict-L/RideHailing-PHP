@@ -10,52 +10,56 @@ use App\Models\HelpCenter;
 
 class HelpCenterController extends Controller
 {
+
     public function index()
     {
         $isDriver = Auth::guard('driver')->check();
-
         $tickets = Ticket::where('user_id', Auth::id())->get();
-
         if ($isDriver) {
             $tickets = Ticket::where('driver_id', Auth::guard('driver')->id())->get();
         }
-
         return view('helpcenter.index', compact('tickets'));
-    }
+    } 
 
     public function store(Request $request)
     {
+        dd($request->all());
         $TotalTicketOpen = Ticket::where('user_id', Auth::id())
                                     ->where('status', 'OPEN')
                                     ->count();
 
         if ($TotalTicketOpen >= 1) {
-        return redirect()->back()
-            ->withErrors(['ticket_limit' => 'max 1 tickets at the time'])
-            ->withInput(); 
-    }
+            return redirect()->back()
+                ->withErrors(['ticket_limit' => 'max 1 tickets at the time'])
+                ->withInput(); 
+        }
+
         $request->validate([
             'jenis_keluhan' => 'required|string',
             'isi_keluhan' => 'required|string',
             'jenis_keluhan_lainnya' => 'required_if:jenis_keluhan,lainnya|string|nullable' 
         ]);
 
-        $tpye = $request->jenis_keluhan;
-        if ($type === 'others') {
+
+        $type = $request->jenis_keluhan;
+        
+
+        if ($type === 'lainnya') {
             $type = $request->jenis_keluhan_lainnya;
         }
         
         $NewTicket = Ticket::create([
             'user_id' => Auth::id(),
-            'subject' => $jenis,
+            'subject' => $type, 
             'status' => 'OPEN'
         ]);
 
         TicketMessage::create([
-            'ticket_id' => $tiketBaru->id,
+            'ticket_id' => $NewTicket->id,
             'sender_type' => 'CUSTOMER',
             'message' => $request->isi_keluhan
         ]);
+        
         return redirect()->route('helpcenter.feedback');
     }
 
@@ -72,7 +76,6 @@ class HelpCenterController extends Controller
         return view('helpcenter.history', compact('keluhan'));
     }
     
-
     public function chat($id)
     {
         $tiket = Ticket::findOrFail($id);
@@ -95,6 +98,4 @@ class HelpCenterController extends Controller
 
         return redirect()->back(); 
     }
-
 }
-

@@ -124,12 +124,13 @@ Route::middleware('auth:driver')->group(function () {
     Route::get('/driver-notifications/{driverNotification}', [DriverNotificationController::class, 'show'])->name('driver-notifications.show');
     Route::put('/driver-notifications/{driverNotification}', [DriverNotificationController::class, 'update'])->name('driver-notifications.update');
     Route::delete('/driver-notifications/{driverNotification}', [DriverNotificationController::class, 'destroy'])->name('driver-notifications.destroy');
-    Route::get('/helpcenter', [HelpCenterController::class, 'index'])->name('helpcenter.index');
-    Route::post('/helpcenter', [HelpCenterController::class, 'store'])->name('helpcenter.store');
-    Route::get('/helpcenter/history', [HelpCenterController::class, 'history'])->name('helpcenter.history');
-    Route::get('/helpcenter/chat/{id}', [HelpCenterController::class, 'chat'])->name('helpcenter.chat');
-    Route::post('/helpcenter/chat/{id}', [HelpCenterController::class, 'sendReply'])->name('helpcenter.reply');
-    Route::get('/helpcenter/feedback', [HelpCenterController::class, 'feedbackPage'])->name('helpcenter.feedback');
+    // ... rute driver lainnya (dashboard, orders, chat, dll) ...
+    Route::get('/driver/helpcenter', [HelpCenterController::class, 'index'])->name('driver.helpcenter.index');
+    Route::post('/driver/helpcenter', [HelpCenterController::class, 'store'])->name('driver.helpcenter.store');
+    Route::get('/driver/helpcenter/history', [HelpCenterController::class, 'history'])->name('driver.helpcenter.history');
+    Route::get('/driver/helpcenter/chat/{id}', [HelpCenterController::class, 'chat'])->name('driver.helpcenter.chat');
+    Route::post('/driver/helpcenter/chat/{id}', [HelpCenterController::class, 'sendReply'])->name('driver.helpcenter.reply');
+    Route::get('/driver/helpcenter/feedback', [HelpCenterController::class, 'feedbackPage'])->name('driver.helpcenter.feedback');
 });
 
 Route::middleware('auth:cs')->group(function () {
