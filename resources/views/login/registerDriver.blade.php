@@ -15,52 +15,63 @@
             <h2>REGISTER DRIVER</h2>
         </div>
 
-        @if ($errors->any()) 
-            <div class="error-alert"> 
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li><strong>Error!</strong> {{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div> 
-        @endif 
-
-        <form method="POST" action="/register-driver"> 
-            @csrf 
-            
-            <div class="form-group">
+    @if ($errors->any()) 
+        <div style="color: red;"> 
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li><strong>Error!</strong> {{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+    
+    <form method="POST" action="/register-driver"> 
+        @csrf 
+        <div class="form-group">
                 <label for="name">Full Name</label>
                 <input type="text" id="name" name="name" value="{{ old('name') }}" required autocomplete="name">
-            </div>
+        </div>
 
-            <div class="form-group">
-                <label for="email">Email Address</label>
-                <input type="email" id="email" name="email" autocomplete="off" required>
-            </div>
+        <div class="form-group">
+            <label>Email:</label> 
+            <input type="email" name="email" value="{{ old('email') }}" autocomplete="off" required>
+        </div>
+
+        <div class="form-group">
+            <label>Drivers License Number:</label>
+            <input type="text" name="drivers_license_number" value="{{ old('drivers_license_number') }}" autocomplete="off"required>
+        </div>
+
+        <div class="form-group">
+            <label>Vehicle Type:</label>
+            
+            <select name="vehicle_type_id" required>
+                <option value="">Select Vehicle Type</option>
+
+                @foreach($vehicleTypes as $type)
+                <option value="{{ $type->id }}" {{ old('vehicle_type_id') == $type->id ? 'selected' : '' }}>
+                    {{ $type->display_name }}
+                </option>
+                @endforeach
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Drivers Plate:</label>
+            <input type="text" name="license_plate" value="{{ old('license_plate') }}" autocomplete="off"required>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" autocomplete="new-password" required>
+        </div>
      
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" autocomplete="new-password" required>
-            </div>
-     
-            <div class="form-group">
-                <label for="password_confirmation">Confirm Password</label>
-                <input type="password" id="password_confirmation" name="password_confirmation" autocomplete="new-password" required>
-            </div>
-
-            <div class="form-group">
-                <label for="drivers_license_number">Drivers License Number (SIM)</label>
-                <input type="text" id="drivers_license_number" name="drivers_license_number" value="{{ old('drivers_license_number') }}" required>
-            </div>
-
-            <div class="form-group">
-                <label for="license_plate">Drivers Plate (Police Number)</label>
-                <input type="text" id="license_plate" name="license_plate" value="{{ old('license_plate') }}" required>
-            </div>
-     
-            <button type="submit" class="btn-submit">SIGN UP AS DRIVER</button> 
-        </form> 
-    </div>
-
+        <div class="form-group">
+            <label for="password_confirmation">Confirm Password</label>
+            <input type="password" id="password_confirmation" name="password_confirmation" autocomplete="new-password" required>
+        </div>
+ 
+        <button type="submit" class="btn-submit">SIGN UP AS DRIVER</button> 
+    </form> 
 </body> 
 </html>

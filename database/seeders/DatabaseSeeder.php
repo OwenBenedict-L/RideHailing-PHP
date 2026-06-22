@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use App\Models\Driver; 
+use App\Models\Vehicle;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Seeder;
@@ -14,18 +15,31 @@ class DatabaseSeeder extends Seeder
 
     public function run(): void
     {
-        User::create([
+        User::firstOrCreate([
             'name' => 'Elfrandt',
             'email' => 'elfrandtgold29@gmail.com',
             'password' => Hash::make('123456789'),
         ]);
 
-        Driver::create([
+        $bike = Vehicle::firstOrCreate([
+            'name_vehicle' => 'bike',
+            'display_name' => 'Motorcycle'
+        ]);
+
+        $car = Vehicle::firstOrCreate([
+            'name_vehicle' => 'car',
+            'display_name' => 'Car'
+        ]);
+
+        Driver::firstOrCreate([
             'name' => 'Pak Supir',
             'email' => 'driver@gmail.com',
             'password' => Hash::make('123456789'),
             'drivers_license_number' => 'SIM-123456',
+            'vehicle_type_id' => $bike->id, 
             'license_plate' => 'B 3614 KLT',
         ]);
+
+        
     }
 }

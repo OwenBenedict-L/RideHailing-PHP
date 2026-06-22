@@ -30,6 +30,7 @@ class DriverFactory extends Factory
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
             'drivers_license_number' => fake()->unique()->numerify(),
+            'vehicle' => fake()->randomElement(['car', 'motorcycle']),
             'license_plate' => fake()->unique()->bothify('B-####-???'),
             'remember_token' => Str::random(10),
         ];

@@ -11,6 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
+        Schema::create('vehicle_types', function (Blueprint $table){
+            $table->id();
+            $table->string('name_vehicle')->unique();
+            $table->string('display_name');
+            $table->timestamps();
+        });
+
         Schema::create('drivers', function (Blueprint $table) {
             $table->id();
             $table->string('name');
@@ -18,6 +25,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('drivers_license_number')->unique();
+            $table->foreignId('vehicle_type_id')->constrained('vehicle_types')->onDelete('cascade');
             $table->string('license_plate')->unique();
             $table->rememberToken();
             $table->timestamps();
@@ -40,5 +48,6 @@ return new class extends Migration
     {
         Schema::dropIfExists('driver_wallets');
         Schema::dropIfExists('drivers');
+        Schema::dropIfExists('vehicle_types');
     }
 };

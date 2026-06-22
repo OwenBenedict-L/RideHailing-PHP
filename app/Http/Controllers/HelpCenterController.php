@@ -12,9 +12,13 @@ class HelpCenterController extends Controller
 {
     public function index()
     {
+        $isDriver = Auth::guard('driver')->check();
 
         $tickets = Ticket::where('user_id', Auth::id())->get();
-        
+
+        if ($isDriver) {
+            $tickets = Ticket::where('driver_id', Auth::guard('driver')->id())->get();
+        }
 
         return view('helpcenter.index', compact('tickets'));
     }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Wallet;
 use Illuminate\Http\Request;
 use App\Models\Estimation; 
+use App\Models\Vehicle;
 use Illuminate\Support\Facades\Auth;
 
 class EstimationController extends Controller
@@ -50,22 +51,42 @@ class EstimationController extends Controller
             return redirect()->route('estimations.create')->with('error', 'Silakan buat rute estimasi terlebih dahulu.');
         }
         $estimation = Estimation::findOrFail($id);
-        return view('estimations.show', compact('estimation'));
+        $vehicleTypes = Vehicle::all();
+
+        $fares = [];
+        foreach($vehicleTypes as $vehicle) {
+            if (strtolower($vehicle->name_vehicle) === 'car') {
+                $hargaAwalMobil = $estimation->distance * 5000;
+                $surgeMobil = rand(120, 130) / 100;
+                $fares[$vehicle->id] = $hargaAwalMobil * $surgeMobil;
+            } else {
+                $fares[$vehicle->id] = $estimation->fare; 
+            }
+        }
+
+        return view('estimations.show', compact('estimation', 'vehicleTypes', 'fares'));
     }
 
     public function selectVehicle(Request $request)
     {
+        $request->validate([
+            'estimation_id' => 'required|exists:estimations,id',
+            'vehicle_type_id' => 'required|exists:vehicle_types,id'
+        ]);
+
         $estimationId = $request->input('estimation_id');
         $estimation = Estimation::findOrFail($estimationId);
+        $vehicleType = Vehicle::findOrFail($request->input('vehicle_type_id'));
 
-        if ($request->vehicle_type === 'Car') {
-            $hargaMobil = $estimation->distance * 5000;
-            $estimation->update([
-                'fare' => $hargaMobil
-            ]);
-        }
+        $fares = session('calculated_fares');
+        $finalFare = $fares[$vehicleType->id] ?? $estimation->fare;
+        
+        $estimation->update(['fare' => $finalFare]);
 
-        session(['checkout_estimation_id' => $estimation->id]);
+        session([
+            'checkout_estimation_id' => $estimation->id,
+            'checkout_vehicle_type_id' => $vehicleType->id 
+        ]);
 
         return redirect()->route('bookings.checkout');
     }
@@ -73,8 +94,9 @@ class EstimationController extends Controller
     public function checkout()
     {
         $estimationId = session('checkout_estimation_id');
+        $vehicleTypeId = session('checkout_vehicle_type_id');
 
-        if (!$estimationId) {
+        if (!$estimationId || !$vehicleTypeId) {
             return redirect('/estimations')->with('error', 'Data estimasi tidak ditemukan.'); 
         }
 
@@ -99,7 +121,8 @@ class EstimationController extends Controller
         return view('bookings.checkout', compact(
             'estimation', 
             'pickup_location', 
-            'destination_location', 
+            'destination_location',
+            'vehicleTypeId',
             'distance', 
             'original_fare', 
             'discount_amount', 

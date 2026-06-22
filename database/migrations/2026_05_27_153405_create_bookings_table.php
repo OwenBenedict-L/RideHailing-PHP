@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('driver_id')->nullable()->constrained('drivers')->onDelete('set null');
+            $table->foreignId('vehicle_type_id')->constrained('vehicle_types')->onDelete('cascade');
             $table->string('pickup_location');
             $table->string('destination_location');
             $table->string('promo_code')->nullable();

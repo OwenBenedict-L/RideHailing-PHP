@@ -57,6 +57,7 @@ class BookingController extends Controller
             'pickup_location' => $request->pickup_location,
             'destination_location' => $request->destination_location,
             'promo_code' => $request->promo_code,
+            'vehicle_type_id' => session('checkout_vehicle_type_id'),
             'fare' => $request->fare,
             'distance' => $request->distance,
             'status' => 'pending'
@@ -235,10 +236,14 @@ class BookingController extends Controller
         }
 
         $driverId = Auth::guard('driver')->id();
+        $driver = Auth::guard('driver')->user();
 
         $orders = Booking::with('user')
-            ->where('status', 'pending')
-            ->orwhere('driver_id', $driverId)
+            ->where('vehicle_type_id', $driver->vehicle_type_id)
+            ->where(function($query) use ($driverId) {
+                $query->where('status', 'pending')
+                ->orWhere('driver_id', $driverId);
+            })
             ->orderBy('created_at', 'desc')
             ->get();
 
