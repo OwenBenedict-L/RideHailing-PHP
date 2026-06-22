@@ -1,0 +1,119 @@
+/* Pengaturan dasar halaman */
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #F7FAFC;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.login-box {
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    width: 100%;
+    max-width: 380px;
+    box-sizing: border-box;
+    position: relative;
+}
+
+.login-header {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.login-header h2 {
+    margin: 10px 0 0 0;
+    color: #1A365D;
+    font-size: 24px;
+}
+
+.btn-back {
+    text-decoration: none;
+    color: #718096;
+    font-size: 13px;
+    font-weight: bold;
+    display: inline-block;
+    margin-bottom: 15px;
+    transition: color 0.2s;
+}
+
+.btn-back:hover {
+    color: #1A365D;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #4A5568;
+}
+
+input[type="email"],
+input[type="password"] {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #CBD5E0;
+    border-radius: 6px;
+    font-size: 15px;
+    background-color: #FFF;
+    color: #2D3748;
+    box-sizing: border-box;
+    transition: border-color 0.2s;
+}
+
+input[type="email"]:focus,
+input[type="password"]:focus {
+    outline: none;
+    border-color: #3182CE;
+}
+
+.btn-submit {
+    width: 100%;
+    padding: 12px;
+    background-color: #1A365D;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-top: 10px;
+}
+
+.btn-submit:hover {
+    background-color: #2A4365;
+}
+
+.register-link {
+    display: block;
+    text-align: center;
+    margin-top: 25px;
+    font-size: 14px;
+    color: #3182CE;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.register-link:hover {
+    text-decoration: underline;
+}
+
+.error-alert {
+    background-color: #FFF5F5;
+    color: #C53030;
+    padding: 10px 15px;
+    border-radius: 6px;
+    font-size: 14px;
+    margin-bottom: 20px;
+    border-left: 4px solid #E53E3E;
+}
