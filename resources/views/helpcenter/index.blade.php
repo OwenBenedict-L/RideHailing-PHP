@@ -5,43 +5,47 @@
         <span class="alert-icon">⚠️</span>
         <span class="alert-message">{{ $errors->first('ticket_limit') }}</span>
     </div>
-@endif
+    @endif
 
-<style>
-.custom-alert-danger {
-    background-color: #f8d7da;
-    color: #721c24;
-    border: 1px solid #f5c6cb;
-    padding: 12px 20px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    font-family: sans-serif;
-    display: flex;
-    align-items: center;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-    animation: shake 0.4s ease-in-out; /* Efek getar saat muncul */
-}
+    <style>
+    .custom-alert-danger {
+        background-color: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+        padding: 12px 20px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        font-family: sans-serif;
+        display: flex;
+        align-items: center;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        animation: shake 0.4s ease-in-out; 
+    }
 
-.alert-icon {
-    margin-right: 10px;
-    font-size: 1.2rem;
-}
+    .alert-icon {
+        margin-right: 10px;
+        font-size: 1.2rem;
+    }
 
-.alert-message {
-    font-weight: bold;
-}
+    .alert-message {
+        font-weight: bold;
+    }
 
-@keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    25% { transform: translateX(-5px); }
-    75% { transform: translateX(5px); }
-}
-</style>
+    @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-5px); }
+        75% { transform: translateX(5px); }
+    }
+    </style>
 
     <h2>Create Ticket</h2>
     <hr>
 
-    <form action="/helpcenter" method="POST">
+    @if(Auth::guard('driver')->check())
+        <form action="{{ route('driver.helpcenter.store') }}" method="POST">
+    @else
+        <form action="{{ route('helpcenter.store') }}" method="POST">
+    @endif
     @csrf 
 
     <label for="jenis">Type of Complaint:</label><br>
@@ -75,16 +79,23 @@
             <button type="button" style="margin-right: 15px;">Back</button>
         </a>
     @endif
+    
     <button type="submit">Send</button>
+    
+    </form>
+
     <br><br><br>
     <div style="text-align: left;">
-        <a href="{{ route('helpcenter.history') }}">
+        @if(Auth::guard('driver')->check())
+            <a href="{{ route('driver.helpcenter.history') }}">
+        @else
+            <a href="{{ route('helpcenter.history') }}">
+        @endif
             <button type="button" style="cursor: pointer;">History</button>
         </a>
     </div>
     <hr style="margin-bottom: 15px;"> 
 
-    </form>
     <script>
         function tampilkanKotakLainnya() {
             var pilihan = document.getElementById("jenis");

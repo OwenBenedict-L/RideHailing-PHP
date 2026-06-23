@@ -98,9 +98,15 @@
         </form>
     @endif </div> <br>
 
-    <a href="{{ route('helpcenter.history') }}" style="text-decoration: none;">
-        <button type="button" style="padding: 5px 15px; cursor: pointer;">Back to History</button>
-    </a>
+    <div style="text-align: left; margin-top: 20px;">
+        @if(Auth::guard('driver')->check())
+            <a href="{{ route('driver.helpcenter.history') }}">
+        @else
+            <a href="{{ route('helpcenter.history') }}">
+        @endif
+            <button type="button" style="padding: 5px 15px; cursor: pointer;">Back to History</button>
+        </a>
+    </div>
 
 </body>
 </html>
