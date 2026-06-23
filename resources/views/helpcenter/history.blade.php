@@ -12,7 +12,6 @@
             border: 1px solid #dddddd;
             padding: 10px;
             text-align: left;
-
             word-wrap: break-word; 
             overflow-wrap: break-word; 
             word-break: break-word;
@@ -20,13 +19,11 @@
         th {
             background-color: #f2f2f2;
         }
-
-        /* this is for width */
-        th:nth-child(1) { width: 15%; } /* Type of Complaint */
-        th:nth-child(2) { width: 40%; } /* Complaints */
-        th:nth-child(3) { width: 15%; } /* Date */
-        th:nth-child(4) { width: 15%; } /* Status */
-        th:nth-child(5) { width: 15%} /* Reply */
+        th:nth-child(1) { width: 15%; } 
+        th:nth-child(2) { width: 40%; } 
+        th:nth-child(3) { width: 15%; } 
+        th:nth-child(4) { width: 15%; } 
+        th:nth-child(5) { width: 15%} 
     </style>
 </head>
 <body>
@@ -76,7 +73,11 @@
                 </td>
                     
                 <td>
-                    <a href="{{ route('helpcenter.chat', $item->id) }}" style="color: #007bff; text-decoration: underline; font-weight: bold;">Message</a>
+                    @if(Auth::guard('driver')->check())
+                        <a href="{{ route('driver.helpcenter.chat', $item->id) }}" style="color: #007bff; text-decoration: underline; font-weight: bold;">Message</a>
+                    @else
+                        <a href="{{ route('helpcenter.chat', $item->id) }}" style="color: #007bff; text-decoration: underline; font-weight: bold;">Message</a>
+                    @endif
                 </td>
             </tr>
             @endforeach
@@ -85,8 +86,14 @@
 
     <br><br>
     
-    <a href="{{ route('helpcenter.index') }}" style="text-decoration: none;">
-        <button type="button" style="padding: 5px 15px; cursor: pointer;">Back</button>
-    </a>
+    <div style="text-align: left;">
+        @if(Auth::guard('driver')->check())
+            <a href="{{ route('driver.helpcenter.index') }}">
+        @else
+            <a href="{{ route('helpcenter.index') }}">
+        @endif
+            <button type="button" style="cursor: pointer; padding: 5px 15px;">Back</button>
+        </a>
+    </div>
 </body>
 </html>

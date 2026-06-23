@@ -16,18 +16,29 @@ class HelpCenterController extends Controller
     public function index()
     {
         $isDriver = Auth::guard('driver')->check();
-        $tickets = Ticket::where('user_id', Auth::id())->get();
+        
         if ($isDriver) {
             $tickets = Ticket::where('driver_id', Auth::guard('driver')->id())->get();
+        } else {
+            $tickets = Ticket::where('user_id', Auth::id())->get();
         }
+        
         return view('helpcenter.index', compact('tickets'));
     } 
 
     public function store(Request $request)
     {
-        $TotalTicketOpen = Ticket::where('user_id', Auth::id())
+        $isDriver = Auth::guard('driver')->check();
+
+        if ($isDriver) {
+            $TotalTicketOpen = Ticket::where('driver_id', Auth::guard('driver')->id())
                                     ->where('status', 'OPEN')
                                     ->count();
+        } else {
+            $TotalTicketOpen = Ticket::where('user_id', Auth::id())
+                                    ->where('status', 'OPEN')
+                                    ->count();
+        }                          
 
         if ($TotalTicketOpen >= 1) {
             return redirect()->back()
@@ -41,19 +52,23 @@ class HelpCenterController extends Controller
             'jenis_keluhan_lainnya' => 'required_if:jenis_keluhan,lainnya|string|nullable' 
         ]);
 
-
         $type = $request->jenis_keluhan;
-        
-
         if ($type === 'lainnya') {
             $type = $request->jenis_keluhan_lainnya;
         }
-        
-        $NewTicket = Ticket::create([
-            'user_id' => Auth::id(),
+
+        $ticketData = [
             'subject' => $type, 
             'status' => 'OPEN'
-        ]);
+        ];
+
+        if ($isDriver) {
+            $ticketData['driver_id'] = Auth::guard('driver')->id();
+        } else {
+            $ticketData['user_id'] = Auth::id(); 
+        }
+
+        $NewTicket = Ticket::create($ticketData);
 
         TicketMessage::create([
             'ticket_id' => $NewTicket->id,
@@ -61,11 +76,6 @@ class HelpCenterController extends Controller
             'message' => $request->isi_keluhan
         ]);
         
-        $jenis = str_replace('_', ' ', $request->jenis_keluhan);
-        if ($request->jenis_keluhan === 'lainnya') {
-            $jenis = $request->jenis_keluhan_lainnya;
-        }
-
         $jenis = str_replace('_', ' ', $request->jenis_keluhan);
         if ($request->jenis_keluhan === 'lainnya') {
             $jenis = $request->jenis_keluhan_lainnya;
@@ -88,8 +98,11 @@ class HelpCenterController extends Controller
                 'is_read' => false
             ]);
         }
-
-        return redirect()->route('helpcenter.feedback')->with('success', 'Ticket created!');
+        if ($isDriver) {
+            return redirect()->route('driver.helpcenter.feedback')->with('success', 'Ticket created!');
+        } else {
+            return redirect()->route('helpcenter.feedback')->with('success', 'Ticket created!');
+        }
     }
 
     public function feedbackPage()
@@ -99,8 +112,15 @@ class HelpCenterController extends Controller
     
     public function history()
     {
-        $keluhan = Ticket::where('user_id', Auth::id())
-        ->orderBy('created_at', 'desc')->get();
+        $isDriver = Auth::guard('driver')->check();
+
+        if ($isDriver) {
+            $keluhan = Ticket::where('driver_id', Auth::guard('driver')->id())
+                             ->orderBy('created_at', 'desc')->get();
+        } else {
+            $keluhan = Ticket::where('user_id', Auth::id())
+                             ->orderBy('created_at', 'desc')->get();
+        }
 
         return view('helpcenter.history', compact('keluhan'));
     }
@@ -124,6 +144,13 @@ class HelpCenterController extends Controller
             'sender_type' => 'CUSTOMER',
             'message' => $request->pesan
         ]);
+
+        $prizes = ['Promo Diskon 10%', 'Cashback Rp 5.000', 'Voucher Gratis Ongkir', 'Zonk'];
+        $gachaResult = $prizes[array_rand($prizes)];
+        
+        if ($gachaResult !== 'Zonk') {
+            session()->flash('gacha_prize', 'Selamat! Dari interaksi ini kamu mendapatkan: ' . $gachaResult);
+        }
 
         return redirect()->back(); 
     }
