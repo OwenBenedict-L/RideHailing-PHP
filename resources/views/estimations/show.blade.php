@@ -26,6 +26,11 @@
         @csrf
         <input type="hidden" name="estimation_id" value="{{ $estimation->id }}">
         
+        <input type="hidden" name="pickup_location" value="{{ $estimation->origin }}">
+        <input type="hidden" name="destination_location" value="{{ $estimation->destination }}">
+        <input type="hidden" name="distance" value="{{ $estimation->distance }}">
+        <input type="hidden" name="promo_code" value="{{ request('promo_code') ?? session('checkout_promo_code') }}">
+
         @if(isset($vehicleTypes) && $vehicleTypes->count() > 0)
             @foreach($vehicleTypes as $index => $vehicle)
             <label class="option-card">
@@ -33,13 +38,15 @@
                 <div>
                     <div class="vehicle-name">{{ $vehicle->display_name }}</div>
                     <div>Fare: Rp {{ number_format($fares[$vehicle->id] ?? 0, 0, ',', '.') }}</div>
+                    
+                    <input type="hidden" name="fares[{{ $vehicle->id }}]" value="{{ $fares[$vehicle->id] ?? 0 }}">
                 </div>
             </label>
             @endforeach
         @endif
 
         <br>
-        <button type="button" onclick="window.history.back();">BACK</button>
+        <button type="button" onclick="window.location.href='{{ route('bookings.create') }}'">BACK</button>
         <button type="submit">NEXT</button>
     </form>
 
