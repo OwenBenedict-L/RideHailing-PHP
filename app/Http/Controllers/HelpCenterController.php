@@ -7,6 +7,8 @@ use App\Models\Ticket;
 use Illuminate\Support\Facades\Auth;
 use App\Models\TicketMessage;
 use App\Models\HelpCenter;
+use App\Models\UserNotification;
+use App\Models\DriverNotification;
 
 class HelpCenterController extends Controller
 {
@@ -23,7 +25,6 @@ class HelpCenterController extends Controller
 
     public function store(Request $request)
     {
-        dd($request->all());
         $TotalTicketOpen = Ticket::where('user_id', Auth::id())
                                     ->where('status', 'OPEN')
                                     ->count();
@@ -60,7 +61,35 @@ class HelpCenterController extends Controller
             'message' => $request->isi_keluhan
         ]);
         
-        return redirect()->route('helpcenter.feedback');
+        $jenis = str_replace('_', ' ', $request->jenis_keluhan);
+        if ($request->jenis_keluhan === 'lainnya') {
+            $jenis = $request->jenis_keluhan_lainnya;
+        }
+
+        $jenis = str_replace('_', ' ', $request->jenis_keluhan);
+        if ($request->jenis_keluhan === 'lainnya') {
+            $jenis = $request->jenis_keluhan_lainnya;
+        }
+
+        if (Auth::guard('user')->check()) {
+            UserNotification::create([
+                'user_id' => Auth::id(),
+                'type'    => 'help',
+                'title'   => 'Support Ticket Created 🛠️',
+                'message' => 'Your ticket regarding "' . $jenis . '" has been received. Our team will review it and get back to you as soon as possible.',
+                'is_read' => false
+            ]);
+        } elseif (Auth::guard('driver')->check()) {
+            DriverNotification::create([
+                'driver_id' => Auth::guard('driver')->id(),
+                'type'    => 'help',
+                'title'   => 'Support Ticket Created 🛠️',
+                'message' => 'Your ticket regarding "' . $jenis . '" has been received. Our team will review it and get back to you as soon as possible.',
+                'is_read' => false
+            ]);
+        }
+
+        return redirect()->route('helpcenter.feedback')->with('success', 'Ticket created!');
     }
 
     public function feedbackPage()

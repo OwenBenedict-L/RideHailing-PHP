@@ -39,7 +39,7 @@
         @endif
 
         <br>
-        <button type="button" onclick="window.location.href='{{ route('bookings.create') }}'">BACK</button>
+        <button type="button" onclick="window.history.back();">BACK</button>
         <button type="submit">NEXT</button>
     </form>
 

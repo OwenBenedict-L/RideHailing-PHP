@@ -31,7 +31,6 @@
     font-weight: bold;
 }
 
-/* Animasi tambahan agar alert lebih terlihat "memaksa" (force) */
 @keyframes shake {
     0%, 100% { transform: translateX(0); }
     25% { transform: translateX(-5px); }
@@ -67,9 +66,15 @@
     <textarea name="isi_keluhan" id="keluhan" rows="5" minlength="10" maxlength="100" required></textarea>
     <br><br>
 
-    <a href="{{route('dashboard.user')}}" style="text-decoration: none;">
-        <button type="button" style = "margin-right: 15px;">Back</button>
-    </a>
+    @if(Auth::guard('driver')->check())
+        <a href="{{ route('dashboard.driver') }}" style="text-decoration: none;">
+            <button type="button" style="margin-right: 15px;">Back</button>
+        </a>
+    @elseif(Auth::guard('user')->check())
+        <a href="{{ route('dashboard.user') }}" style="text-decoration: none;">
+            <button type="button" style="margin-right: 15px;">Back</button>
+        </a>
+    @endif
     <button type="submit">Send</button>
     <br><br><br>
     <div style="text-align: left;">
@@ -98,5 +103,3 @@
     </script>
 </body>
 </html>
-
-
