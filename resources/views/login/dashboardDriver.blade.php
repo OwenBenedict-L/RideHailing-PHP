@@ -40,7 +40,7 @@
                 <span class="menu-title">Notifications</span>
             </a>
 
-            <a href="{{ route('helpcenter.store') }}" class="menu-box">
+            <a href="{{ route('driver.helpcenter.index') }}" class="menu-box">
                 <span class="menu-title">Help Center</span>
             </a>
 

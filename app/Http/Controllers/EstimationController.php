@@ -11,39 +11,83 @@ use Illuminate\Support\Facades\Cache;
 
 class EstimationController extends Controller
 {
-    public function create()
-    {
-        return view('estimations.create');
+    public function create(){
+    
+    $id = session('current_estimation_id');
+        if ($id) {
+            $estimation = Estimation::find($id);
+            if ($estimation) {
+                session()->flashInput([
+                    'pickup_location'      => $estimation->origin,
+                    'destination_location' => $estimation->destination,
+                ]);
+            }
+        }
+        
+            return view('bookings.create');
+        {
+            return view('estimations.create');
+        }
     }
 
-    public function store(Request $request)
+ public function store(Request $request)
     {
         $request->validate([
             'pickup_location' => 'required|string',
             'destination_location' => 'required|string',
         ]);
 
-        $distance = rand(2, 15);
-        $tarifMotor = $distance * 5000; 
         $userId = Auth::id() ?? session()->getId();
+
+        $currentEstimationId = session('current_estimation_id');
+        $estimation = null;
+
+        if ($currentEstimationId) {
+            $estimation = Estimation::find($currentEstimationId);
+        }
+
+        if ($estimation && $estimation->origin === $request->pickup_location && $estimation->destination === $request->destination_location) {
+
+            return redirect()->route('estimations.show');
+        }
+
+        $distance = rand(2, 15); 
+        $tarifMotor = $distance * 5000; 
+        
         $surgeMultiplier = Cache::remember('surge_motor_' . $userId, now()->addHour(), function () {
             return rand(95, 105) / 100;
         });
+        
         $fareAkhir = $tarifMotor * $surgeMultiplier;
         $waktuEstimasi = round(($distance / 40) * 60);
 
+        if ($estimation) {
+            $estimation->update([
+                'user_id' => Auth::id(),
+                'origin' => $request->pickup_location,
+                'destination' => $request->destination_location,
+                'distance' => $distance,
+                'fare' => $fareAkhir,
+                'estimated_time' => $waktuEstimasi,
+                'surge_multiplier' => $surgeMultiplier,
+                'status' => 'ACTIVE' 
+            ]);
+        } else {
+            // Jika benar-benar baru, create
+            $estimation = Estimation::create([
+                'user_id' => Auth::id(),
+                'origin' => $request->pickup_location,
+                'destination' => $request->destination_location,
+                'distance' => $distance,
+                'fare' => $fareAkhir,
+                'estimated_time' => $waktuEstimasi,
+                'surge_multiplier' => $surgeMultiplier,
+                'status' => 'ACTIVE' 
+            ]);
+            
+            session(['current_estimation_id' => $estimation->id]);
+        }
 
-        $estimation = Estimation::create([
-            'user_id' => Auth::id(),
-            'origin' => $request->pickup_location,
-            'destination' => $request->destination_location,
-            'distance' => $distance,
-            'fare' => $fareAkhir,
-            'estimated_time' => $waktuEstimasi,
-            'surge_multiplier' => $surgeMultiplier,
-            'status' => 'ACTIVE' 
-        ]);
-        session(['current_estimation_id' => $estimation->id]);
         return redirect()->route('estimations.show');
     }
 
@@ -67,6 +111,8 @@ class EstimationController extends Controller
             }
         }
 
+        session(['calculated_fares' => $fares]);
+        
         return view('estimations.show', compact('estimation', 'vehicleTypes', 'fares'));
     }
 
