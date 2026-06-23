@@ -1,4 +1,10 @@
 <html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notification History - Ride App</title>
+    @vite(['resources/css/notification-index.css'])
+</head>
 <body>
 <h1>Notification History</h1>
 
@@ -16,22 +22,29 @@
     <br>
 @endif
 
-<a href="{{ route('dashboard.user') }}"><button>BACK</button></a>
-<button onclick="window.location.reload();" style="margin-left: 5px;">↻ Refresh</button>
+<div style="display: flex; flex-direction: row; justify-content: center; align-items: center; gap: 10px; margin-bottom: 25px; width: 100%;">
+    
+    <a href="{{ route('dashboard.user') }}" style="display: flex; text-decoration: none;">
+        <button type="button">BACK</button>
+    </a>
+    
+    <button type="button" onclick="window.location.reload();">↻ Refresh</button>
 
-@if(!$notifications->isEmpty())
-    <form action="{{ route('notifications.markAllRead') }}" method="POST" style="display: inline;">
-        @csrf
-        <button type="submit" style="margin-left: 5px;">✓ Mark All as Read</button>
-    </form>
+    @if(!$notifications->isEmpty())
+        <form action="{{ route('notifications.markAllRead') }}" method="POST" style="margin: 0; display: flex;">
+            @csrf
+            <button type="submit">✓ Mark All as Read</button>
+        </form>
 
-    <form action="{{ route('notifications.deleteAll') }}" method="POST" style="display: inline;" 
-          onsubmit="return confirm('Are you sure you want to delete ALL notifications?')">
-        @csrf
-        @method('DELETE')
-        <button type="submit" style="margin-left: 5px;">🗑 Delete All</button>
-    </form>
-@endif
+        <form action="{{ route('notifications.deleteAll') }}" method="POST" style="margin: 0; display: flex;" 
+              onsubmit="return confirm('Are you sure you want to delete ALL notifications?')">
+            @csrf
+            @method('DELETE')
+            <button type="submit">🗑 Delete All</button>
+        </form>
+    @endif
+
+</div>
 
 <br><br>
 
