@@ -6,6 +6,7 @@ use App\Models\Driver;
 use App\Models\Vehicle;
 use App\Models\Cs;
 use App\Models\UserNotification;
+use App\Models\DriverNotification;
 use Illuminate\Http\Request; 
 use Illuminate\Support\Facades\Auth; 
 use Illuminate\Support\Facades\Hash;
@@ -36,8 +37,6 @@ class AuthController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        Auth::guard('user')->login($user);
-
         UserNotification::create([
             'user_id' => $user->id,
             'type' => 'system',
@@ -46,7 +45,7 @@ class AuthController extends Controller
             'is_read' => false
         ]);
 
-        return redirect('/dashboard-user');
+        return redirect('/login-user');
     }
 
     public function loginUser(Request $request) 
@@ -112,8 +111,15 @@ class AuthController extends Controller
             'license_plate' => $request->license_plate,
         ]);
 
-        Auth::guard('driver')->login($driver);
-        return redirect('/dashboard-driver');
+        DriverNotification::create([
+            'driver_id' => $driver->id,
+            'type' => 'system',
+            'title' => 'Welcome Driver!👋🏻',
+            'message' => 'Hello ' . $driver->name . ', your partner account has been successfully verified. Turn on your status to look for orders and start earning!',
+            'is_read' => false
+        ]);
+
+        return redirect('/login-driver');
     }
 
     public function loginDriver(Request $request) 
@@ -124,7 +130,16 @@ class AuthController extends Controller
         ]); 
  
         if (Auth::guard('driver')->attempt($credentials)) { 
-            $request->session()->regenerate(); 
+            $request->session()->regenerate();
+
+            DriverNotification::create([
+                'driver_id' => Auth::guard('driver')->id(),
+                'type' => 'security',
+                'title' => 'New Login Detected ⚠️',
+                'message' => 'Your driver account was successfully logged in on ' . now()->format('d M Y, H:i') . ' WIB. If this wasn\'t you, please secure your credentials immediately.',
+                'is_read' => false
+            ]);
+
             return redirect()->intended('/dashboard-driver'); 
         } 
  
@@ -142,26 +157,6 @@ class AuthController extends Controller
 
     public function showRegisterCs() { 
         return view('login.registerCs'); 
-    }
-
-    public function registerCs(Request $request) {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:cs,email',
-            'password' => 'required|string|min:8|confirmed',
-        ],[
-            'email.unique' => 'This email is already registered for a CS account!',
-            'password.confirmed' => 'The password confirmation does not match.',
-        ]);
-
-        $cs = Cs::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
-
-        Auth::guard('cs')->login($cs);
-        return redirect('/cs/dashboard'); 
     }
 
     public function loginCs(Request $request) 

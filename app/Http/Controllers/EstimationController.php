@@ -6,6 +6,7 @@ use App\Models\Wallet;
 use Illuminate\Http\Request;
 use App\Models\Estimation; 
 use App\Models\Vehicle;
+use App\Models\Promo;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 
@@ -25,9 +26,6 @@ class EstimationController extends Controller
         }
         
             return view('bookings.create');
-        {
-            return view('estimations.create');
-        }
     }
 
  public function store(Request $request)
@@ -36,6 +34,8 @@ class EstimationController extends Controller
             'pickup_location' => 'required|string',
             'destination_location' => 'required|string',
         ]);
+
+        session(['checkout_promo_code' => $request->promo_code]);
 
         $userId = Auth::id() ?? session()->getId();
 
@@ -144,6 +144,7 @@ class EstimationController extends Controller
     {
         $estimationId = session('checkout_estimation_id');
         $vehicleTypeId = session('checkout_vehicle_type_id');
+        $promo_code = session('checkout_promo_code');
 
         if (!$estimationId || !$vehicleTypeId) {
             return redirect('/estimations')->with('error', 'Data estimasi tidak ditemukan.'); 
@@ -157,9 +158,18 @@ class EstimationController extends Controller
 
         $original_fare = $estimation->fare;
         $discount_amount = 0; 
-        $fare = $original_fare - $discount_amount;
 
-        $promo_code = null; 
+        if ($promo_code) {
+            $promo = Promo::where('code', strtoupper($promo_code))->first();
+            if ($promo && $promo->expiry_date >= now() && $promo->is_active) {
+                $discount_amount = ($promo->discount_percentage / 100) * $original_fare;
+                if ($promo->max_discount && $discount_amount > $promo->max_discount) {
+                    $discount_amount = $promo->max_discount;
+                }
+            }
+        }
+
+        $fare = $original_fare - $discount_amount;
 
         $wallet = Wallet::where('user_id', auth()->id())->first();
 

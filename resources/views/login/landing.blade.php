@@ -10,14 +10,13 @@
     <div class="top-bar">
         <div class="partner-block">
             <span>Drive with Us! 🚗</span>
-            <a href="/login-driver" class="btn btn-outline">Login Driver</a>
-            <a href="/register-driver" class="btn btn-solid">Sign Up</a>
+            <a href="/login-driver" class="btn btn-solid">Login Driver</a>
+            <a href="/register-driver" class="btn btn-outline">Sign Up</a>
         </div>
         
         <div class="partner-block">
             <span>Support Team 🎧</span>
-            <a href="/login-cs" class="btn btn-outline">Login CS</a>
-            <a href="/register-cs" class="btn btn-solid">Sign Up</a>
+            <a href="/login-cs" class="btn btn-solid">Login CS</a>
         </div>
     </div>
 
