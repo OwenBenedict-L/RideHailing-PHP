@@ -142,6 +142,7 @@
                     <th>Name</th>
                     <th>Email</th>
                     <th>Created At</th>
+                    <th>Complaint</th>
                 </tr>
             </thead>
             <tbody>
@@ -151,10 +152,23 @@
                     <td>{{ $driver->name }}</td>
                     <td>{{ $driver->email }}</td>
                     <td>{{ $driver->created_at->format('d M Y, H:i') }}</td>
+                    <td style="text-align: center;">
+                        @php
+                            $tiketAktifDriver = \App\Models\Ticket::where('driver_id', $driver->id)
+                                                                  ->where('status', 'OPEN')
+                                                                  ->latest() 
+                                                                  ->first();
+                        @endphp
+                        @if($tiketAktifDriver)
+                            <a href="{{ route('cs.chat', $tiketAktifDriver->id) }}" class="btn-complaint active">Active</a>
+                        @else
+                            <button class="btn-complaint inactive" disabled>Inactive</button>
+                        @endif
+                    </td>
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="4" style="text-align: center;">Belum ada data driver.</td>
+                    <td colspan="4" style="text-align: center;">No Driver.</td>
                 </tr>
                 @endforelse
             </tbody>

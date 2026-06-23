@@ -89,13 +89,17 @@
                 This issue has been closed by Customer Service. You can't send messages anymore. Sorry if this disturbs your comfort.
             </div>
         @else
-        <form action="{{ route('helpcenter.reply', $tiket->id) }}" method="POST">
-            @csrf
+        @if(Auth::guard('driver')->check())
+            <form action="{{ route('driver.helpcenter.sendReply', $tiket->id) }}" method="POST">
+        @else
+            <form action="{{ route('helpcenter.sendReply', $tiket->id) }}" method="POST">
+        @endif
+        @csrf
             <label for="pesan"><strong>Send a message to CS:</strong></label><br>
-            <textarea name="pesan" id="pesan" class="chat-box" placeholder="Type your message here..." required></textarea>
-            
-            <button type="submit" style="padding: 5px 15px; background-color: #007bff; color: white; border: none; cursor: pointer; border-radius: 4px;">Send Message</button>
-        </form>
+        <textarea name="pesan" id="pesan" rows="4" style="width: 100%; margin-top: 5px; padding: 10px; border-radius: 5px; border: 1px solid #ccc;" placeholder="Type your message here..." required></textarea>
+        <br><br>
+        <button type="submit" style="background-color: #007bff; color: white; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">Send Message</button>
+    </form>
     @endif </div> <br>
 
     <div style="text-align: left; margin-top: 20px;">
