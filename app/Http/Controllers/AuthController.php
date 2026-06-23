@@ -6,6 +6,7 @@ use App\Models\Driver;
 use App\Models\Vehicle;
 use App\Models\Cs;
 use App\Models\UserNotification;
+use App\Models\DriverNotification;
 use Illuminate\Http\Request; 
 use Illuminate\Support\Facades\Auth; 
 use Illuminate\Support\Facades\Hash;
@@ -113,6 +114,15 @@ class AuthController extends Controller
         ]);
 
         Auth::guard('driver')->login($driver);
+
+        DriverNotification::create([
+            'driver_id' => $driver->id,
+            'type' => 'system',
+            'title' => 'Welcome Driver!👋🏻',
+            'message' => 'Hello ' . $driver->name . ', your partner account has been successfully verified. Turn on your status to look for orders and start earning!',
+            'is_read' => false
+        ]);
+
         return redirect('/dashboard-driver');
     }
 
@@ -124,7 +134,16 @@ class AuthController extends Controller
         ]); 
  
         if (Auth::guard('driver')->attempt($credentials)) { 
-            $request->session()->regenerate(); 
+            $request->session()->regenerate();
+
+            DriverNotification::create([
+                'driver_id' => Auth::guard('driver')->id(),
+                'type' => 'security',
+                'title' => 'New Login Detected ⚠️',
+                'message' => 'Your driver account was successfully logged in on ' . now()->format('d M Y, H:i') . ' WIB. If this wasn\'t you, please secure your credentials immediately.',
+                'is_read' => false
+            ]);
+
             return redirect()->intended('/dashboard-driver'); 
         } 
  

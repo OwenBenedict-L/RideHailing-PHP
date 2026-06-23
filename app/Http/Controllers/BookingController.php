@@ -51,17 +51,21 @@ class BookingController extends Controller
      */
     public function store(Request $request)
     {
+        $promoCode = $request->promo_code ?? session('checkout_promo_code');
+
         if ($request->has('confirm_booking')) {
         $booking = Booking::create([
             'user_id' => Auth::guard('user')->id(),
             'pickup_location' => $request->pickup_location,
             'destination_location' => $request->destination_location,
-            'promo_code' => $request->promo_code,
+            'promo_code' => $promoCode,
             'vehicle_type_id' => session('checkout_vehicle_type_id'),
             'fare' => $request->fare,
             'distance' => $request->distance,
             'status' => 'pending'
         ]);
+
+        session()->forget(['checkout_promo_code', 'current_estimation_id', 'checkout_estimation_id', 'checkout_vehicle_type_id']);
 
         return redirect()->route('bookings.index')->with('success', 'Booking successful! Finding your driver...');
         }
@@ -76,8 +80,8 @@ class BookingController extends Controller
         $total_fare = $request->fare;
         $discount_amount = 0;
 
-        if ($request->promo_code) {
-            $promo = Promo::where('code', strtoupper($request->promo_code))->first();
+        if ($promoCode) {
+            $promo = Promo::where('code', strtoupper($promoCode))->first();
 
             if ($promo && $promo->expiry_date >= now() && $promo->is_active) {
                 $discount_amount = ($promo->discount_percentage / 100) * $total_fare;
@@ -94,7 +98,7 @@ class BookingController extends Controller
         return view('bookings.checkout', [
             'pickup_location' => $request->pickup_location,
             'destination_location' => $request->destination_location,
-            'promo_code' => $request->promo_code,
+            'promo_code' => $promoCode,
             'distance' => $request->distance ?? 0,
             'original_fare' => $total_fare,
             'discount_amount' => $discount_amount,
@@ -210,13 +214,6 @@ class BookingController extends Controller
                 'is_read' => false
             ]);
 
-            DriverNotification::create([
-                'driver_id' => Auth::guard('driver')->id(),
-                'type' => 'ride',
-                'title' => 'Order Confirmed 👨🏻‍✈️',
-                'message' => 'You have accepted Trip #' . $booking->id . '. Please pick up ' . $booking->user->name . ' at ' . $booking->pickup_location . '.',
-                'is_read' => false
-            ]);
         }
 
         if($isDriver) {
@@ -272,6 +269,14 @@ class BookingController extends Controller
             'message' => 'Your driver, ' . Auth::guard('driver')->user()->name . ' (' . Auth::guard('driver')->user()->license_plate . '), is on the way to pick you up at ' . $booking->pickup_location . '.',
             'is_read' => false
         ]);
+
+        DriverNotification::create([
+                'driver_id' => Auth::guard('driver')->id(),
+                'type' => 'ride',
+                'title' => 'Order Confirmed 👨🏻‍✈️',
+                'message' => 'You have accepted Trip #' . $booking->id . '. Please pick up ' . $booking->user->name . ' at ' . $booking->pickup_location . '.',
+                'is_read' => false
+            ]);
 
         return redirect()->route('driver.orders')->with('success', 'Order successfully accepted! Please pick up the passenger.');
     }
