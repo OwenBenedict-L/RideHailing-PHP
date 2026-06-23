@@ -1,0 +1,231 @@
+body {
+    background-color: #F8FAFC;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 40px 20px;
+    color: #2D3748;
+    display: flex;
+    justify-content: center;
+}
+
+.review-wrapper {
+    width: 100%;
+    max-width: 480px;
+}
+
+.btn-back {
+    display: inline-block;
+    text-decoration: none;
+    color: #718096;
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    transition: color 0.2s;
+}
+
+.btn-back:hover {
+    color: #1A365D;
+}
+
+.review-card {
+    background-color: #FFFFFF;
+    border-radius: 16px;
+    padding: 32px;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+    border: 1px solid #E2E8F0;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.header-title {
+    font-size: 22px;
+    font-weight: 800;
+    color: #1A365D;
+    margin: 0 0 4px 0;
+}
+
+.header-subtitle {
+    font-size: 14px;
+    color: #718096;
+    margin: 0;
+}
+
+.review-icon {
+    font-size: 28px;
+    background: #F7FAFC;
+    padding: 10px 14px;
+    border-radius: 12px;
+    border: 1px solid #EDF2F7;
+}
+
+.trip-summary-box {
+    background-color: #F8FAFC;
+    border: 1px solid #E2E8F0;
+    border-radius: 14px;
+    padding: 16px 20px;
+    margin-bottom: 24px;
+}
+
+.driver-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px dashed #CBD5E0;
+    margin-bottom: 12px;
+}
+
+.driver-avatar {
+    font-size: 26px;
+    background: white;
+    padding: 6px;
+    border-radius: 50%;
+    border: 1px solid #E2E8F0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+}
+
+.driver-name {
+    font-weight: 800;
+    font-size: 16px;
+    color: #1A365D;
+    margin: 0 0 2px 0;
+}
+
+.route-point {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #4A5568;
+}
+
+.dot-pickup, .dot-dest {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.dot-pickup { background-color: #3182CE; }
+
+.dot-dest { background-color: #38A169; }
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    color: #4A5568;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+select {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #E2E8F0;
+    border-radius: 10px;
+    font-size: 14px;
+    color: #1A365D;
+    font-weight: 600;
+    outline: none;
+    cursor: pointer;
+    background-color: white;
+}
+
+select:focus { border-color: #3182CE; }
+
+.custom-textarea {
+    width: 100%;
+    padding: 14px;
+    border: 2px solid #E2E8F0;
+    border-radius: 12px;
+    font-size: 14px;
+    font-family: inherit;
+    color: #1A365D;
+    outline: none;
+    transition: border-color 0.2s;
+    box-sizing: border-box;
+    resize: vertical;
+}
+
+.custom-textarea:focus { border-color: #3182CE; }
+
+.button-group {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.btn {
+    padding: 14px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-review-submit {
+    background-color: #28A745;
+    color: white;
+    box-shadow: 0 4px 15px rgba(40, 167, 69, 0.25);
+}
+
+.btn-review-submit:hover { background-color: #218838; transform: translateY(-1px); }
+
+.btn-cancel {
+    background-color: #EDF2F7;
+    color: #4A5568;
+}
+
+.btn-cancel:hover { background-color: #E2E8F0; color: #1A365D; }
+
+.badge {
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.badge-success { background-color: #E6FFFA; color: #234E52; border: 1px solid #B2F5EA; }
+
+.error-alert {
+    background-color: #FFF5F5;
+    border-left: 4px solid #E53E3E;
+    color: #C53030;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    margin-bottom: 20px;
+}
+
+.error-alert ul { margin: 0; padding-left: 16px; }
+
+.btn-review-update {
+    background-color: #3182CE;
+    color: white;
+    box-shadow: 0 4px 15px rgba(49, 130, 206, 0.25);
+}
+
+.btn-review-update:hover {
+    background-color: #2B6CB0;
+    transform: translateY(-1px);
+}
