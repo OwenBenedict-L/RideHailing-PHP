@@ -295,7 +295,7 @@ class BookingController extends Controller
             session()->put('rejected_orders', $rejectedOrders);
         }
 
-        return redirect()->route('bookings.order')->with('success', 'Order successfully skipped.');
+        return redirect()->route('driver.orders')->with('success', 'Order successfully skipped.');
     }
 
     /**
@@ -310,30 +310,28 @@ class BookingController extends Controller
             $booking->update([
                 'status' => 'cancelled'
             ]);
-            
-        return redirect()->route('bookings.index')->with('success', 'Your ride has been successfully cancelled.');
-        }
 
-        UserNotification::create([
+            UserNotification::create([
                 'user_id' => $booking->user_id,
                 'type' => 'ride',
-                'title' => 'Trip Cancelled ❌',
+                'title' => 'Trip Cancelled by Driver ❌',
                 'message' => 'Your booking to ' . $booking->destination_location . ' has been cancelled.',
                 'is_read' => false
             ]);
-        
-        return redirect()->route('bookings.index')->with('success', 'Booking cancelled successfully.');
 
-        if ($oldDriverId) {
-            DriverNotification::create([
-                'driver_id' => $oldDriverId,
-                'type'      => 'ride',
-                'title'     => 'Trip Cancelled by Passenger ❌',
-                'message'   => 'Trip #' . $booking->id . ' to ' . $booking->destination_location . ' has been cancelled by the passenger.',
-                'is_read'   => false
-            ]);
+            if ($oldDriverId) {
+                DriverNotification::create([
+                    'driver_id' => $oldDriverId,
+                    'type'      => 'ride',
+                    'title'     => 'Trip Cancelled by Passenger ❌',
+                    'message'   => 'Trip #' . $booking->id . ' to ' . $booking->destination_location . ' has been cancelled by the passenger.',
+                    'is_read'   => false
+                ]);
 
-            return redirect()->route('driver.orders')->with('success', 'Your ride has been successfully cancelled.');
+                return redirect()->route('driver.orders')->with('success', 'Your ride has been successfully cancelled.');
+            }
+
+            return redirect()->route('bookings.index')->with('success', 'Your ride has been successfully cancelled.');   
         }
     }
 }

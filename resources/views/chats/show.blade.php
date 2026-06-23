@@ -35,9 +35,9 @@
                                 <div class="actions-wrapper">
                                     <label for="edit-toggle-{{ $message->id }}" class="btn-edit-trigger">✏️</label>
                                     
-                                    <form action="{{ auth('user')->check() ? route('chat.delete.user', $message->id) : route('chat.delete.driver', $message->id) }}" 
-                                          method="POST" 
-                                          class="delete-form">
+                                    <form action="{{ auth('user')->check() ? route('chat.delete.user', ['driverId' => $contact->id, 'chatId' => $message->id]) : route('chat.delete.driver', ['userId' => $contact->id, 'chatId' => $message->id]) }}" 
+                                        method="POST"
+                                        class="delete-form">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn-delete-trigger">🗑️</button>
@@ -52,11 +52,12 @@
                                     @endif
                                 </div>
 
-                                <form action="{{ auth('user')->check() ? route('chat.update.user', $message->id) : route('chat.update.driver', $message->id) }}" 
-                                      method="POST" 
-                                      class="edit-form">
-                                    @csrf
-                                    <input type="text" name="message" class="input-edit" value="{{ $message->message }}" required>
+                                <form action="{{ auth('user')->check() ? route('chat.update.user', ['driverId' => $contact->id, 'chatId' => $message->id]) : route('chat.update.driver', ['userId' => $contact->id, 'chatId' => $message->id]) }}" 
+                                    method="POST" 
+                                    class="edit-form">
+                                    @csrf 
+                                    @method('PATCH')
+                                    <input type="text" name="message" class="input-edit" value="{{ $message->message }}" autocomplete="off" required>
                                     <button type="submit" class="btn-save">Save</button>
                                     <label for="edit-toggle-{{ $message->id }}" class="btn-cancel" style="display: inline-block; line-height: 1.5;">X</label>
                                 </form>
