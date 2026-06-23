@@ -44,7 +44,7 @@
             flex: 1;
             padding: 20px;
             overflow-y: auto;
-            background-color: #e5ddd5; /* Warna background ala WhatsApp */
+            background-color: #e5ddd5;
             display: flex;
             flex-direction: column;
             gap: 10px;

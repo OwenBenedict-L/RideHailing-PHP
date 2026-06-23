@@ -1,43 +1,57 @@
 <html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create New Promo</title>
+    @vite(['resources/css/create-promos.css'])
+</head>
 <body>
-    <h1>Create New Promo</h1>
 
-    @if(session('success'))
-        <p style="color: green; font-weight: bold;">{{ session('success') }}</p>
-    @endif
+    <div class="promo-container">
+        <a href="{{ route('dashboard.user') }}" class="btn-back">← BACK</a>
 
-    @if(session('error'))
-        <p style="color: red; font-weight: bold;">{{ session('error') }}</p>
-    @endif
+        <div class="promo-header">
+            <h2>CREATE NEW PROMO</h2>
+        </div>
 
-    <form method="POST" action="{{ url('/promos') }}">
-        @csrf
-        
-        Promo Code:
-        <br>
-        <input type="text" name="code" placeholder="Example: DISKON50" required>
-        <br><br>
+        @if(session('success'))
+            <div class="alert-success">
+                <strong>Success!</strong> {{ session('success') }}
+            </div>
+        @endif
 
-        Discount Percentage (1-100):
-        <br>
-        <input type="number" name="discount_percentage" placeholder="Example: 20" required>
-        <br><br>
+        @if(session('error'))
+            <div class="alert-error">
+                <strong>Error!</strong> {{ session('error') }}
+            </div>
+        @endif
 
-        Max Discount (Optional):
-        <br>
-        <input type="number" name="max_discount" placeholder="Example: 15000">
-        <br><br>
+        <form method="POST" action="{{ url('/promos') }}">
+            @csrf
+            
+            <div class="form-group">
+                <label for="code">Promo Code</label>
+                <input type="text" id="code" name="code" placeholder="Example: DISKON50" required>
+            </div>
 
-        Expiry Date:
-        <br>
-        <input type="date" name="expiry_date" required>
-        <br><br>
+            <div class="form-group">
+                <label for="discount_percentage">Discount Percentage (1-100)</label>
+                <input type="number" id="discount_percentage" name="discount_percentage" min="1" max="100" placeholder="Example: 20" required>
+            </div>
 
-        <button type="submit">CREATE PROMO</button>
-    </form>
-    <br>
-    <a href="{{ route('dashboard.user') }}">
-        <button type="button">BACK TO DASHBOARD</button>
-    </a>
+            <div class="form-group">
+                <label for="max_discount">Max Discount (Optional)</label>
+                <input type="number" id="max_discount" name="max_discount" placeholder="Example: 15000">
+            </div>
+
+            <div class="form-group">
+                <label for="expiry_date">Expiry Date</label>
+                <input type="date" id="expiry_date" name="expiry_date" required>
+            </div>
+
+            <button type="submit" class="btn-submit">CREATE PROMO</button>
+        </form>
+    </div>
+
 </body>
 </html>

@@ -91,8 +91,10 @@ Route::middleware('auth:user')->group(function () {
     Route::post('/promos', [PromoController::class, 'store']);
     Route::post('/promos/validate', [PromoController::class, 'validatePromo']);
     Route::delete('/promos/{id}', [PromoController::class, 'destroy']);
-    Route::get('/chat/user/{driverId}', [ChatController::class, 'showConversationForUser'])->name('chat.show.user');
-    Route::post('/chat/user/{driverId}', [ChatController::class, 'storeForUser'])->name('chat.send.user');
+    Route::get('/chat/user/{chatId}', [ChatController::class, 'showConversationForUser'])->name('chat.show.user');
+    Route::post('/chat/user/{chatId}', [ChatController::class, 'storeForUser'])->name('chat.send.user');
+    Route::post('/chat/update-user/{chatId}', [ChatController::class, 'updateChatUser'])->name('chat.update.user');
+    Route::delete('/chat/delete-user/{chatId}', [ChatController::class, 'deleteChatUser'])->name('chat.delete.user');
     Route::post('/notifications/mark-all-read', [UserNotificationController::class, 'markAllRead'])->name('notifications.markAllRead');
     Route::delete('/notifications/delete-all', [UserNotificationController::class, 'deleteAll'])->name('notifications.deleteAll');
     Route::get('/notifications', [UserNotificationController::class, 'index'])->name('notifications.index');
@@ -116,20 +118,22 @@ Route::middleware('auth:driver')->group(function () {
     Route::post('/driver/bookings/{booking}/accept', [BookingController::class, 'acceptOrder'])->name('bookings.orders.accept');
     Route::post('/driver/bookings/{booking}/reject', [BookingController::class, 'rejectOrder'])->name('bookings.orders.reject');
     Route::patch('/driver/bookings/{booking}', [BookingController::class, 'update'])->name('bookings.orders.update');
-    Route::get('/chat/driver/{userId}', [ChatController::class, 'showConversationForDriver'])->name('chat.show.driver');
-    Route::post('/chat/driver/{userId}', [ChatController::class, 'storeForDriver'])->name('chat.send.driver'); 
+    Route::get('/chat/driver/{chatId}', [ChatController::class, 'showConversationForDriver'])->name('chat.show.driver');
+    Route::post('/chat/driver/{chatId}', [ChatController::class, 'storeForDriver'])->name('chat.send.driver'); 
+    Route::post('/chat/update-driver/{chatId}', [ChatController::class, 'updateChatDriver'])->name('chat.update.driver');
+    Route::post('/chat/delete-driver/{chatId}', [ChatController::class, 'deleteChatDriver'])->name('chat.delete.driver');
     Route::post('/driver-notifications/mark-all-read', [DriverNotificationController::class, 'markAllRead'])->name('driver-notifications.markAllRead');
     Route::delete('/driver-notifications/delete-all', [DriverNotificationController::class, 'deleteAll'])->name('driver-notifications.deleteAll');
     Route::get('/driver-notifications', [DriverNotificationController::class, 'index'])->name('driver-notifications.index');
     Route::get('/driver-notifications/{driverNotification}', [DriverNotificationController::class, 'show'])->name('driver-notifications.show');
     Route::put('/driver-notifications/{driverNotification}', [DriverNotificationController::class, 'update'])->name('driver-notifications.update');
     Route::delete('/driver-notifications/{driverNotification}', [DriverNotificationController::class, 'destroy'])->name('driver-notifications.destroy');
-
-    Route::get('/driver/helpcenter', [HelpCenterController::class, 'index'])->name('driver.helpcenter.index');
+    
+ Route::get('/driver/helpcenter', [HelpCenterController::class, 'index'])->name('driver.helpcenter.index');
     Route::post('/driver/helpcenter', [HelpCenterController::class, 'store'])->name('driver.helpcenter.store');
     Route::get('/driver/helpcenter/history', [HelpCenterController::class, 'history'])->name('driver.helpcenter.history');
     Route::get('/driver/helpcenter/chat/{id}', [HelpCenterController::class, 'chat'])->name('driver.helpcenter.chat');
-    Route::post('/driver/helpcenter/chat/{id}', [HelpCenterController::class, 'sendReply'])->name('driver.helpcenter.reply');
+    Route::post('/driver/helpcenter/chat/{id}', [HelpCenterController::class, 'sendReply'])->name('driver.helpcenter.sendReply');
     Route::get('/driver/helpcenter/feedback', [HelpCenterController::class, 'feedbackPage'])->name('driver.helpcenter.feedback');
 });
 
