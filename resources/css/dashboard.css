@@ -160,6 +160,34 @@ body {
     position: relative;
 }
 
+.bell-link {
+    text-decoration: none;
+    font-size: 20px;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s;
+    cursor: pointer;
+}
+
+.bell-link:hover {
+    transform: scale(1.1);
+}
+
+.bell-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: #E53E3E;
+    color: white;
+    font-size: 10px;
+    font-weight: bold;
+    border-radius: 50%;
+    padding: 2px 5px;
+    line-height: 1;
+}
+
 .efek-hati::before,
 .efek-hati::after {
     content: '❤️'; 

@@ -15,6 +15,12 @@
             <h2>LOGIN DRIVER</h2>
         </div>
         
+        @if (session('success'))
+            <div class="alert-success">
+                <strong>Success!</strong> {{ session('success') }}
+            </div>
+        @endif
+
         @if ($errors->any()) 
             <div class="error-alert"> 
                 <strong>Error!</strong> {{ $errors->first('email') }} 

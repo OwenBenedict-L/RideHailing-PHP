@@ -9,8 +9,18 @@
 <body>
 
     <header class="navbar">
-        <div class="navbar-brand">RideApp</div>
+        <div class="navbar-brand">RideApp
+            <a href="{{ route('notifications.index') }}" class="bell-link">
+                🔔
+                @if(\DB::table('user_notifications')->where('user_id', Auth::id())->where('is_read', false)->count() > 0)
+                    <span class="bell-badge">
+                    {{ \DB::table('user_notifications')->where('user_id', Auth::id())->where('is_read', false)->count() }}
+                    </span>
+                @endif
+            </a>
+        </div>
         <div class="navbar-user-zone">
+            
             <span class="user-greeting">Hi, {{ Auth::user()->name }} 👋</span>
             
             <form method="POST" action="/logout-user" style="margin: 0;">
@@ -35,10 +45,6 @@
 
             <a href="{{ route('bookings.index') }}" class="menu-box">
                 <span class="menu-title">My Bookings</span>
-            </a>
-
-            <a href="{{ route('notifications.index') }}" class="menu-box">
-                <span class="menu-title">Notifications</span>
             </a>
 
             <a href="{{ route('helpcenter.index') }}" class="menu-box">
