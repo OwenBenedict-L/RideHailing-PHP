@@ -126,21 +126,63 @@ class ChatController extends Controller
         return view('chats.show', compact('chat', 'contact'));
     }
 
-    public function updateChatUser(Request $request, $chatId) {
-        $request->validate(['message' => 'required|string']);
+    public function updateChatUser(Request $request, $driverId, $chatId) 
+    {
+        $request->validate([
+            'message' => 'required|string|max:1000'
+        ]);
     
-        $chat = Chat::where('id', $chatId)->where('senderUser_id', auth('user')->id()) ->firstOrFail();
+        $chat = Chat::where('id', $chatId)
+            ->where('senderUser_id', auth('user')->id())
+            ->where('receiverDriver_id', $driverId) 
+            ->firstOrFail();
     
-        $chat->update(['message' => $request->message, 'is_edited' => true]);
-        return back();
+        $chat->update([
+            'message' => $request->message, 
+            'is_edited' => true
+        ]);
+
+        return back()->with('success', 'Message updated.');
     }
 
-    public function updateChatDriver(Request $request, $chatId) {
-        $request->validate(['message' => 'required|string']);
+    public function updateChatDriver(Request $request, $userId, $chatId) 
+    {
+        $request->validate([
+            'message' => 'required|string|max:1000'
+        ]);
+
+        $chat = Chat::where('id', $chatId)
+            ->where('senderDriver_id', auth('driver')->id())
+            ->where('receiverUser_id', $userId)
+            ->firstOrFail();
     
-        $chat = Chat::where('id', $chatId)->where('senderDriver_id', auth('driver')->id()) ->firstOrFail();
-    
-        $chat->update(['message' => $request->message, 'is_edited' => true]);
-        return back();
+        $chat->update([
+            'message' => $request->message, 
+            'is_edited' => true
+        ]);
+
+        return back()->with('success', 'Message updated.');
+    }
+
+    public function deleteChatUser($driverId, $chatId) 
+    {
+        $chat = Chat::where('id', $chatId)
+            ->where('senderUser_id', auth('user')->id())
+            ->where('receiverDriver_id', $driverId)
+            ->firstOrFail();
+            
+        $chat->delete();
+        return back()->with('success', 'Message deleted.');
+    }
+
+    public function deleteChatDriver($userId, $chatId) 
+    {
+        $chat = Chat::where('id', $chatId)
+            ->where('senderDriver_id', auth('driver')->id())
+            ->where('receiverUser_id', $userId)
+            ->firstOrFail();
+            
+        $chat->delete();
+        return back()->with('success', 'Message deleted.');
     }
 };
