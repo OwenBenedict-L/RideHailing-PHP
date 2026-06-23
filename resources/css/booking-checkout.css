@@ -1,0 +1,162 @@
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #F7FAFC;
+    color: #2D3748;
+    padding: 40px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    box-sizing: border-box;
+    min-height: 100vh;
+}
+
+.card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    border: 1px solid #E2E8F0;
+    padding: 40px 35px;
+    max-width: 550px;
+    width: 100%;
+    box-sizing: border-box;
+    position: relative;
+}
+
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    background: none !important;
+    border: none !important;
+    color: #4A5568 !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    padding: 0 !important;
+    margin-bottom: 25px !important;
+    cursor: pointer !important;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.back-link:hover {
+    color: #2B6CB0 !important;
+}
+
+h1 {
+    color: #1A365D;
+    font-size: 26px;
+    font-weight: 700;
+    margin-top: 0;
+    margin-bottom: 25px;
+    border-bottom: 1px solid #E2E8F0;
+    padding-bottom: 15px;
+}
+
+h3 {
+    color: #2B6CB0;
+    font-size: 14px;
+    margin-top: 25px;
+    margin-bottom: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+}
+
+p {
+    font-size: 15px;
+    line-height: 1.6;
+    margin: 8px 0;
+    color: #4A5568;
+}
+
+p strong {
+    color: #1A365D;
+}
+
+hr {
+    border: 0;
+    border-top: 1px solid #E2E8F0;
+    margin: 20px 0;
+}
+
+p[style*="color: green"][style*="font-weight: bold"], 
+p[style*="color:green"] {
+    background-color: #C6F6D5 !important;
+    color: #22543D !important;
+    padding: 15px 20px !important;
+    border-radius: 8px !important;
+    font-size: 14px !important;
+    border-left: 5px solid #48BB78 !important;
+    margin-top: 15px !important;
+    margin-bottom: 25px !important;
+    display: block !important;
+}
+
+p[style*="color: red"][style*="font-weight: bold"],
+p[style*="color:red"] {
+    background-color: #FED7D7 !important;
+    color: #9B2C2C !important;
+    padding: 15px 20px !important;
+    border-radius: 8px !important;
+    font-size: 14px !important;
+    border-left: 5px solid #E53E3E !important;
+    margin-top: 15px !important;
+    margin-bottom: 25px !important;
+    display: block !important;
+}
+
+p:has(strong):contains("Total Fare"), 
+p:nth-of-type(4) {
+    font-size: 16px;
+}
+p strong[style*="font-size"], p:has(strong) strong {
+    font-size: 20px;
+    color: #1A365D;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+    width: 100%;
+}
+
+.btn-primary {
+    height: 44px !important;
+    width: 100% !important;
+    font-size: 14px !important;
+    font-weight: bold !important;
+    border-radius: 6px !important;
+    border: none !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background-color: #3182CE !important;
+    color: white !important;
+}
+
+.btn-primary:hover {
+    background-color: #2B6CB0 !important;
+}
+
+.btn-primary:active {
+    transform: scale(0.98) !important;
+}
+
+.btn-disabled {
+    height: 44px !important;
+    width: 100% !important;
+    font-size: 14px !important;
+    font-weight: bold !important;
+    border-radius: 6px !important;
+    border: none !important;
+    cursor: not-allowed !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background-color: #CBD5E0 !important;
+    color: #A0AEC0 !important;
+    margin-top: 10px;
+}
