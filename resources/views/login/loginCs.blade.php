@@ -42,8 +42,6 @@
      
             <button type="submit" class="btn-submit">LOGIN AS CS</button> 
         </form> 
-        
-        <a href="/register-cs" class="register-link">Don't have an account? Sign Up</a>
     </div>
 
 </body> 
