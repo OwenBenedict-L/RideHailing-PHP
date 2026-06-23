@@ -47,7 +47,15 @@
         <h2>Thank you for your feedback.</h2>
         <p>Please be patient, our team will respond to your feedback ASAP.</p>
         
-        <a href="{{ route('dashboard.user') }}" class="btn">Return to Dashboard</a>
+        @if(Auth::guard('driver')->check())
+            <a href="{{ route('dashboard.driver') }}" style="text-decoration: none;">
+        @else
+            <a href="{{ route('dashboard.user') }}" style="text-decoration: none;">
+        @endif
+            <button class="btn btn-primary" style="padding: 10px 20px; background-color: #3498db; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                Return to Dashboard
+            </button>
+        </a>
     </div>
 
 </body>

@@ -26,9 +26,6 @@ class EstimationController extends Controller
         }
         
             return view('bookings.create');
-        {
-            return view('estimations.create');
-        }
     }
 
  public function store(Request $request)
@@ -37,6 +34,8 @@ class EstimationController extends Controller
             'pickup_location' => 'required|string',
             'destination_location' => 'required|string',
         ]);
+
+        session(['checkout_promo_code' => $request->promo_code]);
 
         $userId = Auth::id() ?? session()->getId();
 
@@ -87,7 +86,6 @@ class EstimationController extends Controller
             ]);
             
             session(['current_estimation_id' => $estimation->id]);
-            session(['checkout_promo_code' => $request->promo_code]);
         }
 
         return redirect()->route('estimations.show');

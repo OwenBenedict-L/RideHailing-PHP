@@ -17,7 +17,7 @@
 
     Promo Code (Optional):
     <br>
-    <input name="promo_code" value="{{ old('promo_code', request('promo_code')) }}" placeholder="Example: UNTAR">
+    <input name="promo_code" value="{{ old('promo_code', session('checkout_promo_code')) }}" placeholder="Example: UNTAR">
     <br><br>
     
     <a href="/bookings"><button type="button">BACK</button></a>

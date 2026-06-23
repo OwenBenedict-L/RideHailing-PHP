@@ -10,9 +10,12 @@ return new class extends Migration
     {
         Schema::create('tickets', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade'); // ID Customer
-            $table->string('subject'); // Judul masalah (Contoh: "Aplikasi Error")
-            $table->enum('status', ['OPEN', 'RESOLVED'])->default('OPEN'); // Status masalah
+        
+            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('cascade');
+            $table->foreignId('driver_id')->nullable()->constrained('drivers')->onDelete('cascade');
+            
+            $table->string('subject'); 
+            $table->enum('status', ['OPEN', 'RESOLVED'])->default('OPEN');
             $table->timestamps();
         });
     }

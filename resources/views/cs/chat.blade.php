@@ -18,7 +18,7 @@
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
             display: flex;
             flex-direction: column;
-            height: 85vh; /* Tinggi kotak chat */
+            height: 85vh;
         }
         .chat-header {
             background-color: #0056b3;
@@ -44,7 +44,7 @@
             flex: 1;
             padding: 20px;
             overflow-y: auto;
-            background-color: #e5ddd5; /* Warna background ala WhatsApp */
+            background-color: #e5ddd5;
             display: flex;
             flex-direction: column;
             gap: 10px;
@@ -64,13 +64,13 @@
             margin-top: 5px;
             display: block;
         }
-        /* Bubble chat dari Customer (Kiri) */
+
         .msg-customer {
             background-color: white;
             align-self: flex-start;
             border-top-left-radius: 0;
         }
-        /* Bubble chat dari CS (Kanan) */
+
         .msg-cs {
             background-color: #dcf8c6;
             align-self: flex-end;
