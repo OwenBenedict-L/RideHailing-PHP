@@ -1,46 +1,17 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat CS</title>
-    <style>
-        body { font-family: sans-serif; padding: 20px; }
-        .chat-container {
-            border: 1px solid #ccc;
-            padding: 20px;
-            max-width: 600px;
-            border-radius: 8px;
-            background-color: #f9f9f9;
-        }
-        .ticket-info {
-            background-color: #e9ecef;
-            padding: 15px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-        }
-        .chat-box {
-            width: 100%;
-            height: 100px;
-            margin-bottom: 10px;
-            padding: 10px;
-            box-sizing: border-box;
-        }
-        .chat-history {
-            height: 300px; 
-            overflow-y: scroll; 
-            border: 1px solid #ccc; 
-            padding: 15px; 
-            margin-bottom: 20px; 
-            background-color: white; 
-            border-radius: 5px;
-        }
-    </style>
+    @vite(['resources/css/helpcenter-chat.css'])
 </head>
 <body>
-
-    <h2>Customer Service Chat</h2>
-    <hr>
-
-    <div class="chat-container">
+    <div class="card">
         
+        <h2>Customer Service Chat</h2>
+        <hr>
+
         <div class="ticket-info">
             @php
                 $kamus = [
@@ -62,54 +33,60 @@
         </div>
 
         <div class="chat-history">
-            
             @if(isset($riwayatChat) && $riwayatChat->count() > 0)
                 @foreach($riwayatChat as $chat)
                     @if($chat->sender_type == 'CUSTOMER')
-                        <div style="text-align: right; margin-bottom: 15px;">
-                            <span style="background-color: #cce5ff; padding: 10px 15px; border-radius: 15px 15px 0px 15px; display: inline-block; max-width: 70%; text-align: left;">
-                                {{ $chat->message }}
-                            </span>
+                        <div class="chat-message chat-customer">
+                            <div class="chat-bubble">{{ $chat->message }}</div>
                         </div>
                     @else
-                        <div style="text-align: left; margin-bottom: 15px;">
-                            <span style="background-color: #f1f0f0; padding: 10px 15px; border-radius: 15px 15px 15px 0px; display: inline-block; max-width: 70%;">
-                                {{ $chat->message }}
-                            </span>
+                        <div class="chat-message chat-cs">
+                            <div class="chat-bubble">{{ $chat->message }}</div>
                         </div>
                     @endif
                 @endforeach
             @else
-                <p style="text-align: center; color: #888; font-style: italic;">Belum ada pesan balasan. Silakan ketik pesan Anda di bawah.</p>
+                <p class="empty-chat">Belum ada pesan balasan. Silakan ketik pesan Anda di bawah.</p>
             @endif
         </div>
+
         @if($tiket->status === 'RESOLVED')
-            <div style="padding: 15px; background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; border-radius: 5px; text-align: center;">
+            <div class="alert-closed">
                 <strong>Chat Closed</strong><br>
                 This issue has been closed by Customer Service. You can't send messages anymore. Sorry if this disturbs your comfort.
             </div>
+            
+            <div class="button-container-single">
+                @if(Auth::guard('driver')->check())
+                    <button type="button" class="btn-secondary" onclick="window.location.href='{{ route('driver.helpcenter.history') }}'">Back to History</button>
+                @else
+                    <button type="button" class="btn-secondary" onclick="window.location.href='{{ route('helpcenter.history') }}'">Back to History</button>
+                @endif
+            </div>
+            
         @else
-        @if(Auth::guard('driver')->check())
-            <form action="{{ route('driver.helpcenter.sendReply', $tiket->id) }}" method="POST">
-        @else
-            <form action="{{ route('helpcenter.sendReply', $tiket->id) }}" method="POST">
+            @if(Auth::guard('driver')->check())
+                <form action="{{ route('driver.helpcenter.sendReply', $tiket->id) }}" method="POST">
+            @else
+                <form action="{{ route('helpcenter.sendReply', $tiket->id) }}" method="POST">
+            @endif
+            @csrf
+            
+                <label for="pesan">Send a message to CS:</label>
+                <textarea name="pesan" id="pesan" rows="4" placeholder="Type your message here..." required></textarea>
+                
+                <div class="button-container">
+                    @if(Auth::guard('driver')->check())
+                        <button type="button" class="btn-secondary" onclick="window.location.href='{{ route('driver.helpcenter.history') }}'">Back to History</button>
+                    @else
+                        <button type="button" class="btn-secondary" onclick="window.location.href='{{ route('helpcenter.history') }}'">Back to History</button>
+                    @endif
+                    
+                    <button type="submit" class="btn-primary">Send Message</button>
+                </div>
+            </form>
         @endif
-        @csrf
-            <label for="pesan"><strong>Send a message to CS:</strong></label><br>
-        <textarea name="pesan" id="pesan" rows="4" style="width: 100%; margin-top: 5px; padding: 10px; border-radius: 5px; border: 1px solid #ccc;" placeholder="Type your message here..." required></textarea>
-        <br><br>
-        <button type="submit" style="background-color: #007bff; color: white; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">Send Message</button>
-    </form>
-    @endif </div> <br>
 
-    <div style="text-align: left; margin-top: 20px;">
-        @if(Auth::guard('driver')->check())
-            <a href="{{ route('driver.helpcenter.history') }}">
-        @else
-            <a href="{{ route('helpcenter.history') }}">
-        @endif
-            <button type="button" style="padding: 5px 15px; cursor: pointer;">Back to History</button>
-        </a>
     </div>
 
 </body>

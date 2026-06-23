@@ -55,7 +55,7 @@ class DatabaseSeeder extends Seeder
         Cs::firstOrCreate(
             ['email' => 'darren@gmail.com'],
             [
-                'name' => 'Richie Customer Service',
+                'name' => 'darren customer service',
                 'password' => Hash::make('12345678'),
             ]
         );
