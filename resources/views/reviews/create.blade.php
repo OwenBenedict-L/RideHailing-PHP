@@ -1,52 +1,79 @@
-<html>
+<html lang="en">
 <head>
-    <title>Rate Driver</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rate Driver - RideApp</title>
+    @vite(['resources/css/review.css'])
 </head>
-<body style="padding: 20px;">
-
-    <div style="max-width: 500px; background: white; padding: 20px; border-radius: 8px; border: 1px solid #000000;">
-        <h2>Rate & Review Trip #{{ $booking->id }}</h2>
-        <hr>
-
-        <p style="font-size: 16px;">
-            <strong>Driver:</strong> {{ $booking->driver->name ?? 'Driver' }}<br>
-            <strong>Route:</strong> {{ $booking->pickup_location }} ➔ {{ $booking->destination_location }}
-        </p>
-
-        @if ($errors->any())
-            <div style="color: red; margin-bottom: 15px;">
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
+<body>
+    <div class="review-wrapper">
+        <a href="{{ route('bookings.index') }}" class="btn-back">← BACK TO MY BOOKINGS</a>
+        <div class="review-card">
+            <div class="card-header">
+                <div>
+                    <h2 class="header-title">Rate Your Experience</h2>
+                    <p class="header-subtitle">Trip Booking #{{ $booking->id }}</p>
+                </div>
+                <div class="review-icon">⭐</div>
             </div>
-        @endif
-
-        <form action="{{ route('reviews.store', $booking->id) }}" method="POST">
-            @csrf
-            
-            <div style="margin-bottom: 20px;">
-                <label><strong>Rating:</strong></label><br>
-                <select name="rating" required style="width: 100%; padding: 8px; margin-top: 5px; font-size: 15px;">
-                    <option value="">-- Select Stars --</option>
-                    <option value="5">⭐⭐⭐⭐⭐ (5/5 - Excellent)</option>
-                    <option value="4">⭐⭐⭐⭐ (4/5 - Good)</option>
-                    <option value="3">⭐⭐⭐ (3/5 - Okay)</option>
-                    <option value="2">⭐⭐ (2/5 - Poor)</option>
-                    <option value="1">⭐ (1/5 - Terrible)</option>
-                </select>
+            <div class="trip-summary-box">
+                <div class="driver-info">
+                    <span class="driver-avatar">👤</span>
+                    <div>
+                        <p class="driver-name">{{ $booking->driver->name ?? 'Driver' }}</p>
+                        <span class="badge badge-success">Driver Partner</span>
+                    </div>
+                </div>
+                <div class="route-info">
+                    <div class="route-point">
+                        <span class="dot-pickup"></span>
+                        <span>Pickup: {{ $booking->pickup_location }}</span>
+                    </div>
+                    <div class="route-point" style="margin-top: 6px;">
+                        <span class="dot-dest"></span>
+                        <span>Destination: {{ $booking->destination_location }}</span>
+                    </div>
+                </div>
             </div>
+            @if ($errors->any())
+                <div class="error-alert">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+            <form action="{{ route('reviews.store', $booking->id) }}" method="POST">
+                @csrf
+                <div class="form-group">
+                    <label for="rating">Give Star Rating:</label>
+                    <select name="rating" id="rating" required>
+                        <option value="" disabled selected>-- Select Stars --</option>
+                        <option value="5">⭐⭐⭐⭐⭐ (5/5 - Perfect Ride! 🔥)</option>
+                        <option value="4">⭐⭐⭐⭐ (4/5 - Very Good 👍)</option>
+                        <option value="3">⭐⭐⭐ (3/5 - Okay 😐)</option>
+                        <option value="2">⭐⭐ (2/5 - Below Average 🙁)</option>
+                        <option value="1">⭐ (1/5 - Terrible 😡)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="comment">Leave a Comment (Optional):</label>
+                    <textarea name="comment" id="comment" rows="4" 
+                              placeholder="How was your experience?" 
+                              class="custom-textarea"></textarea>
+                </div>
+                <div class="button-group" style="margin-top: 16px;">
+                    <button type="submit" class="btn btn-review-submit" style="flex: 2;">
+                        SUBMIT REVIEW
+                    </button>
+                    <a href="{{ route('bookings.index') }}" class="btn btn-cancel" style="flex: 1;">
+                        Cancel
+                    </a>
+                </div>
+            </form>
 
-            <div style="margin-bottom: 20px;">
-                <label><strong>Comment (Optional):</strong></label><br>
-                <textarea name="comment" rows="4" placeholder="How was the ride?" style="width: 100%; padding: 8px; margin-top: 5px;"></textarea>
-            </div>
-
-            <button type="submit" style="background-color: #28a745; color: white; border: none; padding: 10px 20px; font-weight: bold; cursor: pointer; border-radius: 4px;">
-                Submit Review
-            </button>
-
-            <a href="{{ route('bookings.index') }}" style="margin-left: 15px; text-decoration: none; color: #000000;">Cancel</a>
-        </form>
+        </div>
     </div>
 
 </body>
