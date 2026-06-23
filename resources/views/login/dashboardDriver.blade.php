@@ -45,10 +45,6 @@
                 <span class="menu-title">Wallet Balance</span>
             </a>
 
-            <a href="{{ route('driver-notifications.index') }}" class="menu-box">
-                <span class="menu-title">Notifications</span>
-            </a>
-
             <a href="{{ route('driver.helpcenter.index') }}" class="menu-box">
                 <span class="menu-title">Help Center</span>
             </a>
