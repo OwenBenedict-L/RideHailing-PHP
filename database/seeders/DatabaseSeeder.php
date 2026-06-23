@@ -52,5 +52,12 @@ class DatabaseSeeder extends Seeder
                 'password' => Hash::make('123456789'),
             ]
         );
+        Cs::firstOrCreate(
+            ['email' => ']darren@gmail.com'],
+            [
+                'name' => 'Richie Customer Service',
+                'password' => Hash::make('12345678'),
+            ]
+        );
     }
 }
