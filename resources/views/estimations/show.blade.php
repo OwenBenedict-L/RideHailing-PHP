@@ -1,54 +1,55 @@
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ride Estimations</title>
-    <style>
-        body { padding: 25px; color: #333; }
-        h1 { font-size: 24px; font-weight: bold; }
-        hr { border: 0; border-top: 1px solid #ccc; margin-bottom: 20px; }
-        .route-path { font-size: 18px; font-weight: bold; margin-bottom: 5px; }
-        .distance { color: #666; font-size: 14px; margin-bottom: 25px; }
-        .section-title { font-size: 18px; font-weight: bold; margin-bottom: 15px; }
-        .option-card { border: 1px solid #ccc; padding: 15px; margin-bottom: 12px; display: flex; gap: 15px; background-color: #f9f9f9; cursor: pointer;}
-        .vehicle-name { font-weight: bold; }
-    </style>
+    @vite(['resources/css/estimations.css'])
 </head>
 <body>
 
-    <h1>Ride Estimations</h1>
-    <hr>
-
-    <div class="route-path">{{ $estimation->origin }} &rarr; {{ $estimation->destination }}</div>
-    <div class="distance">Distance: {{ $estimation->distance }} Km</div>
-
-    <div class="section-title">Available Vehicles</div>
-    
-    <form action="{{ route('estimations.selectVehicle') }}" method="POST">
-        @csrf
-        <input type="hidden" name="estimation_id" value="{{ $estimation->id }}">
+    <div class="card">
         
-        <input type="hidden" name="pickup_location" value="{{ $estimation->origin }}">
-        <input type="hidden" name="destination_location" value="{{ $estimation->destination }}">
-        <input type="hidden" name="distance" value="{{ $estimation->distance }}">
-        <input type="hidden" name="promo_code" value="{{ request('promo_code') ?? session('checkout_promo_code') }}">
+        <h1>Ride Estimations</h1>
+        <hr>
 
-        @if(isset($vehicleTypes) && $vehicleTypes->count() > 0)
-            @foreach($vehicleTypes as $index => $vehicle)
-            <label class="option-card">
-                <input type="radio" name="vehicle_type_id" value="{{ $vehicle->id }}" {{ $index == 0 ? 'checked' : '' }} required>
-                <div>
-                    <div class="vehicle-name">{{ $vehicle->display_name }}</div>
-                    <div>Fare: Rp {{ number_format($fares[$vehicle->id] ?? 0, 0, ',', '.') }}</div>
-                    
-                    <input type="hidden" name="fares[{{ $vehicle->id }}]" value="{{ $fares[$vehicle->id] ?? 0 }}">
-                </div>
-            </label>
-            @endforeach
-        @endif
+        <p><strong>{{ $estimation->origin }} &rarr; {{ $estimation->destination }}</strong></p>
+        <p>Distance: {{ $estimation->distance }} Km</p>
 
-        <br>
-        <button type="button" onclick="window.location.href='{{ route('estimations.create') }}'">BACK</button>
-        <button type="submit">NEXT</button>
-    </form>
+        <h3>Available Vehicles</h3>
+        
+        <form action="{{ route('estimations.selectVehicle') }}" method="POST">
+            @csrf
+            <input type="hidden" name="estimation_id" value="{{ $estimation->id }}">
+            
+            <input type="hidden" name="pickup_location" value="{{ $estimation->origin }}">
+            <input type="hidden" name="destination_location" value="{{ $estimation->destination }}">
+            <input type="hidden" name="distance" value="{{ $estimation->distance }}">
+            <input type="hidden" name="promo_code" value="{{ request('promo_code') ?? session('checkout_promo_code') }}">
+
+            <div class="vehicle-options">
+                @if(isset($vehicleTypes) && $vehicleTypes->count() > 0)
+                    @foreach($vehicleTypes as $index => $vehicle)
+                    <label class="vehicle-card">
+                        <input type="radio" name="vehicle_type_id" value="{{ $vehicle->id }}" {{ $index == 0 ? 'checked' : '' }} required>
+                        <div class="vehicle-details">
+                            <span class="vehicle-name">{{ $vehicle->display_name }}</span>
+                            <span class="vehicle-fare">Fare: Rp {{ number_format($fares[$vehicle->id] ?? 0, 0, ',', '.') }}</span>
+                            
+                            <input type="hidden" name="fares[{{ $vehicle->id }}]" value="{{ $fares[$vehicle->id] ?? 0 }}">
+                        </div>
+                    </label>
+                    @endforeach
+                @endif
+            </div>
+
+            <div class="button-container">
+                <button type="button" class="btn-secondary" onclick="window.location.href='{{ route('estimations.create') }}'">BACK</button>
+                <button type="submit" class="btn-primary">NEXT</button>
+            </div>
+            
+        </form>
+
+    </div>
 
 </body>
 </html>

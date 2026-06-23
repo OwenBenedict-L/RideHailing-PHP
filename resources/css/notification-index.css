@@ -1,0 +1,242 @@
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #F4F7FC;
+    color: #2D3748;
+    padding: 40px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
+    min-height: 100vh;
+}
+
+h1, .table-responsive, table, div, p {
+    max-width: 1200px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+h1 {
+    color: #1A365D;
+    font-size: 28px;
+    font-weight: 700;
+    margin-top: 0;
+    margin-bottom: 25px;
+}
+
+div[style*="color: green"],
+div[style*="color:green"] {
+    background-color: #C6F6D5 !important;
+    color: #22543D !important;
+    padding: 15px 20px !important;
+    border-radius: 8px !important;
+    font-size: 14px !important;
+    border: 1px solid #9AE6B4 !important;
+    border-left: 5px solid #48BB78 !important;
+    display: block !important;
+    font-weight: 500 !important;
+    margin-bottom: 15px !important;
+}
+
+div[style*="color: red"],
+div[style*="color:red"] {
+    background-color: #FED7D7 !important;
+    color: #9B2C2C !important;
+    padding: 15px 20px !important;
+    border-radius: 8px !important;
+    font-size: 14px !important;
+    border: 1px solid #FEB2B2 !important;
+    border-left: 5px solid #E53E3E !important;
+    display: block !important;
+    font-weight: 500 !important;
+    margin-bottom: 15px !important;
+}
+
+br {
+    display: none !important;
+}
+
+a[href*="dashboard"],
+button[onclick*="reload"],
+body > div > form {
+    display: inline-flex !important;
+    vertical-align: middle !important;
+    margin: 0 4px 25px 4px !important;
+    width: auto !important;
+}
+
+body > div > form > button {
+    margin: 0 !important;
+}
+
+button,
+a button {
+    font-size: 13px !important;
+    font-weight: bold !important;
+    border-radius: 6px !important;
+    border: none !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    display: inline-flex !important;
+    align-items: center !important;
+}
+
+button:active {
+    transform: scale(0.96) !important;
+}
+
+a[href*="dashboard"] button,
+button[onclick*="reload"],
+body > div > form > button[type="submit"] {
+    height: 38px !important;
+    padding: 0 16px !important; 
+    justify-content: center !important; 
+    box-sizing: border-box !important;
+    white-space: nowrap !important;
+}
+
+a[href*="dashboard"] button {
+    background-color: #E2E8F0 !important;
+    color: #4A5568 !important;
+}
+a[href*="dashboard"] button:hover {
+    background-color: #CBD5E0 !important;
+    color: #2D3748 !important;
+}
+
+button[onclick*="reload"] {
+    background-color: transparent !important;
+    color: #3182CE !important;
+    border: 1px solid #3182CE !important;
+}
+button[onclick*="reload"]:hover {
+    background-color: #3182CE !important;
+    color: white !important;
+}
+
+body > div > form:not([onsubmit]) > button[type="submit"] {
+    background-color: #3182CE !important;
+    color: white !important;
+}
+body > div > form:not([onsubmit]) > button[type="submit"]:hover {
+    background-color: #2B6CB0 !important;
+}
+
+body > div > form[onsubmit*="ALL"] > button[type="submit"] {
+    background-color: #E53E3E !important;
+    color: white !important;
+}
+body > div > form[onsubmit*="ALL"] > button[type="submit"]:hover {
+    background-color: #C53030 !important;
+}
+
+table[border="1"] {
+    border: none !important;
+    border-collapse: collapse !important;
+    background: white !important;
+    border-radius: 8px !important;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02) !important;
+    overflow: hidden !important;
+    margin-top: 5px !important;
+}
+
+table th {
+    background-color: #1A365D !important;
+    color: white !important;
+    padding: 15px !important;
+    font-weight: 600 !important;
+    border: none !important;
+}
+
+table td {
+    padding: 20px 15px !important;
+    border-bottom: 1px solid #E2E8F0 !important;
+    border-left: none !important;
+    border-right: none !important;
+    border-top: none !important;
+    vertical-align: top !important;
+}
+
+tr[style*="background-color: #f4f7fc"],
+tr[style*="background-color: #f4f7fc;"] {
+    background-color: #F8FAFC !important;
+}
+
+tr[style*="background-color: #ffffff"],
+tr[style*="background-color: #ffffff;"] {
+    background-color: #FFFFFF !important;
+}
+
+span[style*="color: red"][style*="font-size: 11px"] {
+    background-color: #E53E3E !important;
+    color: white !important;
+    padding: 3px 6px !important;
+    border-radius: 4px !important;
+    font-size: 10px !important;
+    margin-top: 6px !important;
+    display: inline-block !important;
+}
+
+strong[style*="color: #002752"] {
+    color: #1A365D !important;
+    font-size: 15px !important;
+    display: block !important;
+    margin-bottom: 4px !important;
+}
+strong[style*="color: #333"] {
+    color: #2D3748 !important;
+    font-size: 15px !important;
+    font-weight: normal !important;
+    display: block !important;
+    margin-bottom: 4px !important;
+}
+
+td div[style*="display: flex"] {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 8px !important;
+}
+
+td form button[style*="background-color: #6c757d"] {
+    background-color: #E2E8F0 !important;
+    color: #4A5568 !important;
+    padding: 6px 12px !important;
+    font-size: 12px !important;
+    border-radius: 6px !important;
+    margin: 0 !important;
+    white-space: nowrap !important;
+}
+td form button[style*="background-color: #6c757d"]:hover {
+    background-color: #CBD5E0 !important;
+}
+
+td a[style*="background-color: #007bff"] {
+    background-color: #3182CE !important;
+    color: white !important;
+    padding: 6px 12px !important;
+    font-size: 12px !important;
+    border-radius: 6px !important;
+    text-decoration: none !important;
+    font-weight: bold !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    white-space: nowrap !important;
+}
+td a[style*="background-color: #007bff"]:hover {
+    background-color: #2B6CB0 !important;
+}
+
+td form button[style*="background-color: #dc3545"] {
+    background-color: #E53E3E !important;
+    color: white !important;
+    padding: 6px 12px !important;
+    font-size: 12px !important;
+    border-radius: 6px !important;
+    margin: 0 !important;
+    white-space: nowrap !important;
+}
+td form button[style*="background-color: #dc3545"]:hover {
+    background-color: #C53030 !important;
+}

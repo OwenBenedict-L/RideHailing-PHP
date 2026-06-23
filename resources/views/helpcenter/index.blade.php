@@ -27,13 +27,22 @@
 
     <label for="jenis"><strong>Type of Complaint:</strong></label>
     <select name="jenis_keluhan" id="jenis" onchange="tampilkanKotakLainnya()" required>
+        
         <option value="" disabled selected>-- Select Type of Complaint --</option>
+    @if(Auth::guard('driver')->check())
+        <option value="lapor_penumpang">Report a passenger</option>
+        <option value="kendala_kendaraan">Vehicle breakdown / issues</option>
+        <option value="bug_aplikasi">Report a bug or error in the application</option>
+        <option value="masalah_pendapatan">Earnings / Balance Issues</option>
+        <option value="lainnya">Others</option>
+    @else
         <option value="lapor_pengemudi">Report driver</option>
         <option value="barang_tertinggal">Report a lost item</option>
         <option value="bug_aplikasi">Report a bug or error in the application</option>
         <option value="batalkan_perjalanan">Cancel Trip</option>
         <option value="masalah_pembayaran">Payment / Balance Issues</option>
         <option value="lainnya">Others</option>
+    @endif
     </select>
 
     <div id="id_lainnya" style="display: none;">
