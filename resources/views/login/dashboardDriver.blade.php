@@ -8,8 +8,17 @@
 <body>
 
     <header class="navbar">
-        <div class="navbar-brand">RideApp - Driver Portal</div>
+        <div class="navbar-brand">RideApp - Driver Portal
+            <a href="{{ route('driver-notifications.index') }}" class="bell-link">🔔
+                @if(\DB::table('driver_notifications')->where('driver_id', Auth::guard('driver')->id())->where('is_read', false)->count() > 0)
+                    <span class="bell-badge">
+                    {{ \DB::table('driver_notifications')->where('driver_id', Auth::guard('driver')->id())->where('is_read', false)->count() }}
+                    </span>
+                @endif
+            </a>
+        </div>
         <div class="navbar-user-zone">
+
             <span class="user-greeting">Hi, {{ Auth::guard('driver')->user()->name }} 🚗</span>
             
             <form method="POST" action="/logout-driver" style="margin: 0;">

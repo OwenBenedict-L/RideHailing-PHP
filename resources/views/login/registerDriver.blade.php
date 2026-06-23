@@ -45,15 +45,14 @@
         <div class="form-group">
             <label>Vehicle Type:</label>
             
-            <select name="vehicle_type_id" required>
-                <option value="">Select Vehicle Type</option>
-
-                @foreach($vehicleTypes as $type)
-                <option value="{{ $type->id }}" {{ old('vehicle_type_id') == $type->id ? 'selected' : '' }}>
-                    {{ $type->display_name }}
-                </option>
-                @endforeach
-            </select>
+                <select id="vehicle_type_id" name="vehicle_type_id" required>
+                    <option value="" disabled {{ old('vehicle_type_id') ? '' : 'selected' }}>Select Vehicle Type</option>
+                        @foreach($vehicleTypes as $type)
+                            <option value="{{ $type->id }}" {{ old('vehicle_type_id') == $type->id ? 'selected' : '' }}>
+                                {{ $type->display_name }}
+                            </option>
+                        @endforeach
+                </select>
         </div>
 
         <div class="form-group">
